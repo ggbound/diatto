@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'base_path' => 'static/upload/',
+    'base_path' => 'attach/upload/',
     'default' => 'default',
     'editor_img' => 'editor/img',
     'member_avatar' => 'member/avatar',
