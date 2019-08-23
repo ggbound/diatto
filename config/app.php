@@ -4,13 +4,13 @@ use think\facade\Env;
 
 return [
     // 应用名称
-    'app_name'               => 'pearProject',
+    'app_name'               => 'diatto',
     // 应用版本
-    'app_version'            => '2.8.4',
+    'app_version'            => '3.0.0',
     // 应用地址
     'app_host'               => '',
     // 应用调试模式
-    'app_debug'              => true,
+    'app_debug'              => false,
     // 应用Trace
     'app_trace'              => false,
     // 是否支持多模块

@@ -39,7 +39,7 @@ use think\facade\Request;
 class Index extends BasicApi
 {
 
-    protected $siteName = 'Project';
+    protected $siteName = 'diatto';
 
     public function index()
     {
@@ -91,8 +91,8 @@ class Index extends BasicApi
         }
         $mysqlUsername = isset($_POST['mysqlUsername']) ? $_POST['mysqlUsername'] : 'root';
         $mysqlPassword = isset($_POST['mysqlPassword']) ? $_POST['mysqlPassword'] : 'root';
-        $mysqlDatabase = isset($_POST['mysqlDatabase']) ? $_POST['mysqlDatabase'] : 'pearProject';
-        $mysqlPrefix = isset($_POST['mysqlPrefix']) ? $_POST['mysqlPrefix'] : 'pear_';
+        $mysqlDatabase = isset($_POST['mysqlDatabase']) ? $_POST['mysqlDatabase'] : 'hi_diatto';
+        $mysqlPrefix = isset($_POST['mysqlPrefix']) ? $_POST['mysqlPrefix'] : 'hi_';
         try {
             ignore_user_abort();
             set_time_limit(0);
@@ -101,7 +101,7 @@ class Index extends BasicApi
             if (!$sql) {
                 throw new Exception("无法读取install/install.sql文件，请检查是否有读权限");
             }
-            $sql = str_replace("`pms_", "`{$mysqlPrefix}", $sql);
+            $sql = str_replace("`hi_", "`{$mysqlPrefix}", $sql);
             $pdo = new PDO("mysql:host={$mysqlHostname};port={$mysqlHostport}", $mysqlUsername, $mysqlPassword, array(
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
