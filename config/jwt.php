@@ -2,7 +2,7 @@
 
 return [
     // 加密key
-    'key' => 'pearProject',
+    'key' => 'diatto',
     'alg' => 'HS256',
     //access_token有效时间
     'accessTokenExp' => 3600 * 24 * 7,
