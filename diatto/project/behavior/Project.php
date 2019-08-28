@@ -9,12 +9,9 @@
 namespace app\project\behavior;
 
 
-use app\common\Model\CommonModel;
 use app\common\Model\Member;
 use app\common\Model\ProjectLog;
-use app\common\Model\TaskStages;
 use service\MessageService;
-use think\facade\Log;
 
 class Project
 {

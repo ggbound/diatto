@@ -2,21 +2,9 @@
 
 namespace app\project\controller;
 
-use app\common\Model\Member;
-use app\common\Model\MemberAccount;
-use app\common\Model\Notify;
-use app\common\Model\ProjectCollection;
-use app\common\Model\ProjectMember;
-use app\common\Model\SystemConfig;
 use controller\BasicApi;
-use OSS\Core\OssException;
-use service\FileService;
-use service\NodeService;
-use service\RandomService;
 use think\Exception;
-use think\exception\PDOException;
 use think\facade\Request;
-use think\File;
 
 /**
  */
@@ -42,7 +30,7 @@ class Department extends BasicApi
         $pcode = Request::post('pcode', '');
         $where[] = ['organization_code', '=', $orgCode];
         $where[] = ['pcode', '=', $pcode];
-        $list = $this->model->_list($where,'id asc');
+        $list = $this->model->_list($where, 'id asc');
         if ($list['list']) {
             foreach ($list['list'] as &$item) {
                 $item['hasNext'] = false;
@@ -115,7 +103,7 @@ class Department extends BasicApi
         }
         $result = $this->model->_edit($data, ['code' => $code]);
         if ($result) {
-            $this->success('',$result);
+            $this->success('', $result);
         }
         $this->error("操作失败，请稍候再试！");
     }

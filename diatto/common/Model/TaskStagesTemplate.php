@@ -2,10 +2,6 @@
 
 namespace app\common\Model;
 
-use service\FileService;
-use service\RandomService;
-use think\File;
-
 /**
  * 任务列表模板
  * Class Organization
@@ -13,9 +9,8 @@ use think\File;
  */
 class TaskStagesTemplate extends CommonModel
 {
-    protected $append = [];
-
     public static $defaultTaskStagesNameList = ['待处理', '进行中', '已完成'];
+    protected $append = [];
 
     /**
      * 创建任务列表模板

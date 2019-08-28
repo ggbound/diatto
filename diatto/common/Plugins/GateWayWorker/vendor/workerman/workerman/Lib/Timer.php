@@ -11,11 +11,12 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace Workerman\Lib;
 
+use Exception;
 use Workerman\Events\EventInterface;
 use Workerman\Worker;
-use Exception;
 
 /**
  * Timer.
@@ -75,12 +76,46 @@ class Timer
     }
 
     /**
+     * Tick.
+     *
+     * @return void
+     */
+    public static function tick()
+    {
+        if (empty(self::$_tasks)) {
+            pcntl_alarm(0);
+            return;
+        }
+
+        $time_now = time();
+        foreach (self::$_tasks as $run_time => $task_data) {
+            if ($time_now >= $run_time) {
+                foreach ($task_data as $index => $one_task) {
+                    $task_func = $one_task[0];
+                    $task_args = $one_task[1];
+                    $persistent = $one_task[2];
+                    $time_interval = $one_task[3];
+                    try {
+                        call_user_func_array($task_func, $task_args);
+                    } catch (\Exception $e) {
+                        Worker::safeEcho($e);
+                    }
+                    if ($persistent) {
+                        self::add($time_interval, $task_func, $task_args);
+                    }
+                }
+                unset(self::$_tasks[$run_time]);
+            }
+        }
+    }
+
+    /**
      * Add a timer.
      *
-     * @param float    $time_interval
+     * @param float $time_interval
      * @param callable $func
-     * @param mixed    $args
-     * @param bool     $persistent
+     * @param mixed $args
+     * @param bool $persistent
      * @return int/false
      */
     public static function add($time_interval, $func, $args = array(), $persistent = true)
@@ -111,41 +146,6 @@ class Timer
         }
         self::$_tasks[$run_time][] = array($func, (array)$args, $persistent, $time_interval);
         return 1;
-    }
-
-
-    /**
-     * Tick.
-     *
-     * @return void
-     */
-    public static function tick()
-    {
-        if (empty(self::$_tasks)) {
-            pcntl_alarm(0);
-            return;
-        }
-
-        $time_now = time();
-        foreach (self::$_tasks as $run_time => $task_data) {
-            if ($time_now >= $run_time) {
-                foreach ($task_data as $index => $one_task) {
-                    $task_func     = $one_task[0];
-                    $task_args     = $one_task[1];
-                    $persistent    = $one_task[2];
-                    $time_interval = $one_task[3];
-                    try {
-                        call_user_func_array($task_func, $task_args);
-                    } catch (\Exception $e) {
-                        Worker::safeEcho($e);
-                    }
-                    if ($persistent) {
-                        self::add($time_interval, $task_func, $task_args);
-                    }
-                }
-                unset(self::$_tasks[$run_time]);
-            }
-        }
     }
 
     /**

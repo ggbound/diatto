@@ -11,12 +11,13 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace Workerman\Connection;
 
+use Exception;
 use Workerman\Events\EventInterface;
 use Workerman\Lib\Timer;
 use Workerman\Worker;
-use Exception;
 
 /**
  * AsyncTcpConnection.
@@ -24,83 +25,73 @@ use Exception;
 class AsyncTcpConnection extends TcpConnection
 {
     /**
+     * PHP built-in protocols.
+     *
+     * @var array
+     */
+    protected static $_builtinTransports = array(
+        'tcp' => 'tcp',
+        'udp' => 'udp',
+        'unix' => 'unix',
+        'ssl' => 'ssl',
+        'sslv2' => 'sslv2',
+        'sslv3' => 'sslv3',
+        'tls' => 'tls'
+    );
+    /**
      * Emitted when socket connection is successfully established.
      *
      * @var callback
      */
     public $onConnect = null;
-
     /**
      * Transport layer protocol.
      *
      * @var string
      */
     public $transport = 'tcp';
-
     /**
      * Status.
      *
      * @var int
      */
     protected $_status = self::STATUS_INITIAL;
-
     /**
      * Remote host.
      *
      * @var string
      */
     protected $_remoteHost = '';
-
     /**
      * Remote port.
      *
      * @var int
      */
     protected $_remotePort = 80;
-
     /**
      * Connect start time.
      *
      * @var string
      */
     protected $_connectStartTime = 0;
-
     /**
      * Remote URI.
      *
      * @var string
      */
     protected $_remoteURI = '';
-
     /**
      * Context option.
      *
      * @var array
      */
     protected $_contextOption = null;
-
     /**
      * Reconnect timer.
      *
      * @var int
      */
     protected $_reconnectTimer = null;
-
-
-    /**
-     * PHP built-in protocols.
-     *
-     * @var array
-     */
-    protected static $_builtinTransports = array(
-        'tcp'   => 'tcp',
-        'udp'   => 'udp',
-        'unix'  => 'unix',
-        'ssl'   => 'ssl',
-        'sslv2' => 'sslv2',
-        'sslv3' => 'sslv3',
-        'tls'   => 'tls'
-    );
 
     /**
      * Construct.
@@ -130,19 +121,19 @@ class AsyncTcpConnection extends TcpConnection
                 $address_info['query'] = '?' . $address_info['query'];
             }
             $this->_remoteAddress = "{$address_info['host']}:{$address_info['port']}";
-            $this->_remoteHost    = $address_info['host'];
-            $this->_remotePort    = $address_info['port'];
-            $this->_remoteURI     = "{$address_info['path']}{$address_info['query']}";
-            $scheme               = isset($address_info['scheme']) ? $address_info['scheme'] : 'tcp';
+            $this->_remoteHost = $address_info['host'];
+            $this->_remotePort = $address_info['port'];
+            $this->_remoteURI = "{$address_info['path']}{$address_info['query']}";
+            $scheme = isset($address_info['scheme']) ? $address_info['scheme'] : 'tcp';
         }
 
         $this->id = $this->_id = self::$_idRecorder++;
-        if(PHP_INT_MAX === self::$_idRecorder){
+        if (PHP_INT_MAX === self::$_idRecorder) {
             self::$_idRecorder = 0;
         }
         // Check application layer protocol class.
         if (!isset(self::$_builtinTransports[$scheme])) {
-            $scheme         = ucfirst($scheme);
+            $scheme = ucfirst($scheme);
             $this->protocol = '\\Protocols\\' . $scheme;
             if (!class_exists($this->protocol)) {
                 $this->protocol = "\\Workerman\\Protocols\\$scheme";
@@ -156,9 +147,29 @@ class AsyncTcpConnection extends TcpConnection
 
         // For statistics.
         self::$statistics['connection_count']++;
-        $this->maxSendBufferSize         = self::$defaultMaxSendBufferSize;
-        $this->_contextOption            = $context_option;
+        $this->maxSendBufferSize = self::$defaultMaxSendBufferSize;
+        $this->_contextOption = $context_option;
         static::$connections[$this->_id] = $this;
+    }
+
+    /**
+     * Reconnect.
+     *
+     * @param int $after
+     * @return void
+     */
+    public function reconnect($after = 0)
+    {
+        $this->_status = self::STATUS_INITIAL;
+        static::$connections[$this->_id] = $this;
+        if ($this->_reconnectTimer) {
+            Timer::del($this->_reconnectTimer);
+        }
+        if ($after > 0) {
+            $this->_reconnectTimer = Timer::add($after, array($this, 'connect'), null, false);
+            return;
+        }
+        $this->connect();
     }
 
     /**
@@ -172,7 +183,7 @@ class AsyncTcpConnection extends TcpConnection
             $this->_status !== self::STATUS_CLOSED) {
             return;
         }
-        $this->_status           = self::STATUS_CONNECTING;
+        $this->_status = self::STATUS_CONNECTING;
         $this->_connectStartTime = microtime(true);
         if ($this->transport !== 'unix') {
             // Open socket connection asynchronously.
@@ -202,29 +213,32 @@ class AsyncTcpConnection extends TcpConnection
         // Add socket to global event loop waiting connection is successfully established or faild.
         Worker::$globalEvent->add($this->_socket, EventInterface::EV_WRITE, array($this, 'checkConnection'));
         // For windows.
-        if(DIRECTORY_SEPARATOR === '\\') {
+        if (DIRECTORY_SEPARATOR === '\\') {
             Worker::$globalEvent->add($this->_socket, EventInterface::EV_EXCEPT, array($this, 'checkConnection'));
         }
     }
 
     /**
-     * Reconnect.
+     * Try to emit onError callback.
      *
-     * @param int $after
+     * @param int $code
+     * @param string $msg
      * @return void
      */
-    public function reconnect($after = 0)
+    protected function emitError($code, $msg)
     {
-        $this->_status                   = self::STATUS_INITIAL;
-        static::$connections[$this->_id] = $this;
-        if ($this->_reconnectTimer) {
-            Timer::del($this->_reconnectTimer);
+        $this->_status = self::STATUS_CLOSING;
+        if ($this->onError) {
+            try {
+                call_user_func($this->onError, $this, $code, $msg);
+            } catch (\Exception $e) {
+                Worker::log($e);
+                exit(250);
+            } catch (\Error $e) {
+                Worker::log($e);
+                exit(250);
+            }
         }
-        if ($after > 0) {
-            $this->_reconnectTimer = Timer::add($after, array($this, 'connect'), null, false);
-            return;
-        }
-        $this->connect();
     }
 
     /**
@@ -258,29 +272,6 @@ class AsyncTcpConnection extends TcpConnection
     }
 
     /**
-     * Try to emit onError callback.
-     *
-     * @param int    $code
-     * @param string $msg
-     * @return void
-     */
-    protected function emitError($code, $msg)
-    {
-        $this->_status = self::STATUS_CLOSING;
-        if ($this->onError) {
-            try {
-                call_user_func($this->onError, $this, $code, $msg);
-            } catch (\Exception $e) {
-                Worker::log($e);
-                exit(250);
-            } catch (\Error $e) {
-                Worker::log($e);
-                exit(250);
-            }
-        }
-    }
-
-    /**
      * Check connection is successfully established or faild.
      *
      * @param resource $socket
@@ -289,7 +280,7 @@ class AsyncTcpConnection extends TcpConnection
     public function checkConnection()
     {
         // Remove EV_EXPECT for windows.
-        if(DIRECTORY_SEPARATOR === '\\') {
+        if (DIRECTORY_SEPARATOR === '\\') {
             Worker::$globalEvent->del($this->_socket, EventInterface::EV_EXCEPT);
         }
 
@@ -328,8 +319,8 @@ class AsyncTcpConnection extends TcpConnection
             // Register a listener waiting read event.
             Worker::$globalEvent->add($this->_socket, EventInterface::EV_READ, array($this, 'baseRead'));
 
-            $this->_status                = self::STATUS_ESTABLISHED;
-            $this->_remoteAddress         = $address;
+            $this->_status = self::STATUS_ESTABLISHED;
+            $this->_remoteAddress = $address;
 
             // Try to emit onConnect callback.
             if ($this->onConnect) {

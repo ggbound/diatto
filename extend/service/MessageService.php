@@ -40,6 +40,25 @@ class MessageService
         Gateway::sendToAll($this->messageFormat($message, $action), $client_id_array, $exclude_client_id, $raw);
     }
 
+    public function messageFormat($message, $action = 'none')
+    {
+        $messageData = [
+            'action' => $action, //推送场景
+            'msg' => '', //推送内容
+            'title' => '消息通知',//推送标题
+            'data' => [],//推送数据
+            'uid' => 0,//推送数据
+        ];
+        if (is_array($message)) {
+            $messageData['data'] = $message;
+            $messageData['msg'] = isset($message['content']) ? $message['content'] : '';
+            $messageData['title'] = isset($message['title']) ? $message['title'] : '';
+        } else {
+            $messageData['msg'] = $message;
+        }
+        return json_encode($messageData, JSON_UNESCAPED_UNICODE);
+    }
+
     public function sendToUid($uid, $message, $action = '')
     {
         Gateway::sendToUid($uid, $this->messageFormat($message, $action));
@@ -65,25 +84,6 @@ class MessageService
         if ($group) {
             Gateway::joinGroup($client_id, $group);
         }
-    }
-
-    public function messageFormat($message, $action = 'none')
-    {
-        $messageData = [
-            'action' => $action, //推送场景
-            'msg' => '', //推送内容
-            'title' => '消息通知',//推送标题
-            'data' => [],//推送数据
-            'uid' => 0,//推送数据
-        ];
-        if (is_array($message)) {
-            $messageData['data'] = $message;
-            $messageData['msg'] = isset($message['content']) ? $message['content'] : '';
-            $messageData['title'] = isset($message['title']) ? $message['title'] : '';
-        } else {
-            $messageData['msg'] = $message;
-        }
-        return json_encode($messageData, JSON_UNESCAPED_UNICODE);
     }
 
 }

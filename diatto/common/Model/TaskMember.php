@@ -77,9 +77,9 @@ class TaskMember extends CommonModel
         if ($isExecutor) {
             Task::update(['assign_to' => $memberCode], ['code' => $taskCode]);
             if ($memberCode == $currentMember['code']) {
-                Task::taskHook($currentMember['code'], $taskCode, 'claim','',0, '', '', '', ['is_robot' => $isRobot]);
+                Task::taskHook($currentMember['code'], $taskCode, 'claim', '', 0, '', '', '', ['is_robot' => $isRobot]);
             } else {
-                Task::taskHook($currentMember['code'], $taskCode, 'assign', $memberCode,0, '', '', '', ['is_robot' => $isRobot]);
+                Task::taskHook($currentMember['code'], $taskCode, 'assign', $memberCode, 0, '', '', '', ['is_robot' => $isRobot]);
             }
         }
         if ($memberCode) {

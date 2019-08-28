@@ -12,17 +12,6 @@ use think\Model;
 class CommonModel extends Model
 {
 
-    /**
-     * 返回失败的请求
-     * @param mixed $msg 消息内容
-     * @param array $data 返回数据
-     * @param integer $code 返回代码
-     */
-    protected function error($msg, $data = [], $code = 400)
-    {
-        ToolsService::error($msg, $data, $code);
-    }
-
     public static function limitByQuery($sql, $page = 1, $pageSize = 10)
     {
         if ($page < 1) {
@@ -144,5 +133,16 @@ class CommonModel extends Model
             }
         }
         return false;
+    }
+
+    /**
+     * 返回失败的请求
+     * @param mixed $msg 消息内容
+     * @param array $data 返回数据
+     * @param integer $code 返回代码
+     */
+    protected function error($msg, $data = [], $code = 400)
+    {
+        ToolsService::error($msg, $data, $code);
     }
 }

@@ -2,18 +2,14 @@
 
 namespace app\project\controller;
 
-use app\common\Model\Member;
 use app\common\Model\ProjectAuthNode;
-use app\common\Model\SystemConfig;
 use controller\BasicApi;
-use service\FileService;
 use service\NodeService;
 use service\ToolsService;
 use think\facade\Request;
-use think\File;
 
 /**
- * Class Account
+ * Class Member
  * @package app\project\controller
  */
 class Auth extends BasicApi
@@ -50,66 +46,6 @@ class Auth extends BasicApi
         if (method_exists($this, $method)) {
             return $this->$method($auth_id);
         }
-    }
-
-    /**
-     * 读取授权节点
-     * @param string $auth
-     */
-    protected function _apply_getnode($auth)
-    {
-        $nodes = NodeService::get([], [], 'project');
-        $checked = ProjectAuthNode::where(['auth' => $auth])->column('node');
-        $count = 1;
-        foreach ($nodes as $key => &$node) {
-            if (!$node['title']) {
-                $node['title'] = '-';
-            }
-            $node['checked'] = in_array($node['node'], $checked);
-            $node['key'] = $node['node'];
-            $count++;
-        }
-        $checkedList = [];
-        $all = $this->_apply_filter(ToolsService::arr2tree($nodes, 'node', 'pnode', 'children'), 1, $checkedList);
-        $this->success('', ['list' => $all, 'checkedList' => $checkedList]);
-    }
-
-    /**
-     * 保存授权节点
-     * @param string $auth
-     * @throws \Exception
-     */
-    protected function _apply_save($auth)
-    {
-        list($data, $post) = [[], Request::only('action,id,nodes')];
-        isset($post['nodes']) && $post['nodes'] = json_decode($post['nodes']);
-        foreach (isset($post['nodes']) ? $post['nodes'] : [] as $node) {
-            $data[] = ['auth' => $auth, 'node' => $node];
-        }
-        ProjectAuthNode::where(['auth' => $auth])->delete();
-        ProjectAuthNode::insertAll($data);
-        $this->success('节点授权更新成功！', '');
-    }
-
-    /**
-     * 节点数据拼装
-     * @param array $nodes
-     * @param int $level
-     * @param $checkedList
-     * @return array
-     */
-    protected function _apply_filter($nodes, $level = 1, &$checkedList)
-    {
-        foreach ($nodes as $key => $node) {
-            if (!empty($node['children']) && is_array($node['children'])) {
-                $node[$key]['children'] = $this->_apply_filter($node['children'], $level + 1, $checkedList);
-            } else {
-                if ($node['checked']) {
-                    $checkedList[] = $node['key'];
-                }
-            }
-        }
-        return $nodes;
     }
 
     /**
@@ -177,7 +113,7 @@ class Auth extends BasicApi
     {
         $currentOrganizationCode = getCurrentOrganizationCode();
         $params = Request::only('is_default,id');
-        $this->model->isUpdate(true)->save(['is_default' => 0],['organization_code' => $currentOrganizationCode]);
+        $this->model->isUpdate(true)->save(['is_default' => 0], ['organization_code' => $currentOrganizationCode]);
         $result = $this->model->_edit($params);
         if ($result) {
             $this->success('');
@@ -196,5 +132,65 @@ class Auth extends BasicApi
             $this->success("权限删除成功！", '');
         }
         $this->error("权限删除失败，请稍候再试！");
+    }
+
+    /**
+     * 读取授权节点
+     * @param string $auth
+     */
+    protected function _apply_getnode($auth)
+    {
+        $nodes = NodeService::get([], [], 'project');
+        $checked = ProjectAuthNode::where(['auth' => $auth])->column('node');
+        $count = 1;
+        foreach ($nodes as $key => &$node) {
+            if (!$node['title']) {
+                $node['title'] = '-';
+            }
+            $node['checked'] = in_array($node['node'], $checked);
+            $node['key'] = $node['node'];
+            $count++;
+        }
+        $checkedList = [];
+        $all = $this->_apply_filter(ToolsService::arr2tree($nodes, 'node', 'pnode', 'children'), 1, $checkedList);
+        $this->success('', ['list' => $all, 'checkedList' => $checkedList]);
+    }
+
+    /**
+     * 节点数据拼装
+     * @param array $nodes
+     * @param int $level
+     * @param $checkedList
+     * @return array
+     */
+    protected function _apply_filter($nodes, $level = 1, &$checkedList)
+    {
+        foreach ($nodes as $key => $node) {
+            if (!empty($node['children']) && is_array($node['children'])) {
+                $node[$key]['children'] = $this->_apply_filter($node['children'], $level + 1, $checkedList);
+            } else {
+                if ($node['checked']) {
+                    $checkedList[] = $node['key'];
+                }
+            }
+        }
+        return $nodes;
+    }
+
+    /**
+     * 保存授权节点
+     * @param string $auth
+     * @throws \Exception
+     */
+    protected function _apply_save($auth)
+    {
+        list($data, $post) = [[], Request::only('action,id,nodes')];
+        isset($post['nodes']) && $post['nodes'] = json_decode($post['nodes']);
+        foreach (isset($post['nodes']) ? $post['nodes'] : [] as $node) {
+            $data[] = ['auth' => $auth, 'node' => $node];
+        }
+        ProjectAuthNode::where(['auth' => $auth])->delete();
+        ProjectAuthNode::insertAll($data);
+        $this->success('节点授权更新成功！', '');
     }
 }

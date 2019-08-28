@@ -3,8 +3,6 @@
 namespace app\common\Model;
 
 
-use service\DateService;
-
 /**
  * 邀请链接
  * Class TaskStar
@@ -53,7 +51,7 @@ class InviteLink extends CommonModel
                 'over_time' => Date('Y-m-d H:i:s', strtotime(nowTime()) + 3600 * 24),
             ];
             $result = self::create($fileData);
-        }else{
+        } else {
             $result = $inviteLink;
         }
         return $result;

@@ -1,7 +1,6 @@
 <?php
 
 
-
 namespace service;
 
 use think\Db;
@@ -11,7 +10,6 @@ use think\db\Query;
  * 基础数据服务
  * Class DataService
  * @package service
-
  * @date 2017/03/22 15:32
  */
 class DataService

@@ -2,8 +2,6 @@
 
 namespace app\project\controller;
 
-use app\common\Model\Member;
-use app\common\Model\MemberAccount;
 use controller\BasicApi;
 use think\facade\Request;
 

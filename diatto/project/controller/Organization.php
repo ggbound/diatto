@@ -3,9 +3,6 @@
 namespace app\project\controller;
 
 use controller\BasicApi;
-use think\db\exception\DataNotFoundException;
-use think\db\exception\ModelNotFoundException;
-use think\exception\DbException;
 use think\facade\Request;
 
 class Organization extends BasicApi
@@ -103,7 +100,7 @@ class Organization extends BasicApi
     /**
      * 删除指定资源
      *
-     * @param  int $id
+     * @param int $id
      * @return void
      */
     public function delete($id = 0)

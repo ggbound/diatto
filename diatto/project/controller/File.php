@@ -135,7 +135,7 @@ class File extends BasicApi
             if ($data['taskCode']) {
                 \app\common\Model\SourceLink::createSource('file', $fileResult['code'], 'task', $data['taskCode']);
             }
-            \app\common\Model\Project::projectHook(getCurrentMember()['code'],  $data['projectCode'], 'uploadFile','',0,'','',$fileResult['code'],['title' => $fileInfo['fullName'], 'url' => $fileResult['file_url']]);
+            \app\common\Model\Project::projectHook(getCurrentMember()['code'], $data['projectCode'], 'uploadFile', '', 0, '', '', $fileResult['code'], ['title' => $fileInfo['fullName'], 'url' => $fileResult['file_url']]);
         }
 
         $project = \app\common\Model\Project::where(['code' => $data['projectCode']])->find();

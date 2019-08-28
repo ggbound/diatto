@@ -3,7 +3,6 @@
 namespace app\project\controller;
 
 use app\common\Model\Member;
-use app\common\Model\ProjectLog;
 use app\common\Model\ProjectVersionLog;
 use controller\BasicApi;
 use think\db\exception\DataNotFoundException;

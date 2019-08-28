@@ -60,6 +60,20 @@ class SourceLink extends CommonModel
         return $result;
     }
 
+    public function deleteSource($code)
+    {
+        $source = self::where(['code' => $code])->find();
+        if (!$source) {
+            throw new \Exception('该资源不存在', 1);
+        }
+        $source = self::getSourceDetail($code);
+        $result = self::where(['code' => $code])->delete();
+        if ($source['link_type'] == 'task') {
+            Task::taskHook(getCurrentMember()['code'], $source['link_code'], 'unlinkFile', '', 0, '', '', '', ['title' => $source['title'], 'url' => $source['sourceDetail']['file_url']]);
+        }
+        return $result;
+    }
+
     public static function getSourceDetail($sourceCode)
     {
         $source = self::where(['code' => $sourceCode])->find();
@@ -76,20 +90,6 @@ class SourceLink extends CommonModel
         }
         $source['sourceDetail'] = $sourceDetail;
         return $source;
-    }
-
-    public function deleteSource($code)
-    {
-        $source = self::where(['code' => $code])->find();
-        if (!$source) {
-            throw new \Exception('该资源不存在', 1);
-        }
-        $source = self::getSourceDetail($code);
-        $result = self::where(['code' => $code])->delete();
-        if ($source['link_type'] == 'task') {
-            Task::taskHook(getCurrentMember()['code'], $source['link_code'], 'unlinkFile', '', 0, '', '', '', ['title' => $source['title'], 'url' => $source['sourceDetail']['file_url']]);
-        }
-        return $result;
     }
 
 }

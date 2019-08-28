@@ -4,26 +4,16 @@ namespace app\project\controller;
 
 use app\common\Model\CommonModel;
 use app\common\Model\Member;
-use app\common\Model\MemberAccount;
-use app\common\Model\Notify;
 use app\common\Model\ProjectCollection;
 use app\common\Model\ProjectLog;
 use app\common\Model\ProjectMember;
 use app\common\Model\ProjectReport;
-use app\common\Model\SystemConfig;
 use controller\BasicApi;
-use OSS\Core\OssException;
-use service\FileService;
-use service\NodeService;
-use service\RandomService;
 use think\Db;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
-use think\Exception;
 use think\Exception\DbException;
-use think\exception\PDOException;
 use think\facade\Request;
-use think\File;
 
 /**
  */
@@ -297,7 +287,7 @@ class Project extends BasicApi
         debug('begin');
         $result = ProjectReport::setDayilyProejctReport();
         debug('end');
-        logRecord(debug('begin','end') * 1000 . 'ms', 'setDayilyProejctReportSuccess');
+        logRecord(debug('begin', 'end') * 1000 . 'ms', 'setDayilyProejctReportSuccess');
         echo 'success_at ' . nowTime();
     }
 

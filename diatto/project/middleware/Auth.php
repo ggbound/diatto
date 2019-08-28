@@ -74,7 +74,7 @@ class Auth
                     foreach ($config as $itemKey => $item) {
                         sysconf($itemKey, $item);
                     }
-                }else{
+                } else {
                     sysconf($key, $config);
                 }
             }

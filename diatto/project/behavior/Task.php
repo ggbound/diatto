@@ -9,7 +9,6 @@
 namespace app\project\behavior;
 
 
-use app\common\Model\CommonModel;
 use app\common\Model\Member;
 use app\common\Model\Notify;
 use app\common\Model\ProjectLog;
@@ -23,7 +22,6 @@ use think\Db;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 use think\exception\DbException;
-use think\facade\Log;
 
 class Task
 {
@@ -160,7 +158,7 @@ class Task
                 break;
             case 'setWorkTime':
                 $icon = 'clock-circle';
-                $remark = '更新预估工时为 ' .$task['work_time'];
+                $remark = '更新预估工时为 ' . $task['work_time'];
                 break;
             case 'linkFile':
                 $icon = 'link';
@@ -254,7 +252,7 @@ class Task
                         }
                     }
                 }
-            }else{
+            } else {
                 $taskMembers = TaskMember::where(['task_code' => $task['code']])->select()->toArray();
             }
             //todo 短信,消息推送

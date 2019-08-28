@@ -52,7 +52,7 @@ function setCurrentMember($data)
     $key = 'member:info:' . $data['code'];
     if (!$data) {
         Cache::rm($key);
-    }else{
+    } else {
         Cache::set($key, $data);
     }
     return session('member', $data);
@@ -179,6 +179,7 @@ function isOpenNoticePush()
 {
     return config('config.notice_push');
 }
+
 /**
  * 是否开启钉钉消息推送
  * @return mixed

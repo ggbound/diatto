@@ -3,9 +3,7 @@
 namespace app\common\Model;
 
 use Exception;
-use function GuzzleHttp\Promise\task;
 use service\DateService;
-use service\RandomService;
 use think\Db;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
@@ -20,42 +18,6 @@ use think\facade\Hook;
 class Task extends CommonModel
 {
     protected $append = ['priText', 'liked', 'stared', 'tags', 'childCount', 'hasUnDone', 'parentDone', 'hasComment', 'hasSource', 'canRead'];
-
-    public function read($code)
-    {
-        if (!$code) {
-            throw new Exception('请选择任务', 1);
-        }
-        $task = self::where(['code' => $code])->field('id', true)->find();
-        if (!$task) {
-            throw new Exception('该任务已失效', 404);
-        }
-        $project = Project::where(['code' => $task['project_code']])->field('name,open_begin_time')->find();
-        $stage = TaskStages::where(['code' => $task['stage_code']])->field('name')->find();
-        $task['executor'] = null;
-        if ($task['assign_to']) {
-            $task['executor'] = Member::where(['code' => $task['assign_to']])->field('name,code,avatar')->find();
-        }
-        if ($task['pcode']) {
-            $task['parentTask'] = self::where(['code' => $task['pcode']])->field('id', true)->find();
-            $parents = [];
-            if (isset($task['path'])) {
-                $paths = explode(',', $task['path']);
-                if ($paths) {
-                    foreach ($paths as $parentCode) {
-                        $item = self::where(['code' => $parentCode])->field('name')->find();
-                        $parents[] = ['code' => $parentCode, 'name' => $item['name']];
-                    }
-                }
-            }
-            $task['parentTasks'] = array_reverse($parents);
-        }
-        $task['openBeginTime'] = $project['open_begin_time'];
-        $task['projectName'] = $project['name'];
-        $task['stageName'] = $stage['name'];
-        //TODO 查看权限
-        return $task;
-    }
 
     /**
      * @param $projectCode
@@ -132,6 +94,25 @@ class Task extends CommonModel
         return $result;
     }
 
+    /** 任务变动钩子
+     * @param $memberCode
+     * @param $taskCode
+     * @param string $type
+     * @param string $toMemberCode
+     * @param int $isComment
+     * @param string $remark
+     * @param string $content
+     * @param string $fileCode
+     * @param array $data
+     * @param string $tag
+     */
+    public static function taskHook($memberCode, $taskCode, $type = 'create', $toMemberCode = '', $isComment = 0, $remark = '', $content = '', $fileCode = '', $data = [], $tag = 'task')
+    {
+        $data = ['memberCode' => $memberCode, 'taskCode' => $taskCode, 'remark' => $remark, 'type' => $type, 'content' => $content, 'isComment' => $isComment, 'toMemberCode' => $toMemberCode, 'fileCode' => $fileCode, 'data' => $data, 'tag' => $tag];
+        Hook::listen($tag, $data);
+
+    }
+
     public function taskSources($code)
     {
         if (!$code) {
@@ -204,6 +185,269 @@ class Task extends CommonModel
         $member = getCurrentMember();
         Collection::starTask($code, $member['code'], $star);
         return $result;
+    }
+
+    public function taskDone($taskCode, $done)
+    {
+        if (!$taskCode) {
+            throw new Exception('请选择任务', 1);
+        }
+        $task = self::where(['code' => $taskCode])->find();
+        if (!$task) {
+            throw new Exception('任务已失效', 2);
+        }
+        if ($task['deleted']) {
+            throw new Exception('任务在回收站中无法进行编辑', 3);
+        }
+        if ($task['pcode'] && $task['parentDone']) {
+            throw new Exception('父任务已完成，无法重做子任务', 4);
+        }
+        if ($task['hasUnDone']) {
+            throw new Exception('子任务尚未全部完成，无法完成父任务', 5);
+        }
+
+        Db::startTrans();
+        try {
+            $result = self::update(['done' => $done], ['code' => $taskCode]);
+            //todo 添加任务动态，编辑权限检测
+            Db::commit();
+        } catch (Exception $e) {
+            Db::rollback();
+            throw new Exception($e->getMessage());
+        }
+        $member = getCurrentMember();
+        $done ? $type = 'done' : $type = 'redo';
+        self::taskHook($member['code'], $taskCode, $type);
+        if ($task['pcode']) {
+            $done ? $type = 'doneChild' : $type = 'redoChild';
+            self::taskHook($member['code'], $task['pcode'], $type);
+        }
+        return $result;
+    }
+
+    public function batchAssignTask($taskCodes, $executorCode)
+    {
+        if ($taskCodes) {
+            try {
+                foreach ($taskCodes as $taskCode) {
+                    $this->assignTask($taskCode, $executorCode);
+                }
+            } catch (Exception $e) {
+                return error(201, $e->getMessage());
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 指派任务
+     * @param $taskCode
+     * @param $executorCode
+     * @return TaskMember|bool
+     * @throws DataNotFoundException
+     * @throws ModelNotFoundException
+     * @throws DbException
+     */
+    public function assignTask($taskCode, $executorCode)
+    {
+        if (!$taskCode) {
+            throw new Exception('请选择任务', 1);
+        }
+        $task = self::where(['code' => $taskCode])->find();
+        if (!$task) {
+            throw new Exception('任务已失效', 2);
+        }
+        if ($task['deleted']) {
+            throw new Exception('任务在回收站中无法进行指派', 3);
+        }
+        Db::startTrans();
+        try {
+            $result = TaskMember::inviteMember($executorCode, $taskCode, 1);
+            //todo 添加任务动态，编辑权限检测
+            Db::commit();
+        } catch (Exception $e) {
+            Db::rollback();
+            throw new Exception($e->getMessage());
+        }
+        return $result;
+    }
+
+    /**
+     * @param $taskCode
+     * @param $comment
+     * @param $mentions
+     * @return bool
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
+     */
+    public function createComment($taskCode, $comment, $mentions = [])
+    {
+        if (!$taskCode) {
+            throw new Exception('请选择任务', 1);
+        }
+        $task = self::where(['code' => $taskCode])->find();
+        if (!$task) {
+            throw new Exception('任务已失效', 2);
+        }
+//        $data = [
+//            'member_code' => getCurrentMember()['code'],
+//            'source_code' => $taskCode,
+//            'action_type' => 'task',
+//            'code' => createUniqueCode('projectLog'),
+//            'create_time' => nowTime(),
+//            'is_comment' => 1,
+//            'content' => $comment,
+//            'type' => 'comment'
+//        ];
+        self::taskHook(getCurrentMember()['code'], $taskCode, 'comment', '', 1, '', $comment, '', $mentions);
+        return true;
+//        return ProjectLog::create($data);
+    }
+
+    /**
+     * 任务排序
+     * @param $stageCode string 移到的任务列表code
+     * @param $codes array 经过排序的任务code列表
+     * @return bool
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
+     */
+    public function sort($stageCode, $codes)
+    {
+        if (!$codes) {
+            return false;
+        }
+        if ($codes) {
+            $stage = TaskStages::where(['code' => $stageCode])->find();
+            foreach ($codes as $key => $code) {
+                $task = self::where(['code' => $code])->find();
+                self::update(['sort' => $key, 'stage_code' => $stageCode], ['code' => $code]);
+                if ($task['stage_code'] != $stageCode) {
+                    self::taskHook(getCurrentMember()['code'], $code, 'move', '', '', '', '', '', ['stageName' => $stage['name']]);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public function getMemberTasks($memberCode = '', $done = 0, $page = 1, $pageSize = 10)
+    {
+        if (!$memberCode) {
+            $memberCode = getCurrentMember()['code'];
+        }
+        if ($page < 1) {
+            $page = 1;
+        }
+        $offset = ($page - 1) * $page;
+        $limit = $pageSize;
+        $prefix = config('database.prefix');
+        $doneSql = '';
+        if ($done != -1) {
+            $doneSql = " and t.done = {$done}";
+        }
+        $sql = "select *,t.id as id,t.name as name,t.code as code,t.create_time as create_time from {$prefix}task as t join {$prefix}project as p on t.project_code = p.code where  t.deleted = 0 {$doneSql} and t.assign_to = '{$memberCode}' and p.deleted = 0 order by t.id desc";
+        $total = Db::query($sql);
+        $total = count($total);
+        $sql .= " limit {$offset},{$limit}";
+        $list = Db::query($sql);
+        return ['list' => $list, 'total' => $total];
+    }
+
+    /**
+     * 导入成员
+     * @param \think\File $file
+     * @return bool
+     * @throws Exception
+     */
+    public function uploadFile(\think\File $file, $projectCode, $memberCode)
+    {
+        try {
+            $data = importExcel($file->getInfo()['tmp_name']);
+        } catch (Exception $e) {
+            return error('201', $e->getMessage());
+        }
+        $count = 0;
+        if ($data) {
+            foreach ($data as $key => $item) {
+                if ($key > 2) {
+                    $name = trim($item['A']);
+                    $pTaskName = trim($item['B']);
+                    $taskStageName = trim($item['C']);
+                    $executorName = trim($item['D']);
+                    $beginTime = trim($item['E']);
+                    $endTime = trim($item['F']);
+                    $description = trim($item['G']);
+                    $priName = trim($item['H']);
+                    $tagNameList = trim($item['I']);
+
+                    if (!$name || !$taskStageName) {
+                        continue;
+                    }
+                    $taskStage = TaskStages::where(['name' => $taskStageName, 'project_code' => $projectCode])->field('code')->find();
+                    if (!$taskStage) {
+                        continue;
+                    }
+                    $taskStageCode = $taskStage['code'];
+
+                    switch ($priName) {
+                        case '紧急':
+                            $pri = 1;
+                            break;
+                        case '非常紧急':
+                            $pri = 2;
+                            break;
+                        default:
+                            $pri = 0;
+                    }
+
+                    $tagCodes = [];
+                    if ($tagNameList) {
+                        $tagNameList = explode(';', $tagNameList);
+                        foreach ($tagNameList as $tagName) {
+                            $tag = TaskTag::where(['name' => $tagName, 'project_code' => $projectCode])->field('code')->find();
+                            if ($tag) {
+                                $tagCodes[] = $tag['code'];
+                            }
+                        }
+                    }
+
+                    if ($pTaskName) {
+                        if (!isset($parentCode) || !$parentCode) {
+                            $pTask = self::where(['name' => $pTaskName, 'project_code' => $projectCode])->field('code')->order('id desc')->find();
+                            if ($pTask) {
+                                $parentCode = $pTask['code'];
+                            } else {
+                                $parentCode = '';
+                            }
+                        }
+                    } else {
+                        $parentCode = '';
+                    }
+
+                    $executorCode = '';
+                    if ($executorName) {
+                        $prefix = config('database.prefix');
+                        $sql = "select m.code as code from {$prefix}project_member as pm join {$prefix}member as m on pm.member_code = m.code where m.name = '{$executorName}'";
+                        $executor = Db::query($sql);
+                        if ($executor) {
+                            $executorCode = $executor[0]['code'];
+                        }
+                    }
+
+                    $beginTime = DateService::checkDateIsValid($beginTime) ? $beginTime : '';
+                    $endTime = DateService::checkDateIsValid($endTime) ? $endTime : '';
+                    $task = $this->createTask($taskStageCode, $projectCode, $name, $memberCode, $executorCode, $parentCode, $pri, $description, $tagCodes, $beginTime, $endTime);
+                    if ($task) {
+                        $count++;
+                    }
+                }
+
+            }
+        }
+        return $count;
     }
 
     /**
@@ -323,268 +567,40 @@ class Task extends CommonModel
         return $this->read($result['code']);
     }
 
-    public function taskDone($taskCode, $done)
+    public function read($code)
     {
-        if (!$taskCode) {
+        if (!$code) {
             throw new Exception('请选择任务', 1);
         }
-        $task = self::where(['code' => $taskCode])->find();
+        $task = self::where(['code' => $code])->field('id', true)->find();
         if (!$task) {
-            throw new Exception('任务已失效', 2);
+            throw new Exception('该任务已失效', 404);
         }
-        if ($task['deleted']) {
-            throw new Exception('任务在回收站中无法进行编辑', 3);
+        $project = Project::where(['code' => $task['project_code']])->field('name,open_begin_time')->find();
+        $stage = TaskStages::where(['code' => $task['stage_code']])->field('name')->find();
+        $task['executor'] = null;
+        if ($task['assign_to']) {
+            $task['executor'] = Member::where(['code' => $task['assign_to']])->field('name,code,avatar')->find();
         }
-        if ($task['pcode'] && $task['parentDone']) {
-            throw new Exception('父任务已完成，无法重做子任务', 4);
-        }
-        if ($task['hasUnDone']) {
-            throw new Exception('子任务尚未全部完成，无法完成父任务', 5);
-        }
-
-        Db::startTrans();
-        try {
-            $result = self::update(['done' => $done], ['code' => $taskCode]);
-            //todo 添加任务动态，编辑权限检测
-            Db::commit();
-        } catch (Exception $e) {
-            Db::rollback();
-            throw new Exception($e->getMessage());
-        }
-        $member = getCurrentMember();
-        $done ? $type = 'done' : $type = 'redo';
-        self::taskHook($member['code'], $taskCode, $type);
         if ($task['pcode']) {
-            $done ? $type = 'doneChild' : $type = 'redoChild';
-            self::taskHook($member['code'], $task['pcode'], $type);
-        }
-        return $result;
-    }
-
-    /**
-     * 指派任务
-     * @param $taskCode
-     * @param $executorCode
-     * @return TaskMember|bool
-     * @throws DataNotFoundException
-     * @throws ModelNotFoundException
-     * @throws DbException
-     */
-    public function assignTask($taskCode, $executorCode)
-    {
-        if (!$taskCode) {
-            throw new Exception('请选择任务', 1);
-        }
-        $task = self::where(['code' => $taskCode])->find();
-        if (!$task) {
-            throw new Exception('任务已失效', 2);
-        }
-        if ($task['deleted']) {
-            throw new Exception('任务在回收站中无法进行指派', 3);
-        }
-        Db::startTrans();
-        try {
-            $result = TaskMember::inviteMember($executorCode, $taskCode, 1);
-            //todo 添加任务动态，编辑权限检测
-            Db::commit();
-        } catch (Exception $e) {
-            Db::rollback();
-            throw new Exception($e->getMessage());
-        }
-        return $result;
-    }
-
-    public function batchAssignTask($taskCodes, $executorCode)
-    {
-        if ($taskCodes) {
-            try {
-                foreach ($taskCodes as $taskCode) {
-                    $this->assignTask($taskCode, $executorCode);
-                }
-            } catch (Exception $e) {
-                return error(201, $e->getMessage());
-            }
-        }
-        return true;
-    }
-
-    /**
-     * @param $taskCode
-     * @param $comment
-     * @param $mentions
-     * @return bool
-     * @throws DataNotFoundException
-     * @throws DbException
-     * @throws ModelNotFoundException
-     */
-    public function createComment($taskCode, $comment, $mentions = [])
-    {
-        if (!$taskCode) {
-            throw new Exception('请选择任务', 1);
-        }
-        $task = self::where(['code' => $taskCode])->find();
-        if (!$task) {
-            throw new Exception('任务已失效', 2);
-        }
-//        $data = [
-//            'member_code' => getCurrentMember()['code'],
-//            'source_code' => $taskCode,
-//            'action_type' => 'task',
-//            'code' => createUniqueCode('projectLog'),
-//            'create_time' => nowTime(),
-//            'is_comment' => 1,
-//            'content' => $comment,
-//            'type' => 'comment'
-//        ];
-        self::taskHook(getCurrentMember()['code'], $taskCode, 'comment', '', 1, '', $comment, '', $mentions);
-        return true;
-//        return ProjectLog::create($data);
-    }
-
-    /**
-     * 任务排序
-     * @param $stageCode string 移到的任务列表code
-     * @param $codes array 经过排序的任务code列表
-     * @return bool
-     * @throws DataNotFoundException
-     * @throws DbException
-     * @throws ModelNotFoundException
-     */
-    public function sort($stageCode, $codes)
-    {
-        if (!$codes) {
-            return false;
-        }
-        if ($codes) {
-            $stage = TaskStages::where(['code' => $stageCode])->find();
-            foreach ($codes as $key => $code) {
-                $task = self::where(['code' => $code])->find();
-                self::update(['sort' => $key, 'stage_code' => $stageCode], ['code' => $code]);
-                if ($task['stage_code'] != $stageCode) {
-                    self::taskHook(getCurrentMember()['code'], $code, 'move', '', '', '', '', '', ['stageName' => $stage['name']]);
-                }
-            }
-            return true;
-        }
-        return false;
-    }
-
-    public function getMemberTasks($memberCode = '', $done = 0, $page = 1, $pageSize = 10)
-    {
-        if (!$memberCode) {
-            $memberCode = getCurrentMember()['code'];
-        }
-        if ($page < 1) {
-            $page = 1;
-        }
-        $offset = ($page - 1) * $page;
-        $limit = $pageSize;
-        $prefix = config('database.prefix');
-        $doneSql = '';
-        if ($done != -1) {
-            $doneSql = " and t.done = {$done}";
-        }
-        $sql = "select *,t.id as id,t.name as name,t.code as code,t.create_time as create_time from {$prefix}task as t join {$prefix}project as p on t.project_code = p.code where  t.deleted = 0 {$doneSql} and t.assign_to = '{$memberCode}' and p.deleted = 0 order by t.id desc";
-        $total = Db::query($sql);
-        $total = count($total);
-        $sql .= " limit {$offset},{$limit}";
-        $list = Db::query($sql);
-        return ['list' => $list, 'total' => $total];
-    }
-
-
-    /**
-     * 导入成员
-     * @param \think\File $file
-     * @return bool
-     * @throws Exception
-     */
-    public function uploadFile(\think\File $file, $projectCode, $memberCode)
-    {
-        try {
-            $data = importExcel($file->getInfo()['tmp_name']);
-        } catch (Exception $e) {
-            return error('201', $e->getMessage());
-        }
-        $count = 0;
-        if ($data) {
-            foreach ($data as $key => $item) {
-                if ($key > 2) {
-                    $name = trim($item['A']);
-                    $pTaskName = trim($item['B']);
-                    $taskStageName = trim($item['C']);
-                    $executorName = trim($item['D']);
-                    $beginTime = trim($item['E']);
-                    $endTime = trim($item['F']);
-                    $description = trim($item['G']);
-                    $priName = trim($item['H']);
-                    $tagNameList = trim($item['I']);
-
-                    if (!$name || !$taskStageName) {
-                        continue;
-                    }
-                    $taskStage = TaskStages::where(['name' => $taskStageName, 'project_code' => $projectCode])->field('code')->find();
-                    if (!$taskStage) {
-                        continue;
-                    }
-                    $taskStageCode = $taskStage['code'];
-
-                    switch ($priName) {
-                        case '紧急':
-                            $pri = 1;
-                            break;
-                        case '非常紧急':
-                            $pri = 2;
-                            break;
-                        default:
-                            $pri = 0;
-                    }
-
-                    $tagCodes = [];
-                    if ($tagNameList) {
-                        $tagNameList = explode(';', $tagNameList);
-                        foreach ($tagNameList as $tagName) {
-                            $tag = TaskTag::where(['name' => $tagName, 'project_code' => $projectCode])->field('code')->find();
-                            if ($tag) {
-                                $tagCodes[] = $tag['code'];
-                            }
-                        }
-                    }
-
-                    if ($pTaskName) {
-                        if (!isset($parentCode) || !$parentCode) {
-                            $pTask = self::where(['name' => $pTaskName, 'project_code' => $projectCode])->field('code')->order('id desc')->find();
-                            if ($pTask) {
-                                $parentCode = $pTask['code'];
-                            } else {
-                                $parentCode = '';
-                            }
-                        }
-                    } else {
-                        $parentCode = '';
-                    }
-
-                    $executorCode = '';
-                    if ($executorName) {
-                        $prefix = config('database.prefix');
-                        $sql = "select m.code as code from {$prefix}project_member as pm join {$prefix}member as m on pm.member_code = m.code where m.name = '{$executorName}'";
-                        $executor = Db::query($sql);
-                        if ($executor) {
-                            $executorCode = $executor[0]['code'];
-                        }
-                    }
-
-                    $beginTime = DateService::checkDateIsValid($beginTime) ? $beginTime : '';
-                    $endTime = DateService::checkDateIsValid($endTime) ? $endTime : '';
-                    $task = $this->createTask($taskStageCode, $projectCode, $name, $memberCode, $executorCode, $parentCode, $pri, $description, $tagCodes, $beginTime, $endTime);
-                    if ($task) {
-                        $count++;
+            $task['parentTask'] = self::where(['code' => $task['pcode']])->field('id', true)->find();
+            $parents = [];
+            if (isset($task['path'])) {
+                $paths = explode(',', $task['path']);
+                if ($paths) {
+                    foreach ($paths as $parentCode) {
+                        $item = self::where(['code' => $parentCode])->field('name')->find();
+                        $parents[] = ['code' => $parentCode, 'name' => $item['name']];
                     }
                 }
-
             }
+            $task['parentTasks'] = array_reverse($parents);
         }
-        return $count;
+        $task['openBeginTime'] = $project['open_begin_time'];
+        $task['projectName'] = $project['name'];
+        $task['stageName'] = $stage['name'];
+        //TODO 查看权限
+        return $task;
     }
 
     /**
@@ -678,7 +694,6 @@ class Task extends CommonModel
         }
         return true;
     }
-
 
     public function getPriTextAttr($value, $data)
     {
@@ -811,24 +826,5 @@ class Task extends CommonModel
             }
         }
         return $stared;
-    }
-
-    /** 任务变动钩子
-     * @param $memberCode
-     * @param $taskCode
-     * @param string $type
-     * @param string $toMemberCode
-     * @param int $isComment
-     * @param string $remark
-     * @param string $content
-     * @param string $fileCode
-     * @param array $data
-     * @param string $tag
-     */
-    public static function taskHook($memberCode, $taskCode, $type = 'create', $toMemberCode = '', $isComment = 0, $remark = '', $content = '', $fileCode = '', $data = [], $tag = 'task')
-    {
-        $data = ['memberCode' => $memberCode, 'taskCode' => $taskCode, 'remark' => $remark, 'type' => $type, 'content' => $content, 'isComment' => $isComment, 'toMemberCode' => $toMemberCode, 'fileCode' => $fileCode, 'data' => $data, 'tag' => $tag];
-        Hook::listen($tag, $data);
-
     }
 }

@@ -20,48 +20,53 @@ class Member extends CommonModel
 
     protected $append = [];
 
-    public static function login($member)
+    /**
+     * 钉钉登录
+     * @param $userInfo
+     * @return Member|array|PDOStatement|string|Model|null
+     * @throws DataNotFoundException
+     * @throws ModelNotFoundException
+     * @throws DbException
+     */
+    public static function dingtalkLogin($userInfo)
     {
-        // 更新登录信息
-        Db::name('Member')->where(['id' => $member['id']])->update([
-            'last_login_time' => Db::raw('now()'),
-        ]);
-        $list = MemberAccount::where(['member_code' => $member['code']])->order('id asc')->select()->toArray();
-        $organizationList = [];
-        if ($list) {
-            foreach ($list as &$item) {
-                $departments = [];
-                $departmentCodes = $item['department_code'];
-                if ($departmentCodes) {
-                    $departmentCodes = explode(',', $departmentCodes);
-                    foreach ($departmentCodes as $departmentCode) {
-                        $department = Department::where(['code' => $departmentCode])->field('name')->find();
-                        $departments[] = $department['name'];
-                    }
-                }
-                $item['department'] = $departments ? implode(' - ', $departments) : '';
-                $organization = Organization::where(['code' => $item['organization_code']])->find();
-                if ($organization) {
-                    $organizationList[] = $organization;
+        $currentMember = getCurrentMember();
+        if ($currentMember) {
+            $where = ['code' => $currentMember['code']];
+            $currentMember = self::where($where)->find();
+        }
+        $unionid = $userInfo['unionid'];
+        $openid = $userInfo['openid'];
+        $member = self::where(['dingtalk_unionid' => $unionid])->find();
+        $memberData = [
+            'dingtalk_openid' => $openid,
+            'dingtalk_unionid' => $unionid,
+            'dingtalk_userid' => isset($userInfo['userId']) ? $userInfo['userId'] : '',
+        ];
+        if (!$member) {
+            $memberData['name'] = $userInfo['nick'];
+            $memberData['avatar'] = isset($userInfo['avatar']) ? $userInfo['avatar'] : '';
+            $memberData['mobile'] = isset($userInfo['mobile']) ? $userInfo['mobile'] : '';
+            $memberData['email'] = isset($userInfo['email']) ? $userInfo['email'] : '';
+            if (!$currentMember) {
+                $member = self::createMember($memberData);
+            } else {
+                //已登录且未绑定，则绑定
+                if (!$currentMember['dingtalk_unionid'] || !$currentMember['dingtalk_userid']) {
+                    self::update($memberData, $where);
+                    $member = self::where($where)->find();
                 }
             }
+        } else {
+            if ($currentMember && $member['dingtalk_unionid'] != $currentMember['dingtalk_unionid']) {
+                return error('1', '您想要绑定的第三方帐号已经被绑定给其他帐号，请先用该第三方帐号登录后，解绑释放它，再切回当前帐号发起绑定');
+            }
+            if (!$member['dingtalk_userid']) {
+                self::update($memberData, ['code' => $member['code']]);
+            }
         }
-        $member['account_id'] = $list[0]['id'];
-        $member['is_owner'] = $list[0]['is_owner'];
-        $member['authorize'] = $list[0]['authorize'];
-        $member['position'] = $list[0]['position'];
-        $member['department'] = $list[0]['department'];
-
-        setCurrentMember($member);
-        !empty($member['authorize']) && NodeService::applyProjectAuthNode();
-        $member = getCurrentMember();
-        $tokenList = JwtService::initToken(['code' => $member['code']]);
-        $accessTokenExp = JwtService::decodeToken($tokenList['accessToken'])->exp;
-        $tokenList['accessTokenExp'] = $accessTokenExp;
-        $loginInfo = ['member' => $member, 'tokenList' => $tokenList, 'organizationList' => $organizationList];
-        session('loginInfo', $loginInfo);
-        logRecord($loginInfo, 'info', 'member/login');
-        return $loginInfo;
+        self::login($member);
+        return $member;
     }
 
     /**
@@ -141,53 +146,48 @@ class Member extends CommonModel
         return $result;
     }
 
-    /**
-     * 钉钉登录
-     * @param $userInfo
-     * @return Member|array|PDOStatement|string|Model|null
-     * @throws DataNotFoundException
-     * @throws ModelNotFoundException
-     * @throws DbException
-     */
-    public static function dingtalkLogin($userInfo)
+    public static function login($member)
     {
-        $currentMember = getCurrentMember();
-        if ($currentMember) {
-            $where = ['code' => $currentMember['code']];
-            $currentMember = self::where($where)->find();
-        }
-        $unionid = $userInfo['unionid'];
-        $openid = $userInfo['openid'];
-        $member = self::where(['dingtalk_unionid' => $unionid])->find();
-        $memberData = [
-            'dingtalk_openid' => $openid,
-            'dingtalk_unionid' => $unionid,
-            'dingtalk_userid' => isset($userInfo['userId']) ? $userInfo['userId'] : '',
-        ];
-        if (!$member) {
-            $memberData['name'] = $userInfo['nick'];
-            $memberData['avatar'] = isset($userInfo['avatar']) ? $userInfo['avatar'] : '';
-            $memberData['mobile'] = isset($userInfo['mobile']) ? $userInfo['mobile'] : '';
-            $memberData['email'] = isset($userInfo['email']) ? $userInfo['email'] : '';
-            if (!$currentMember) {
-                $member = self::createMember($memberData);
-            } else {
-                //已登录且未绑定，则绑定
-                if (!$currentMember['dingtalk_unionid'] || !$currentMember['dingtalk_userid']) {
-                    self::update($memberData, $where);
-                    $member = self::where($where)->find();
+        // 更新登录信息
+        Db::name('Member')->where(['id' => $member['id']])->update([
+            'last_login_time' => Db::raw('now()'),
+        ]);
+        $list = MemberAccount::where(['member_code' => $member['code']])->order('id asc')->select()->toArray();
+        $organizationList = [];
+        if ($list) {
+            foreach ($list as &$item) {
+                $departments = [];
+                $departmentCodes = $item['department_code'];
+                if ($departmentCodes) {
+                    $departmentCodes = explode(',', $departmentCodes);
+                    foreach ($departmentCodes as $departmentCode) {
+                        $department = Department::where(['code' => $departmentCode])->field('name')->find();
+                        $departments[] = $department['name'];
+                    }
+                }
+                $item['department'] = $departments ? implode(' - ', $departments) : '';
+                $organization = Organization::where(['code' => $item['organization_code']])->find();
+                if ($organization) {
+                    $organizationList[] = $organization;
                 }
             }
-        } else {
-            if ($currentMember && $member['dingtalk_unionid'] != $currentMember['dingtalk_unionid']) {
-                return error('1', '您想要绑定的第三方帐号已经被绑定给其他帐号，请先用该第三方帐号登录后，解绑释放它，再切回当前帐号发起绑定');
-            }
-            if (!$member['dingtalk_userid']) {
-                self::update($memberData, ['code' => $member['code']]);
-            }
         }
-        self::login($member);
-        return $member;
+        $member['account_id'] = $list[0]['id'];
+        $member['is_owner'] = $list[0]['is_owner'];
+        $member['authorize'] = $list[0]['authorize'];
+        $member['position'] = $list[0]['position'];
+        $member['department'] = $list[0]['department'];
+
+        setCurrentMember($member);
+        !empty($member['authorize']) && NodeService::applyProjectAuthNode();
+        $member = getCurrentMember();
+        $tokenList = JwtService::initToken(['code' => $member['code']]);
+        $accessTokenExp = JwtService::decodeToken($tokenList['accessToken'])->exp;
+        $tokenList['accessTokenExp'] = $accessTokenExp;
+        $loginInfo = ['member' => $member, 'tokenList' => $tokenList, 'organizationList' => $organizationList];
+        session('loginInfo', $loginInfo);
+        logRecord($loginInfo, 'info', 'member/login');
+        return $loginInfo;
     }
 
     public static function logout()

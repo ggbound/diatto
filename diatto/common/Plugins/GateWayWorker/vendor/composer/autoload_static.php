@@ -6,26 +6,26 @@ namespace Composer\Autoload;
 
 class ComposerStaticInitf4e34532a1d845b06a4253c44ea489ec
 {
-    public static $prefixLengthsPsr4 = array (
-        'W' => 
-        array (
-            'Workerman\\' => 10,
-        ),
-        'G' => 
-        array (
-            'GatewayWorker\\' => 14,
-        ),
+    public static $prefixLengthsPsr4 = array(
+        'W' =>
+            array(
+                'Workerman\\' => 10,
+            ),
+        'G' =>
+            array(
+                'GatewayWorker\\' => 14,
+            ),
     );
 
-    public static $prefixDirsPsr4 = array (
-        'Workerman\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/workerman/workerman',
-        ),
-        'GatewayWorker\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/workerman/gateway-worker/src',
-        ),
+    public static $prefixDirsPsr4 = array(
+        'Workerman\\' =>
+            array(
+                0 => __DIR__ . '/..' . '/workerman/workerman',
+            ),
+        'GatewayWorker\\' =>
+            array(
+                0 => __DIR__ . '/..' . '/workerman/gateway-worker/src',
+            ),
     );
 
     public static function getInitializer(ClassLoader $loader)

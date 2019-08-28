@@ -2,22 +2,16 @@
 
 namespace app\project\controller;
 
-use app\common\Model\Member;
 use app\common\Model\MemberAccount;
 use app\common\Model\Organization;
-use app\common\Model\SystemConfig;
 use controller\BasicApi;
-use service\FileService;
-use service\MessageService;
-use service\NodeService;
 use think\facade\Request;
-use think\File;
 
 /**
- * Class Account
+ * Class Member
  * @package app\project\controller
  */
-class Account extends BasicApi
+class Member extends BasicApi
 {
 
     public function __construct()
@@ -74,7 +68,7 @@ class Account extends BasicApi
         $list = $this->model->_list($where, 'id asc');
         if ($list['list']) {
             foreach ($list['list'] as &$item) {
-                $memberInfo = Member::where(['code' => $item['member_code']])->field('id', true)->find();
+                $memberInfo = \app\common\Model\Member::where(['code' => $item['member_code']])->field('id', true)->find();
                 if ($memberInfo) {
                     $item['avatar'] = $memberInfo['avatar'];
                 }

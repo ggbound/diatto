@@ -11,6 +11,7 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace Workerman\Connection;
 
 /**
@@ -44,45 +45,12 @@ class UdpConnection extends ConnectionInterface
      * Construct.
      *
      * @param resource $socket
-     * @param string   $remote_address
+     * @param string $remote_address
      */
     public function __construct($socket, $remote_address)
     {
-        $this->_socket        = $socket;
+        $this->_socket = $socket;
         $this->_remoteAddress = $remote_address;
-    }
-
-    /**
-     * Sends data on the connection.
-     *
-     * @param string $send_buffer
-     * @param bool   $raw
-     * @return void|boolean
-     */
-    public function send($send_buffer, $raw = false)
-    {
-        if (false === $raw && $this->protocol) {
-            $parser      = $this->protocol;
-            $send_buffer = $parser::encode($send_buffer, $this);
-            if ($send_buffer === '') {
-                return null;
-            }
-        }
-        return strlen($send_buffer) === stream_socket_sendto($this->_socket, $send_buffer, 0, $this->_remoteAddress);
-    }
-
-    /**
-     * Get remote IP.
-     *
-     * @return string
-     */
-    public function getRemoteIp()
-    {
-        $pos = strrpos($this->_remoteAddress, ':');
-        if ($pos) {
-            return trim(substr($this->_remoteAddress, 0, $pos), '[]');
-        }
-        return '';
     }
 
     /**
@@ -124,6 +92,16 @@ class UdpConnection extends ConnectionInterface
     }
 
     /**
+     * Get local address.
+     *
+     * @return string
+     */
+    public function getLocalAddress()
+    {
+        return (string)@stream_socket_get_name($this->_socket, false);
+    }
+
+    /**
      * Get local port.
      *
      * @return int
@@ -139,16 +117,6 @@ class UdpConnection extends ConnectionInterface
     }
 
     /**
-     * Get local address.
-     *
-     * @return string
-     */
-    public function getLocalAddress()
-    {
-        return (string)@stream_socket_get_name($this->_socket, false);
-    }
-
-    /**
      * Is ipv4.
      *
      * return bool.
@@ -159,6 +127,20 @@ class UdpConnection extends ConnectionInterface
             return false;
         }
         return strpos($this->getRemoteIp(), ':') === false;
+    }
+
+    /**
+     * Get remote IP.
+     *
+     * @return string
+     */
+    public function getRemoteIp()
+    {
+        $pos = strrpos($this->_remoteAddress, ':');
+        if ($pos) {
+            return trim(substr($this->_remoteAddress, 0, $pos), '[]');
+        }
+        return '';
     }
 
     /**
@@ -178,7 +160,7 @@ class UdpConnection extends ConnectionInterface
      * Close connection.
      *
      * @param mixed $data
-     * @param bool  $raw
+     * @param bool $raw
      * @return bool
      */
     public function close($data = null, $raw = false)
@@ -187,5 +169,24 @@ class UdpConnection extends ConnectionInterface
             $this->send($data, $raw);
         }
         return true;
+    }
+
+    /**
+     * Sends data on the connection.
+     *
+     * @param string $send_buffer
+     * @param bool $raw
+     * @return void|boolean
+     */
+    public function send($send_buffer, $raw = false)
+    {
+        if (false === $raw && $this->protocol) {
+            $parser = $this->protocol;
+            $send_buffer = $parser::encode($send_buffer, $this);
+            if ($send_buffer === '') {
+                return null;
+            }
+        }
+        return strlen($send_buffer) === stream_socket_sendto($this->_socket, $send_buffer, 0, $this->_remoteAddress);
     }
 }

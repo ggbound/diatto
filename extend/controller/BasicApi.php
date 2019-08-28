@@ -2,7 +2,6 @@
 
 namespace controller;
 
-use service\ApiService;
 use service\ToolsService;
 
 /**
@@ -13,14 +12,14 @@ use service\ToolsService;
 class BasicApi
 {
 
+    public $model = null;
+    public $table = '';
+    public $NotFound = 404;
     /**
      * 当前请求对象
      * @var \think\Request
      */
     protected $request;
-    public $model = null;
-    public $table = '';
-    public $NotFound = 404;
 
     /**
      * 构造方法

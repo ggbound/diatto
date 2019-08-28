@@ -11,9 +11,11 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace Workerman\Events\React;
-use Workerman\Events\EventInterface;
+
 use React\EventLoop\TimerInterface;
+use Workerman\Events\EventInterface;
 
 /**
  * Class StreamSelectLoop
@@ -73,15 +75,15 @@ class Base implements \React\EventLoop\LoopInterface
                 $this->_signalHandlerMap[$fd] = $func;
                 return $this->addSignal($fd, $func);
             case EventInterface::EV_TIMER:
-                $timer_obj = $this->addPeriodicTimer($fd, function() use ($func, $args) {
+                $timer_obj = $this->addPeriodicTimer($fd, function () use ($func, $args) {
                     call_user_func_array($func, $args);
                 });
                 $this->_timerIdMap[++$this->_timerIdIndex] = $timer_obj;
                 return $this->_timerIdIndex;
             case EventInterface::EV_TIMER_ONCE:
                 $index = ++$this->_timerIdIndex;
-                $timer_obj = $this->addTimer($fd, function() use ($func, $args, $index) {
-                    $this->del($index,EventInterface::EV_TIMER_ONCE);
+                $timer_obj = $this->addTimer($fd, function () use ($func, $args, $index) {
+                    $this->del($index, EventInterface::EV_TIMER_ONCE);
                     call_user_func_array($func, $args);
                 });
                 $this->_timerIdMap[$index] = $timer_obj;
@@ -91,10 +93,66 @@ class Base implements \React\EventLoop\LoopInterface
     }
 
     /**
+     * @param resource $stream
+     * @param callable $listener
+     */
+    public function addReadStream($stream, $listener)
+    {
+        return $this->_eventLoop->addReadStream($stream, $listener);
+    }
+
+    /**
+     * @param resource $stream
+     * @param callable $listener
+     */
+    public function addWriteStream($stream, $listener)
+    {
+        return $this->_eventLoop->addWriteStream($stream, $listener);
+    }
+
+    /**
+     * @param int $signal
+     * @param callable $listener
+     */
+    public function removeSignal($signal, $listener)
+    {
+        return $this->_eventLoop->removeSignal($signal, $listener);
+    }
+
+    /**
+     * @param int $signal
+     * @param callable $listener
+     */
+    public function addSignal($signal, $listener)
+    {
+        return $this->_eventLoop->addSignal($signal, $listener);
+    }
+
+    /**
+     * @param float|int $interval
+     * @param callable $callback
+     * @return \React\EventLoop\Timer\Timer|TimerInterface
+     */
+    public function addPeriodicTimer($interval, $callback)
+    {
+        return $this->_eventLoop->addPeriodicTimer($interval, $callback);
+    }
+
+    /**
+     * @param float|int $interval
+     * @param callable $callback
+     * @return \React\EventLoop\Timer\Timer|TimerInterface
+     */
+    public function addTimer($interval, $callback)
+    {
+        return $this->_eventLoop->addTimer($interval, $callback);
+    }
+
+    /**
      * Remove event listener from event loop.
      *
      * @param mixed $fd
-     * @param int   $flag
+     * @param int $flag
      * @return bool
      */
     public function del($fd, $flag)
@@ -114,7 +172,7 @@ class Base implements \React\EventLoop\LoopInterface
 
             case EventInterface::EV_TIMER:
             case EventInterface::EV_TIMER_ONCE:
-                if (isset($this->_timerIdMap[$fd])){
+                if (isset($this->_timerIdMap[$fd])) {
                     $timer_obj = $this->_timerIdMap[$fd];
                     unset($this->_timerIdMap[$fd]);
                     $this->cancelTimer($timer_obj);
@@ -124,6 +182,29 @@ class Base implements \React\EventLoop\LoopInterface
         return false;
     }
 
+    /**
+     * @param resource $stream
+     */
+    public function removeReadStream($stream)
+    {
+        return $this->_eventLoop->removeReadStream($stream);
+    }
+
+    /**
+     * @param resource $stream
+     */
+    public function removeWriteStream($stream)
+    {
+        return $this->_eventLoop->removeWriteStream($stream);
+    }
+
+    /**
+     * @param TimerInterface $timer
+     */
+    public function cancelTimer(TimerInterface $timer)
+    {
+        return $this->_eventLoop->cancelTimer($timer);
+    }
 
     /**
      * Main loop.
@@ -135,6 +216,13 @@ class Base implements \React\EventLoop\LoopInterface
         $this->run();
     }
 
+    /**
+     * Run.
+     */
+    public function run()
+    {
+        return $this->_eventLoop->run();
+    }
 
     /**
      * Destroy loop.
@@ -157,99 +245,11 @@ class Base implements \React\EventLoop\LoopInterface
     }
 
     /**
-     * @param resource $stream
-     * @param callable $listener
-     */
-    public function addReadStream($stream, $listener)
-    {
-        return $this->_eventLoop->addReadStream($stream, $listener);
-    }
-
-    /**
-     * @param resource $stream
-     * @param callable $listener
-     */
-    public function addWriteStream($stream, $listener)
-    {
-        return $this->_eventLoop->addWriteStream($stream, $listener);
-    }
-
-    /**
-     * @param resource $stream
-     */
-    public function removeReadStream($stream)
-    {
-        return $this->_eventLoop->removeReadStream($stream);
-    }
-
-    /**
-     * @param resource $stream
-     */
-    public function removeWriteStream($stream)
-    {
-        return $this->_eventLoop->removeWriteStream($stream);
-    }
-
-    /**
-     * @param float|int $interval
-     * @param callable $callback
-     * @return \React\EventLoop\Timer\Timer|TimerInterface
-     */
-    public function addTimer($interval, $callback)
-    {
-        return $this->_eventLoop->addTimer($interval, $callback);
-    }
-
-    /**
-     * @param float|int $interval
-     * @param callable $callback
-     * @return \React\EventLoop\Timer\Timer|TimerInterface
-     */
-    public function addPeriodicTimer($interval, $callback)
-    {
-        return $this->_eventLoop->addPeriodicTimer($interval, $callback);
-    }
-
-    /**
-     * @param TimerInterface $timer
-     */
-    public function cancelTimer(TimerInterface $timer)
-    {
-        return $this->_eventLoop->cancelTimer($timer);
-    }
-
-    /**
      * @param callable $listener
      */
     public function futureTick($listener)
     {
         return $this->_eventLoop->futureTick($listener);
-    }
-
-    /**
-     * @param int $signal
-     * @param callable $listener
-     */
-    public function addSignal($signal, $listener)
-    {
-        return $this->_eventLoop->addSignal($signal, $listener);
-    }
-
-    /**
-     * @param int $signal
-     * @param callable $listener
-     */
-    public function removeSignal($signal, $listener)
-    {
-        return $this->_eventLoop->removeSignal($signal, $listener);
-    }
-
-    /**
-     * Run.
-     */
-    public function run()
-    {
-        return $this->_eventLoop->run();
     }
 
     /**

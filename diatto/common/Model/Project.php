@@ -22,7 +22,7 @@ class Project extends CommonModel
         return self::where(['id' => $id, 'deleted' => 0, 'archive' => 0])->find();
     }
 
-    public function getMemberProjects($memberCode = '',$organizationCode = '', $deleted = 0, $archive = 0, $page = 1, $pageSize = 10)
+    public function getMemberProjects($memberCode = '', $organizationCode = '', $deleted = 0, $archive = 0, $page = 1, $pageSize = 10)
     {
         if (!$memberCode) {
             $memberCode = getCurrentMember()['code'];
@@ -98,6 +98,25 @@ class Project extends CommonModel
         return $result;
     }
 
+    /** 项目变动钩子
+     * @param $memberCode
+     * @param $sourceCode
+     * @param string $type
+     * @param string $toMemberCode
+     * @param int $isComment
+     * @param string $remark
+     * @param string $content
+     * @param string $fileCode
+     * @param array $data
+     * @param string $tag
+     */
+    public static function projectHook($memberCode, $sourceCode, $type = 'create', $toMemberCode = '', $isComment = 0, $remark = '', $content = '', $fileCode = '', $data = [], $tag = 'project')
+    {
+        $data = ['memberCode' => $memberCode, 'sourceCode' => $sourceCode, 'remark' => $remark, 'type' => $type, 'content' => $content, 'isComment' => $isComment, 'toMemberCode' => $toMemberCode, 'fileCode' => $fileCode, 'data' => $data, 'tag' => $tag];
+        Hook::listen($tag, $data);
+
+    }
+
     public function edit($code, $data)
     {
         if (!$code) {
@@ -112,7 +131,6 @@ class Project extends CommonModel
         self::projectHook(getCurrentMember()['code'], $code, 'edit');
         return $result;
     }
-
 
     /**
      * @param File $file
@@ -239,24 +257,5 @@ class Project extends CommonModel
         }
         $result = ProjectMember::where($where)->delete();
         return $result;
-    }
-
-    /** 项目变动钩子
-     * @param $memberCode
-     * @param $sourceCode
-     * @param string $type
-     * @param string $toMemberCode
-     * @param int $isComment
-     * @param string $remark
-     * @param string $content
-     * @param string $fileCode
-     * @param array $data
-     * @param string $tag
-     */
-    public static function projectHook($memberCode, $sourceCode, $type = 'create', $toMemberCode = '', $isComment = 0, $remark = '', $content = '', $fileCode = '', $data = [], $tag = 'project')
-    {
-        $data = ['memberCode' => $memberCode, 'sourceCode' => $sourceCode, 'remark' => $remark, 'type' => $type, 'content' => $content, 'isComment' => $isComment, 'toMemberCode' => $toMemberCode, 'fileCode' => $fileCode, 'data' => $data, 'tag' => $tag];
-        Hook::listen($tag, $data);
-
     }
 }

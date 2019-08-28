@@ -125,7 +125,7 @@ class ProjectMenu extends CommonModel
     {
 
         foreach ($menus as $key => $menu) {
-            if (($menu['node'] == '#' && isset($menu['children']) && $menu['children']) || ($menu['node'] != '#' && !isset($menu['children'])) ||  $menu['url'] == 'home') {
+            if (($menu['node'] == '#' && isset($menu['children']) && $menu['children']) || ($menu['node'] != '#' && !isset($menu['children'])) || $menu['url'] == 'home') {
                 $temp = $menu;
                 unset($temp['children']);
                 $new[] = $temp;
@@ -134,6 +134,24 @@ class ProjectMenu extends CommonModel
                 $this->buildFilterMenuData($menu['children'], $new);
             }
         }
+    }
+
+    public function del($id)
+    {
+        $delArr = [$id];
+        $list = $this::where(['pid' => $id])->select()->toArray();
+        if ($list) {
+            foreach ($list as $item) {
+                $delArr[] = $item['id'];
+                $list2 = $this::where(['pid' => $item['id']])->select()->toArray();
+                if ($list2) {
+                    foreach ($list2 as $item2) {
+                        $delArr[] = $item2['id'];
+                    }
+                }
+            }
+        }
+        return $this::destroy($delArr);
     }
 
     /**
@@ -168,23 +186,5 @@ class ProjectMenu extends CommonModel
             }
         }
         return $menus;
-    }
-
-    public function del($id)
-    {
-        $delArr = [$id];
-        $list = $this::where(['pid' => $id])->select()->toArray();
-        if ($list) {
-            foreach ($list as $item) {
-                $delArr[] = $item['id'];
-                $list2 = $this::where(['pid' => $item['id']])->select()->toArray();
-                if ($list2) {
-                    foreach ($list2 as $item2) {
-                        $delArr[] = $item2['id'];
-                    }
-                }
-            }
-        }
-        return $this::destroy($delArr);
     }
 }

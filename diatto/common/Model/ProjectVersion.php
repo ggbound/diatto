@@ -79,6 +79,23 @@ class ProjectVersion extends CommonModel
         return true;
     }
 
+    /**
+     * 版本变动钩子
+     * @param $memberCode
+     * @param $versionCode
+     * @param string $type
+     * @param string $remark
+     * @param string $content
+     * @param array $data
+     * @param string $tag
+     */
+    public static function versionHook($memberCode, $versionCode, $type = 'create', $remark = '', $content = '', $data = [], $tag = 'version')
+    {
+        $data = ['memberCode' => $memberCode, 'versionCode' => $versionCode, 'remark' => $remark, 'type' => $type, 'content' => $content, 'data' => $data, 'tag' => $tag];
+        Hook::listen($tag, $data);
+
+    }
+
     public function changeStatus($versionCode, $status, $publishTime = '')
     {
         if (!$versionCode) {
@@ -116,6 +133,23 @@ class ProjectVersion extends CommonModel
         return $task;
     }
 
+    public static function updateSchedule($versionCode)
+    {
+        $version = ProjectVersion::where(['code' => $versionCode])->find();
+        $taskList = Task::where(['version_code' => $versionCode, 'deleted' => 0])->field('id', true)->select();
+        $doneTotal = 0;
+        if ($taskList) {
+            foreach ($taskList as $task) {
+                if ($task['done']) {
+                    $doneTotal++;
+                }
+            }
+            $schedule = intval($doneTotal / count($taskList) * 100);
+            $version->schedule = $schedule;
+            $version->save();
+        }
+    }
+
     /**
      * 移除发布内容
      * @param $taskCode
@@ -141,23 +175,6 @@ class ProjectVersion extends CommonModel
         return $task;
     }
 
-    public static function updateSchedule($versionCode)
-    {
-        $version = ProjectVersion::where(['code' => $versionCode])->find();
-        $taskList = Task::where(['version_code' => $versionCode, 'deleted' => 0])->field('id', true)->select();
-        $doneTotal = 0;
-        if ($taskList) {
-            foreach ($taskList as $task) {
-                if ($task['done']) {
-                    $doneTotal++;
-                }
-            }
-            $schedule = intval($doneTotal / count($taskList) * 100);
-            $version->schedule = $schedule;
-            $version->save();
-        }
-    }
-
     public function getStatusTextAttr($value, $data)
     {
         //状态。0：未开始，1：进行中，2：延期发布，3：已发布
@@ -175,23 +192,6 @@ class ProjectVersion extends CommonModel
                 return '已发布';
 
         }
-    }
-
-    /**
-     * 版本变动钩子
-     * @param $memberCode
-     * @param $versionCode
-     * @param string $type
-     * @param string $remark
-     * @param string $content
-     * @param array $data
-     * @param string $tag
-     */
-    public static function versionHook($memberCode, $versionCode, $type = 'create', $remark = '', $content = '', $data = [], $tag = 'version')
-    {
-        $data = ['memberCode' => $memberCode, 'versionCode' => $versionCode, 'remark' => $remark, 'type' => $type, 'content' => $content, 'data' => $data, 'tag' => $tag];
-        Hook::listen($tag, $data);
-
     }
 
 }

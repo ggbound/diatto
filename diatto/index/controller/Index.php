@@ -9,6 +9,7 @@ use app\common\Model\DepartmentMember;
 use app\common\Model\File;
 use app\common\Model\Member;
 use app\common\Model\MemberAccount;
+use app\common\Model\Notify;
 use app\common\Model\Organization;
 use app\common\Model\Project;
 use app\common\Model\ProjectAuth;
@@ -21,11 +22,8 @@ use app\common\Model\Task;
 use app\common\Model\TaskLike;
 use app\common\Model\TaskMember;
 use app\common\Model\TaskStages;
-use app\common\Model\Notify;
-use app\common\Model\TaskWorkflowRule;
 use controller\BasicApi;
 use Exception;
-use Firebase\JWT\JWT;
 use PDO;
 use service\JwtService;
 use service\MessageService;
@@ -159,17 +157,6 @@ class Index extends BasicApi
 
     }
 
-    public function checkInstall()
-    {
-        $dataPath = env('root_path') . 'install/';
-        // 锁定的文件
-        $lockFile = $dataPath . 'install.lock';
-        if (!is_file($lockFile)) {
-            $this->error('', 201);
-        }
-        $this->success();
-    }
-
     /**
      * @throws Exception
      */
@@ -196,6 +183,17 @@ class Index extends BasicApi
         TaskMember::where("id > 0")->delete();
         TaskStages::where("id > 0")->delete();
         Notify::where("id > 0")->delete();
+    }
+
+    public function checkInstall()
+    {
+        $dataPath = env('root_path') . 'install/';
+        // 锁定的文件
+        $lockFile = $dataPath . 'install.lock';
+        if (!is_file($lockFile)) {
+            $this->error('', 201);
+        }
+        $this->success();
     }
 
     /**

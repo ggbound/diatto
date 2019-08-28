@@ -29,7 +29,7 @@ class TaskMember extends BasicApi
         $taskCode = Request::post('taskCode');
         $where = [];
         $where[] = ['task_code', '=', $taskCode];
-        $list = $this->model->_list($where,'is_owner desc');
+        $list = $this->model->_list($where, 'is_owner desc');
         if ($list['list']) {
             foreach ($list['list'] as &$item) {
                 $member = Member::where(['code' => $item['member_code']])->field('id,name,avatar,code')->find();

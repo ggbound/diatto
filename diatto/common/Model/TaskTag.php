@@ -12,6 +12,28 @@ class TaskTag extends CommonModel
     protected $append = [];
 
     /**
+     * 设置标签
+     * @param $tagCode
+     * @param $taskCode
+     * @return TaskToTag|bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public static function setTag($tagCode, $taskCode)
+    {
+        $data = ['tag_code' => $tagCode, 'task_code' => $taskCode];
+        $taskToTag = TaskToTag::where($data)->find();
+        if ($taskToTag) {
+            return $taskToTag->delete($data);
+        } else {
+            $data['create_time'] = nowTime();
+            $data['code'] = createUniqueCode('taskToTag');
+            return TaskToTag::create($data);
+        }
+    }
+
+    /**
      * 创建标签
      * @param $name
      * @param $color
@@ -60,27 +82,5 @@ class TaskTag extends CommonModel
         self::where(['code' => $tagCode])->delete();
         TaskToTag::where(['tag_code' => $tagCode])->delete();
         return true;
-    }
-
-    /**
-     * 设置标签
-     * @param $tagCode
-     * @param $taskCode
-     * @return TaskToTag|bool
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
-     */
-    public static function setTag($tagCode, $taskCode)
-    {
-        $data = ['tag_code' => $tagCode, 'task_code' => $taskCode];
-        $taskToTag = TaskToTag::where($data)->find();
-        if ($taskToTag) {
-            return $taskToTag->delete($data);
-        } else {
-            $data['create_time'] = nowTime();
-            $data['code'] = createUniqueCode('taskToTag');
-            return TaskToTag::create($data);
-        }
     }
 }

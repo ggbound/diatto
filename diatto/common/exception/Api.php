@@ -1,4 +1,5 @@
 <?php
+
 namespace app\common\exception;
 
 use Exception;
@@ -11,7 +12,7 @@ class Api extends Handle
 {
     public function render(Exception $e)
     {
-        ToolsService::error($e->getMessage(),[],$e->getCode());
+        ToolsService::error($e->getMessage(), [], $e->getCode());
 
         // 参数验证错误
         if ($e instanceof ValidateException) {
@@ -23,7 +24,8 @@ class Api extends Handle
         if ($e instanceof HttpException && request()->isAjax()) {
             return response($e->getMessage(), $e->getStatusCode());
         }
-        var_dump($e);die;
+        var_dump($e);
+        die;
 
         // 其他错误交给系统处理
         return parent::render($e);

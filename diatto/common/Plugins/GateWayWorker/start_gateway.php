@@ -12,8 +12,8 @@
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-use Workerman\Worker;
 use GatewayWorker\Gateway;
+use Workerman\Worker;
 
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/config.php';

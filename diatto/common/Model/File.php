@@ -2,7 +2,6 @@
 
 namespace app\common\Model;
 
-use function GuzzleHttp\Promise\task;
 use think\Db;
 
 /**

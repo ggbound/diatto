@@ -9,19 +9,11 @@
 namespace app\project\behavior;
 
 
-use app\common\Model\CommonModel;
-use app\common\Model\Member;
-use app\common\Model\Notify;
-use app\common\Model\ProjectLog;
 use app\common\Model\ProjectVersion;
 use app\common\Model\ProjectVersionLog;
-use app\common\Model\TaskMember;
-use app\common\Model\TaskStages;
-use service\MessageService;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 use think\exception\DbException;
-use think\facade\Log;
 
 class Version
 {

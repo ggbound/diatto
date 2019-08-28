@@ -16,15 +16,6 @@ class ApiService
 {
 
     /**
-     * 获取数据操作对象
-     * @return Query
-     */
-    protected static function db()
-    {
-        return Db::name('ApiLog');
-    }
-
-    /**
      * 写入API日志
      * @param string $from
      * @param string $content
@@ -94,6 +85,15 @@ class ApiService
         if ($count >= 10) {
             throw new \Exception('访问过于频繁', 1);
         }
+    }
+
+    /**
+     * 获取数据操作对象
+     * @return Query
+     */
+    protected static function db()
+    {
+        return Db::name('ApiLog');
     }
 
 }

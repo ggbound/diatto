@@ -12,23 +12,6 @@ use Firebase\JWT\JWT;
 class JwtService
 {
     /**
-     * 公共配置
-     * @return array
-     */
-    public static function getCommonConfig()
-    {
-        $jwtConfig = config('jwt.');
-        $time = time(); //当前时间
-        $token = array(
-            "iss" => $jwtConfig['iss'],
-            "aud" => $jwtConfig['aud'],
-            "iat" => $time,
-            "nbf" => $time,
-        );
-        return $token;
-    }
-
-    /**
      * 创建初始token
      * @param $data
      * @return array 返回accessToken 和 refreshToken
@@ -58,6 +41,23 @@ class JwtService
         $accessToken['scopes'] = 'access';
         $accessToken['exp'] = $time + $jwtConfig['accessTokenExp'];
         return JWT::encode($accessToken, $key, $jwtConfig['alg']);
+    }
+
+    /**
+     * 公共配置
+     * @return array
+     */
+    public static function getCommonConfig()
+    {
+        $jwtConfig = config('jwt.');
+        $time = time(); //当前时间
+        $token = array(
+            "iss" => $jwtConfig['iss'],
+            "aud" => $jwtConfig['aud'],
+            "iat" => $time,
+            "nbf" => $time,
+        );
+        return $token;
     }
 
     /**

@@ -11,11 +11,10 @@
  * @link http://www.workerman.net/
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-use Workerman\Worker;
-use Workerman\WebServer;
-use GatewayWorker\Gateway;
+
 use GatewayWorker\BusinessWorker;
-use Workerman\Autoloader;
+use Workerman\Worker;
+
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/config.php';
 
@@ -28,11 +27,10 @@ $worker->name = 'YourAppBusinessWorker';
 // bussinessWorker进程数量
 $worker->count = 4;
 // 服务注册地址
-$worker->registerAddress =  SERVER_ADDRESS . ':' . SERVER_PORT;
+$worker->registerAddress = SERVER_ADDRESS . ':' . SERVER_PORT;
 
 // 如果不是在根目录启动，则运行runAll方法
-if(!defined('GLOBAL_START'))
-{
+if (!defined('GLOBAL_START')) {
     Worker::runAll();
 }
 

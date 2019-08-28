@@ -36,20 +36,6 @@ class NodeService
     }
 
     /**
-     * 获取项目账号授权节点
-     * @return array
-     */
-    public static function getProjectAuthNode()
-    {
-        $nodes = cache('member_need_access_node');
-        if (empty($nodes)) {
-            $nodes = Db::name('ProjectNode')->where(['is_auth' => '1'])->column('node');
-            cache('member_need_access_node', $nodes);
-        }
-        return $nodes;
-    }
-
-    /**
      * 检查账号节点权限
      * @param string $node 节点
      * @param $moduleApp string
@@ -71,6 +57,34 @@ class NodeService
             return in_array($currentNode, (array)$member['nodes']);
         }
         return false;
+    }
+
+    /**
+     * 驼峰转下划线规则
+     * @param string $node
+     * @return string
+     */
+    public static function parseNodeStr($node)
+    {
+        $tmp = [];
+        foreach (explode('/', $node) as $name) {
+            $tmp[] = strtolower(trim(preg_replace("/[A-Z]/", "_\\0", $name), "_"));
+        }
+        return trim(join('/', $tmp), '/');
+    }
+
+    /**
+     * 获取项目账号授权节点
+     * @return array
+     */
+    public static function getProjectAuthNode()
+    {
+        $nodes = cache('member_need_access_node');
+        if (empty($nodes)) {
+            $nodes = Db::name('ProjectNode')->where(['is_auth' => '1'])->column('node');
+            cache('member_need_access_node', $nodes);
+        }
+        return $nodes;
     }
 
     /**
@@ -132,20 +146,6 @@ class NodeService
             }
         }
         return $nodes;
-    }
-
-    /**
-     * 驼峰转下划线规则
-     * @param string $node
-     * @return string
-     */
-    public static function parseNodeStr($node)
-    {
-        $tmp = [];
-        foreach (explode('/', $node) as $name) {
-            $tmp[] = strtolower(trim(preg_replace("/[A-Z]/", "_\\0", $name), "_"));
-        }
-        return trim(join('/', $tmp), '/');
     }
 
     /**

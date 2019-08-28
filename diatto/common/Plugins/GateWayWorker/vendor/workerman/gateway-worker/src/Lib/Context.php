@@ -11,6 +11,7 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace GatewayWorker\Lib;
 
 use Exception;
@@ -61,10 +62,10 @@ class Context
      * @var int
      */
     public static $connection_id;
-    
+
     /**
      * 旧的session
-     * 
+     *
      * @var string
      */
     public static $old_session;
@@ -102,7 +103,7 @@ class Context
     public static function clear()
     {
         self::$local_ip = self::$local_port = self::$client_ip = self::$client_port =
-        self::$client_id = self::$connection_id  = self::$old_session = null;
+        self::$client_id = self::$connection_id = self::$old_session = null;
     }
 
     /**

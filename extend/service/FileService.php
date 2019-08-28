@@ -10,7 +10,6 @@ use Qiniu\Auth;
 use Qiniu\Storage\BucketManager;
 use Qiniu\Storage\UploadManager;
 use think\facade\Log;
-use think\File;
 
 /**
  * 系统文件服务
@@ -76,28 +75,55 @@ class FileService
     }
 
     /**
-     * 获取文件当前URL地址
-     * @param string $filename 文件HASH名称
-     * @param string|null $storage 文件存储引擎
-     * @return bool|string
-     * @throws OssException
+     * 获取服务器URL前缀
+     * @return string
+     */
+    public static function getBaseUriLocal()
+    {
+        $appRoot = request()->root(true);  // 去掉参数 true 将获得相对地址
+        $uriRoot = preg_match('/\.php$/', $appRoot) ? dirname($appRoot) : $appRoot;
+        $uriRoot = in_array($uriRoot, ['/', '\\']) ? '' : $uriRoot;
+        return "{$uriRoot}/";
+    }
+
+    /**
+     * 获取七牛云URL前缀
+     * @return string
      * @throws \think\Exception
      * @throws \think\exception\PDOException
      */
-    public static function getFileUrl($filename, $storage = null)
+    public static function getBaseUriQiniu()
     {
-        if (self::hasFile($filename, $storage) === false) {
-            return false;
+        switch (strtolower(sysconf('storage_qiniu_is_https'))) {
+            case 'https':
+                return 'https://' . sysconf('storage_qiniu_domain') . '/';
+            case 'http':
+                return 'http://' . sysconf('storage_qiniu_domain') . '/';
+            case 'auto':
+                return '//' . sysconf('storage_qiniu_domain') . '/';
+            default:
+                throw new \think\Exception('未设置七牛云文件地址协议');
         }
-        switch (empty($storage) ? sysconf('storage_type') : $storage) {
-            case 'local':
-                return self::getBaseUriLocal() . $filename;
-            case 'qiniu':
-                return self::getBaseUriQiniu() . $filename;
-            case 'oss':
-                return self::getBaseUriOss() . $filename;
+    }
+
+    /**
+     * 获取阿里云对象存储URL前缀
+     * @return string
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     */
+    public static function getBaseUriOss()
+    {
+        switch (strtolower(sysconf('storage_oss_is_https'))) {
+            case 'https':
+                return 'https://' . sysconf('storage_oss_domain') . '/';
+            case 'http':
+                return 'http://' . sysconf('storage_oss_domain') . '/';
+            case 'auto':
+                return '//' . sysconf('storage_oss_domain') . '/';
+            default:
+                throw new \think\Exception('未设置阿里云文件地址协议');
         }
-        throw new \think\Exception('未设置存储方式，无法获取到文件对应URL地址');
     }
 
     /**
@@ -158,100 +184,9 @@ class FileService
         return "{$protocol}://" . sysconf('storage_oss_domain');
     }
 
-    /**
-     * 获取服务器URL前缀
-     * @return string
-     */
-    public static function getBaseUriLocal()
-    {
-        $appRoot = request()->root(true);  // 去掉参数 true 将获得相对地址
-        $uriRoot = preg_match('/\.php$/', $appRoot) ? dirname($appRoot) : $appRoot;
-        $uriRoot = in_array($uriRoot, ['/', '\\']) ? '' : $uriRoot;
-        return "{$uriRoot}/";
-    }
-
-    /**
-     * 获取七牛云URL前缀
-     * @return string
-     * @throws \think\Exception
-     * @throws \think\exception\PDOException
-     */
-    public static function getBaseUriQiniu()
-    {
-        switch (strtolower(sysconf('storage_qiniu_is_https'))) {
-            case 'https':
-                return 'https://' . sysconf('storage_qiniu_domain') . '/';
-            case 'http':
-                return 'http://' . sysconf('storage_qiniu_domain') . '/';
-            case 'auto':
-                return '//' . sysconf('storage_qiniu_domain') . '/';
-            default:
-                throw new \think\Exception('未设置七牛云文件地址协议');
-        }
-    }
-
-    /**
-     * 获取阿里云对象存储URL前缀
-     * @return string
-     * @throws \think\Exception
-     * @throws \think\exception\PDOException
-     */
-    public static function getBaseUriOss()
-    {
-        switch (strtolower(sysconf('storage_oss_is_https'))) {
-            case 'https':
-                return 'https://' . sysconf('storage_oss_domain') . '/';
-            case 'http':
-                return 'http://' . sysconf('storage_oss_domain') . '/';
-            case 'auto':
-                return '//' . sysconf('storage_oss_domain') . '/';
-            default:
-                throw new \think\Exception('未设置阿里云文件地址协议');
-        }
-    }
-
-    /**
-     * 获取文件相对名称
-     * @param string $local_url 文件标识
-     * @param string $ext 文件后缀
-     * @param string $pre 文件前缀（若有值需要以/结尾）
-     * @return string
-     */
-    public static function getFileName($local_url, $ext = '', $pre = '')
-    {
-        empty($ext) && $ext = strtolower(pathinfo($local_url, 4));
-        return $pre . join('/', str_split(md5($local_url), 16)) . '.' . ($ext ? $ext : 'tmp');
-    }
-
     public static function removeSuffix($fileName)
     {
         return basename($fileName, "." . substr(strrchr($fileName, '.'), 1));
-    }
-
-    /**
-     * 检查文件是否已经存在
-     * @param string $filename
-     * @param string|null $storage
-     * @return bool
-     * @throws OssException
-     * @throws \think\Exception
-     * @throws \think\exception\PDOException
-     */
-    public static function hasFile($filename, $storage = null)
-    {
-        switch (empty($storage) ? sysconf('storage_type') : $storage) {
-            case 'local':
-                return file_exists(env('root_path') . $filename);
-            case 'qiniu':
-                $auth = new Auth(sysconf('storage_qiniu_access_key'), sysconf('storage_qiniu_secret_key'));
-                $bucketMgr = new BucketManager($auth);
-                list($ret, $err) = $bucketMgr->stat(sysconf('storage_qiniu_bucket'), $filename);
-                return $err === null;
-            case 'oss':
-                $ossClient = new OssClient(sysconf('storage_oss_keyid'), sysconf('storage_oss_secret'), self::getBaseUriOss(), true);
-                return $ossClient->doesObjectExist(sysconf('storage_oss_bucket'), $filename);
-        }
-        return false;
     }
 
     /**
@@ -297,27 +232,6 @@ class FileService
             return false;
         }
         return self::$type($filename, $content);
-    }
-
-    /**
-     * 文件储存在本地
-     * @param string $filename
-     * @param string $content
-     * @return array|null
-     */
-    public static function local($filename, $content)
-    {
-        try {
-            $realfile = env('root_path') . $filename;
-            !file_exists(dirname($realfile)) && mkdir(dirname($realfile), 0755, true);
-            if (file_put_contents($realfile, $content)) {
-                $url = pathinfo(request()->baseFile(true), PATHINFO_DIRNAME) . '/' . $filename;
-                return ['file' => $realfile, 'hash' => md5_file($realfile), 'key' => "{$filename}", 'url' => $url];
-            }
-        } catch (Exception $err) {
-            Log::error('本地文件存储失败, ' . $err->getMessage());
-        }
-        return null;
     }
 
     /**
@@ -391,6 +305,91 @@ class FileService
             Log::error("FileService 文件下载失败 [ {$url} ] " . $e->getMessage());
         }
         return ['url' => $url];
+    }
+
+    /**
+     * 获取文件相对名称
+     * @param string $local_url 文件标识
+     * @param string $ext 文件后缀
+     * @param string $pre 文件前缀（若有值需要以/结尾）
+     * @return string
+     */
+    public static function getFileName($local_url, $ext = '', $pre = '')
+    {
+        empty($ext) && $ext = strtolower(pathinfo($local_url, 4));
+        return $pre . join('/', str_split(md5($local_url), 16)) . '.' . ($ext ? $ext : 'tmp');
+    }
+
+    /**
+     * 获取文件当前URL地址
+     * @param string $filename 文件HASH名称
+     * @param string|null $storage 文件存储引擎
+     * @return bool|string
+     * @throws OssException
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     */
+    public static function getFileUrl($filename, $storage = null)
+    {
+        if (self::hasFile($filename, $storage) === false) {
+            return false;
+        }
+        switch (empty($storage) ? sysconf('storage_type') : $storage) {
+            case 'local':
+                return self::getBaseUriLocal() . $filename;
+            case 'qiniu':
+                return self::getBaseUriQiniu() . $filename;
+            case 'oss':
+                return self::getBaseUriOss() . $filename;
+        }
+        throw new \think\Exception('未设置存储方式，无法获取到文件对应URL地址');
+    }
+
+    /**
+     * 检查文件是否已经存在
+     * @param string $filename
+     * @param string|null $storage
+     * @return bool
+     * @throws OssException
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     */
+    public static function hasFile($filename, $storage = null)
+    {
+        switch (empty($storage) ? sysconf('storage_type') : $storage) {
+            case 'local':
+                return file_exists(env('root_path') . $filename);
+            case 'qiniu':
+                $auth = new Auth(sysconf('storage_qiniu_access_key'), sysconf('storage_qiniu_secret_key'));
+                $bucketMgr = new BucketManager($auth);
+                list($ret, $err) = $bucketMgr->stat(sysconf('storage_qiniu_bucket'), $filename);
+                return $err === null;
+            case 'oss':
+                $ossClient = new OssClient(sysconf('storage_oss_keyid'), sysconf('storage_oss_secret'), self::getBaseUriOss(), true);
+                return $ossClient->doesObjectExist(sysconf('storage_oss_bucket'), $filename);
+        }
+        return false;
+    }
+
+    /**
+     * 文件储存在本地
+     * @param string $filename
+     * @param string $content
+     * @return array|null
+     */
+    public static function local($filename, $content)
+    {
+        try {
+            $realfile = env('root_path') . $filename;
+            !file_exists(dirname($realfile)) && mkdir(dirname($realfile), 0755, true);
+            if (file_put_contents($realfile, $content)) {
+                $url = pathinfo(request()->baseFile(true), PATHINFO_DIRNAME) . '/' . $filename;
+                return ['file' => $realfile, 'hash' => md5_file($realfile), 'key' => "{$filename}", 'url' => $url];
+            }
+        } catch (Exception $err) {
+            Log::error('本地文件存储失败, ' . $err->getMessage());
+        }
+        return null;
     }
 
 }

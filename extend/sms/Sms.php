@@ -6,7 +6,6 @@ namespace sms;
 use Overtrue\EasySms\EasySms;
 use Overtrue\EasySms\Exceptions\InvalidArgumentException;
 use Overtrue\EasySms\Exceptions\NoGatewayAvailableException;
-use think\facade\Log;
 
 /**
  * 短信服务

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'name'    => 'Think Console',
+    'name' => 'Think Console',
     'version' => '0.1',
-    'user'    => null,
+    'user' => null,
 ];

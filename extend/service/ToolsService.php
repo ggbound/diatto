@@ -3,7 +3,6 @@
 namespace service;
 
 use think\exception\HttpResponseException;
-use think\facade\Log;
 use think\facade\Response;
 use think\facade\Session;
 
@@ -49,6 +48,18 @@ class ToolsService
     }
 
     /**
+     * 返回成功的操作
+     * @param mixed $msg 消息内容
+     * @param array $data 返回数据
+     * @param integer $code 返回代码
+     */
+    public static function success($msg, $data = [], $code = 1)
+    {
+        $result = ['code' => $code, 'msg' => $msg, 'data' => $data];
+        throw new HttpResponseException(Response::create($result, 'json', 200, self::corsRequestHander()));
+    }
+
+    /**
      * Cors Request Header信息
      * @return array
      */
@@ -59,18 +70,6 @@ class ToolsService
 //            'Access-Control-Allow-Methods' => 'GET,POST,OPTIONS',
 //            'Access-Control-Allow-Credentials' => "true",
         ];
-    }
-
-    /**
-     * 返回成功的操作
-     * @param mixed $msg 消息内容
-     * @param array $data 返回数据
-     * @param integer $code 返回代码
-     */
-    public static function success($msg, $data = [], $code = 1)
-    {
-        $result = ['code' => $code, 'msg' => $msg, 'data' => $data];
-        throw new HttpResponseException(Response::create($result, 'json', 200, self::corsRequestHander()));
     }
 
     /**
@@ -112,31 +111,6 @@ class ToolsService
     /**
      * 一维数据数组生成数据树
      * @param array $list 数据列表
-     * @param string $id 父ID Key
-     * @param string $pid ID Key
-     * @param string $son 定义子数据Key
-     * @return array
-     */
-    public static function arr2tree($list, $id = 'id', $pid = 'pid', $son = 'children')
-    {
-        list($tree, $map) = [[], []];
-        foreach ($list as $item) {
-            $map[$item[$id]] = $item;
-        }
-        foreach ($list as $item) {
-            if (isset($item[$pid]) && isset($map[$item[$pid]])) {
-                $map[$item[$pid]][$son][] = &$map[$item[$id]];
-            } else {
-                $tree[] = &$map[$item[$id]];
-            }
-        }
-        unset($map);
-        return $tree;
-    }
-
-    /**
-     * 一维数据数组生成数据树
-     * @param array $list 数据列表
      * @param string $id ID Key
      * @param string $pid 父ID Key
      * @param string $path
@@ -161,6 +135,31 @@ class ToolsService
                 $tree = array_merge($tree, self::arr2table($sub, $id, $pid, $path, $attr[$path]));
             }
         }
+        return $tree;
+    }
+
+    /**
+     * 一维数据数组生成数据树
+     * @param array $list 数据列表
+     * @param string $id 父ID Key
+     * @param string $pid ID Key
+     * @param string $son 定义子数据Key
+     * @return array
+     */
+    public static function arr2tree($list, $id = 'id', $pid = 'pid', $son = 'children')
+    {
+        list($tree, $map) = [[], []];
+        foreach ($list as $item) {
+            $map[$item[$id]] = $item;
+        }
+        foreach ($list as $item) {
+            if (isset($item[$pid]) && isset($map[$item[$pid]])) {
+                $map[$item[$pid]][$son][] = &$map[$item[$id]];
+            } else {
+                $tree[] = &$map[$item[$id]];
+            }
+        }
+        unset($map);
         return $tree;
     }
 

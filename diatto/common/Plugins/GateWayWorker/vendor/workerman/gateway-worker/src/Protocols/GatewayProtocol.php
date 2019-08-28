@@ -11,6 +11,7 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace GatewayWorker\Protocols;
 
 /**
@@ -135,16 +136,16 @@ class GatewayProtocol
     const HEAD_LEN = 28;
 
     public static $empty = array(
-        'cmd'           => 0,
-        'local_ip'      => 0,
-        'local_port'    => 0,
-        'client_ip'     => 0,
-        'client_port'   => 0,
+        'cmd' => 0,
+        'local_ip' => 0,
+        'local_port' => 0,
+        'client_ip' => 0,
+        'client_port' => 0,
         'connection_id' => 0,
-        'flag'          => 0,
-        'gateway_port'  => 0,
-        'ext_data'      => '',
-        'body'          => '',
+        'flag' => 0,
+        'gateway_port' => 0,
+        'ext_data' => '',
+        'body' => '',
     );
 
     /**
@@ -176,14 +177,14 @@ class GatewayProtocol
             $data['body'] = serialize($data['body']);
         }
         $data['flag'] |= $flag;
-        $ext_len      = strlen($data['ext_data']);
-        $package_len  = self::HEAD_LEN + $ext_len + strlen($data['body']);
+        $ext_len = strlen($data['ext_data']);
+        $package_len = self::HEAD_LEN + $ext_len + strlen($data['body']);
         return pack("NCNnNnNCnN", $package_len,
-            $data['cmd'], $data['local_ip'],
-            $data['local_port'], $data['client_ip'],
-            $data['client_port'], $data['connection_id'],
-            $data['flag'], $data['gateway_port'],
-            $ext_len) . $data['ext_data'] . $data['body'];
+                $data['cmd'], $data['local_ip'],
+                $data['local_port'], $data['client_ip'],
+                $data['client_port'], $data['connection_id'],
+                $data['flag'], $data['gateway_port'],
+                $ext_len) . $data['ext_data'] . $data['body'];
     }
 
     /**

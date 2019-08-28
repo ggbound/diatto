@@ -11,10 +11,11 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace GatewayWorker;
 
-use Workerman\Worker;
 use Workerman\Lib\Timer;
+use Workerman\Worker;
 
 /**
  *
@@ -34,7 +35,7 @@ class Register extends Worker
      * {@inheritdoc}
      */
     public $reloadable = false;
-    
+
     /**
      * 秘钥
      * @var string
@@ -78,10 +79,10 @@ class Register extends Worker
 
         // 记录进程启动的时间
         $this->_startTime = time();
-        
+
         // 强制使用text协议
         $this->protocol = '\Workerman\Protocols\Text';
-        
+
         // 运行父方法
         parent::run();
     }
@@ -95,7 +96,7 @@ class Register extends Worker
     public function onConnect($connection)
     {
         $connection->timeout_timerid = Timer::add(10, function () use ($connection) {
-            Worker::log("Register auth timeout (".$connection->getRemoteIp()."). See http://wiki.workerman.net/Error4 for detail");
+            Worker::log("Register auth timeout (" . $connection->getRemoteIp() . "). See http://wiki.workerman.net/Error4 for detail");
             $connection->close();
         }, null, false);
     }
@@ -104,20 +105,20 @@ class Register extends Worker
      * 设置消息回调
      *
      * @param \Workerman\Connection\ConnectionInterface $connection
-     * @param string                                    $buffer
+     * @param string $buffer
      * @return void
      */
     public function onMessage($connection, $buffer)
     {
         // 删除定时器
         Timer::del($connection->timeout_timerid);
-        $data       = @json_decode($buffer, true);
+        $data = @json_decode($buffer, true);
         if (empty($data['event'])) {
-            $error = "Bad request for Register service. Request info(IP:".$connection->getRemoteIp().", Request Buffer:$buffer). See http://wiki.workerman.net/Error4 for detail";
+            $error = "Bad request for Register service. Request info(IP:" . $connection->getRemoteIp() . ", Request Buffer:$buffer). See http://wiki.workerman.net/Error4 for detail";
             Worker::log($error);
             return $connection->close($error);
         }
-        $event      = $data['event'];
+        $event = $data['event'];
         $secret_key = isset($data['secret_key']) ? $data['secret_key'] : '';
         // 开始验证
         switch ($event) {
@@ -128,7 +129,7 @@ class Register extends Worker
                     return $connection->close();
                 }
                 if ($secret_key !== $this->secretKey) {
-                    Worker::log("Register: Key does not match ".var_export($secret_key, true)." !== ".var_export($this->secretKey, true));
+                    Worker::log("Register: Key does not match " . var_export($secret_key, true) . " !== " . var_export($this->secretKey, true));
                     return $connection->close();
                 }
                 $this->_gatewayConnections[$connection->id] = $data['address'];
@@ -137,7 +138,7 @@ class Register extends Worker
             // 是 worker 连接
             case 'worker_connect':
                 if ($secret_key !== $this->secretKey) {
-                    Worker::log("Register: Key does not match ".var_export($secret_key, true)." !== ".var_export($this->secretKey, true));
+                    Worker::log("Register: Key does not match " . var_export($secret_key, true) . " !== " . var_export($this->secretKey, true));
                     return $connection->close();
                 }
                 $this->_workerConnections[$connection->id] = $connection;
@@ -146,8 +147,29 @@ class Register extends Worker
             case 'ping':
                 break;
             default:
-                Worker::log("Register unknown event:$event IP: ".$connection->getRemoteIp()." Buffer:$buffer. See http://wiki.workerman.net/Error4 for detail");
+                Worker::log("Register unknown event:$event IP: " . $connection->getRemoteIp() . " Buffer:$buffer. See http://wiki.workerman.net/Error4 for detail");
                 $connection->close();
+        }
+    }
+
+    /**
+     * 向 BusinessWorker 广播 gateway 内部通讯地址
+     *
+     * @param \Workerman\Connection\ConnectionInterface $connection
+     */
+    public function broadcastAddresses($connection = null)
+    {
+        $data = array(
+            'event' => 'broadcast_addresses',
+            'addresses' => array_unique(array_values($this->_gatewayConnections)),
+        );
+        $buffer = json_encode($data);
+        if ($connection) {
+            $connection->send($buffer);
+            return;
+        }
+        foreach ($this->_workerConnections as $con) {
+            $con->send($buffer);
         }
     }
 
@@ -164,27 +186,6 @@ class Register extends Worker
         }
         if (isset($this->_workerConnections[$connection->id])) {
             unset($this->_workerConnections[$connection->id]);
-        }
-    }
-
-    /**
-     * 向 BusinessWorker 广播 gateway 内部通讯地址
-     *
-     * @param \Workerman\Connection\ConnectionInterface $connection
-     */
-    public function broadcastAddresses($connection = null)
-    {
-        $data   = array(
-            'event'     => 'broadcast_addresses',
-            'addresses' => array_unique(array_values($this->_gatewayConnections)),
-        );
-        $buffer = json_encode($data);
-        if ($connection) {
-            $connection->send($buffer);
-            return;
-        }
-        foreach ($this->_workerConnections as $con) {
-            $con->send($buffer);
         }
     }
 }

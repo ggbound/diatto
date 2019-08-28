@@ -2,7 +2,6 @@
 
 namespace app\common\Model;
 
-use service\ToolsService;
 use think\Db;
 
 /**

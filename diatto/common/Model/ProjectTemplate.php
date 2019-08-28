@@ -3,7 +3,6 @@
 namespace app\common\Model;
 
 use service\FileService;
-use service\RandomService;
 use think\File;
 
 /**

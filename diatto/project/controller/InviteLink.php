@@ -3,9 +3,6 @@
 namespace app\project\controller;
 
 use controller\BasicApi;
-use think\db\exception\DataNotFoundException;
-use think\db\exception\ModelNotFoundException;
-use think\exception\DbException;
 use think\facade\Request;
 
 class InviteLink extends BasicApi

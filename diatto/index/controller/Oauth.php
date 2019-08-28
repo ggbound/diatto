@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 use think\exception\DbException;
-use think\facade\Log;
 use think\facade\Request;
 use think\response\Redirect;
 
@@ -35,17 +34,19 @@ class Oauth extends BasicApi
             ]
         ];
         $params = [
-            'agent_id'=> '271863764',
+            'agent_id' => '271863764',
             'userid_list' => 'manager9168',
-            'msg'=> json_encode($msg)
+            'msg' => json_encode($msg)
         ];
         $res = $app->conversation->sendCorporationMessage($params);
-        echo json_encode($res);die;
+        echo json_encode($res);
+        die;
         $userId = $app->user->getUseridByUnionid('3CnKFHEE7mX1hayPIHvpCwiEiE');
 //        echo json_encode($userId);die;
         $userId = $userId['userid'];
         $user = $app->user->get($userId, $lang = null);
-        echo json_encode($user);die;
+        echo json_encode($user);
+        die;
     }
 
     /**

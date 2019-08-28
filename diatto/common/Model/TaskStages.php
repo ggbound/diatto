@@ -2,10 +2,6 @@
 
 namespace app\common\Model;
 
-use service\FileService;
-use service\RandomService;
-use think\File;
-
 /**
  * 任务列表
  * Class Organization

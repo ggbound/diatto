@@ -11,6 +11,7 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace GatewayWorker\Lib;
 
 use Config\Db as DbConfig;
@@ -43,9 +44,9 @@ class Db
         }
 
         if (empty(self::$instance[$config_name])) {
-            $config                       = DbConfig::$$config_name;
+            $config = DbConfig::$$config_name;
             self::$instance[$config_name] = new DbConnection($config['host'], $config['port'],
-                $config['user'], $config['password'], $config['dbname'],$config['charset']);
+                $config['user'], $config['password'], $config['dbname'], $config['charset']);
         }
         return self::$instance[$config_name];
     }
