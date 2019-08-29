@@ -2,14 +2,12 @@
 
 **Diatto是一个基于 [Mauve](https://github.com/aoju/mauve.git) 使用的协同软件,帮助团队轻松共享和讨论工作中的任务、文件、分享、日程等内容，让团队协作焕发无限可能。所以你随时随地都可以和团队协作**
  
-# 安装指南
 
 # 概述
 - 不支持 IE8 及以下版本，建议使用基于Webkit内核的现代浏览器访问
 - 为前后端分离架构，因此安装分为后端和前端两大部分，需要分别进行部署和运行
 - 后端：./config/app.php   app_version
 
-# 后端安装
 [Diatto](https://github.com/aoju/diatto.git)
 <a name="BdwQF"></a>
 ## 环境要求
