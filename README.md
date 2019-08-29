@@ -2,6 +2,10 @@
 
 **Diatto是一个基于 [Mauve](https://github.com/aoju/mauve.git) 使用的协同软件,帮助团队轻松共享和讨论工作中的任务、文件、分享、日程等内容，让团队协作焕发无限可能。所以你随时随地都可以和团队协作**
  
+<p align="center">
+	-- QQ群①：<a href="https://shang.qq.com/wpa/qunwpa?idkey=c207666cbc107d03d368bde8fc15605bb883ebc482e28d440de149e3e2217460">275264059</a> --
+	-- QQ群②：<a href="https://shang.qq.com/wpa/qunwpa?idkey=17fadd02891457034c6536c984f0d7db29b73ea14c9b86bba39ce18ed7a90e18">839128</a> --
+</p>
 
 ## 概述
 - 不支持 IE8 及以下版本，建议使用基于Webkit内核的现代浏览器访问
@@ -108,8 +112,3 @@ location / {
 #### 第三方存储
 1. 修改  ./config/storage.php 填写对应的配置信息，修改  stoage_type  为对应的值，目前支持上传至七牛云和阿里云OSS
 2. 参考资料 [七牛](https://developer.qiniu.com/) 或者 [阿里云](https://help.aliyun.com/product/31815.html)
-
-<p align="center">
-	-- QQ群①：<a href="https://shang.qq.com/wpa/qunwpa?idkey=17fadd02891457034c6536c984f0d7db29b73ea14c9b86bba39ce18ed7a90e18">839128</a> --
-	-- QQ群②：<a href="https://shang.qq.com/wpa/qunwpa?idkey=c207666cbc107d03d368bde8fc15605bb883ebc482e28d440de149e3e2217460">275264059</a> --
-</p>
