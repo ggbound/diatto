@@ -115,7 +115,6 @@ class MemberAccount extends CommonModel
      */
     public function del($accountCode)
     {
-        //todo 权限判断
         try {
             Db::startTrans();
             $memberAccount = self::where(['code' => $accountCode])->find()->toArray();

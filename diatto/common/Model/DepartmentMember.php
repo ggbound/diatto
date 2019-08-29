@@ -124,9 +124,10 @@ class DepartmentMember extends CommonModel
                                 }
                             }
                         }
+                    } else {
+                        $this->inviteMember($memberAccount['code'], '');
                     }
                 }
-
             }
         }
         return $count;
