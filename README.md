@@ -1,19 +1,34 @@
-# Team Work，团队协作平台
+<p align="center">
+	<a target="_blank" href="https://travis-ci.org/aoju/bus">
+		<img src="https://travis-ci.org/aoju/bus.svg?branch=master">
+	</a>
+	<a target="_blank" href="https://www.mysql.com">
+		<img src="https://img.shields.io/badge/Mysql-5.7-blue.svg">
+	</a>
+	<a target="_blank" href="http://www.php.net">
+		<img src="https://img.shields.io/badge/php-7.2.0-yellow.svg">
+	</a>
+	<a target="_blank" href="http://www.thinkphp.cn/">
+		<img src="https://img.shields.io/badge/thinkphp-5.1.0-blue.svg">
+	</a>
+	<a target="_blank" href="https://www.mit-license.org">
+		<img src="https://img.shields.io/badge/license-MIT-green.svg">
+	</a>
+</p>
 
-**Diatto是一个基于 [Mauve](https://github.com/aoju/mauve.git) 使用的协同软件,帮助团队轻松共享和讨论工作中的任务、文件、分享、日程等内容，让团队协作焕发无限可能。所以你随时随地都可以和团队协作**
- 
 <p align="center">
 	-- QQ群①：<a href="https://shang.qq.com/wpa/qunwpa?idkey=c207666cbc107d03d368bde8fc15605bb883ebc482e28d440de149e3e2217460">275264059</a> --
 	-- QQ群②：<a href="https://shang.qq.com/wpa/qunwpa?idkey=17fadd02891457034c6536c984f0d7db29b73ea14c9b86bba39ce18ed7a90e18">839128</a> --
 </p>
+
+**Diatto是一个基于 [Mauve](https://github.com/aoju/mauve.git) 使用的协同软件,帮助团队轻松共享和讨论工作中的任务、文件、分享、日程等内容，让团队协作焕发无限可能。所以你随时随地都可以和团队协作**
+ 
 
 ## 概述
 - 不支持 IE8 及以下版本，建议使用基于Webkit内核的现代浏览器访问
 - 为前后端分离架构，因此安装分为后端和前端两大部分，需要分别进行部署和运行
 - 后端：./config/app.php   app_version
 
-[Diatto](https://github.com/aoju/diatto.git)
-<a name="BdwQF"></a>
 ## 环境要求
 
 - PHP >= 7.0.0 (推荐PHP7.2版本)
@@ -22,8 +37,6 @@
 - PDO PHP Extension
 - Redis
 
-**亦可以使用phpstudy集成环境 **[**下载地址**](http://phpstudy.php.cn/index.php)
-<a name="7EnRt"></a>
 ## 安装步骤
 ### 安装PHP
 CentOS 6.x: 
