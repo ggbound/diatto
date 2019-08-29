@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.27, for Linux (x86_64)
 --
--- Host: localhost    Database: hi_pear
+-- Host: localhost    Database: hi_diatto
 -- ------------------------------------------------------
 -- Server version	5.7.27
 
@@ -16,6 +16,14 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Current Database: `hi_diatto`
+--
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `hi_diatto` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
+
+USE `hi_diatto`;
+
+--
 -- Table structure for table `hi_collection`
 --
 
@@ -24,15 +32,15 @@ DROP TABLE IF EXISTS `hi_collection`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_collection` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(30) DEFAULT NULL,
-  `type` varchar(10) DEFAULT NULL COMMENT '类型',
-  `source_code` varchar(30) DEFAULT '0' COMMENT '任务ID',
-  `member_code` varchar(30) DEFAULT '' COMMENT '成员id',
-  `create_time` varchar(30) DEFAULT NULL,
+  `code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '类型',
+  `source_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '0' COMMENT '任务ID',
+  `member_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '成员id',
+  `create_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `id` (`id`) USING BTREE,
   UNIQUE KEY `code` (`code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=113  COMMENT='收藏表';
+) ENGINE=InnoDB AUTO_INCREMENT=113 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='收藏表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -54,17 +62,17 @@ DROP TABLE IF EXISTS `hi_department`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_department` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(30) DEFAULT NULL COMMENT '编号',
-  `organization_code` varchar(30) DEFAULT NULL COMMENT '组织编号',
-  `name` varchar(30) DEFAULT NULL COMMENT '名称',
+  `code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '编号',
+  `organization_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '组织编号',
+  `name` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '名称',
   `sort` int(11) DEFAULT '0' COMMENT '排序',
-  `pcode` varchar(30) DEFAULT '' COMMENT '上级编号',
-  `icon` varchar(20) DEFAULT NULL COMMENT '图标',
-  `create_time` varchar(20) DEFAULT NULL COMMENT '创建时间',
-  `path` text COMMENT '上级路径',
+  `pcode` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '上级编号',
+  `icon` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '图标',
+  `create_time` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '创建时间',
+  `path` text COLLATE utf8mb4_unicode_ci COMMENT '上级路径',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `code` (`code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5  COMMENT='部门表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='部门表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -86,17 +94,17 @@ DROP TABLE IF EXISTS `hi_department_member`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_department_member` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(30) DEFAULT '' COMMENT 'id',
-  `department_code` varchar(30) DEFAULT '' COMMENT '部门id',
-  `organization_code` varchar(30) DEFAULT '' COMMENT '组织id',
-  `account_code` varchar(30) DEFAULT '' COMMENT '成员id',
-  `join_time` varchar(255) DEFAULT NULL COMMENT '加入时间',
+  `code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT 'id',
+  `department_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '部门id',
+  `organization_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '组织id',
+  `account_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '成员id',
+  `join_time` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '加入时间',
   `is_principal` tinyint(1) DEFAULT NULL COMMENT '是否负责人',
   `is_owner` tinyint(1) DEFAULT '0' COMMENT '拥有者',
-  `authorize` varchar(255) DEFAULT NULL COMMENT '角色',
+  `authorize` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '角色',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `code` (`code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=39  COMMENT='部门-成员表';
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='部门-成员表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,26 +126,26 @@ DROP TABLE IF EXISTS `hi_file`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_file` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(30) DEFAULT '' COMMENT '编号',
-  `path_name` varchar(200) DEFAULT NULL COMMENT '相对路径',
-  `title` char(90) DEFAULT NULL COMMENT '名称',
-  `extension` char(30) DEFAULT NULL COMMENT '扩展名',
+  `code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '编号',
+  `path_name` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '相对路径',
+  `title` char(90) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '名称',
+  `extension` char(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '扩展名',
   `size` mediumint(8) unsigned DEFAULT '0' COMMENT '文件大小',
-  `object_type` char(30) DEFAULT NULL COMMENT '对象类型',
-  `organization_code` varchar(30) DEFAULT '' COMMENT '组织编码',
-  `task_code` varchar(30) DEFAULT NULL COMMENT '任务编码',
-  `project_code` varchar(30) DEFAULT NULL COMMENT '项目编码',
-  `create_by` varchar(30) DEFAULT '' COMMENT '上传人',
-  `create_time` varchar(30) DEFAULT NULL COMMENT '创建时间',
+  `object_type` char(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '对象类型',
+  `organization_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '组织编码',
+  `task_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '任务编码',
+  `project_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '项目编码',
+  `create_by` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '上传人',
+  `create_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '创建时间',
   `downloads` mediumint(8) unsigned DEFAULT '0' COMMENT '下载次数',
-  `extra` varchar(255) DEFAULT NULL COMMENT '额外信息',
+  `extra` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '额外信息',
   `deleted` tinyint(1) DEFAULT '0' COMMENT '删除标记',
-  `file_url` text COMMENT '完整地址',
-  `file_type` varchar(255) DEFAULT NULL COMMENT '文件类型',
-  `deleted_time` varchar(30) DEFAULT '' COMMENT '删除时间',
+  `file_url` text COLLATE utf8mb4_unicode_ci COMMENT '完整地址',
+  `file_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '文件类型',
+  `deleted_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `code` (`code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=44  COMMENT='文件表';
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='文件表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -159,15 +167,15 @@ DROP TABLE IF EXISTS `hi_invite_link`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_invite_link` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(30) DEFAULT NULL COMMENT '邀请码',
-  `create_by` varchar(30) DEFAULT NULL COMMENT '邀请人',
-  `invite_type` varchar(20) DEFAULT NULL COMMENT '链接类型',
-  `source_code` varchar(30) DEFAULT NULL COMMENT '资源编码',
-  `create_time` varchar(30) DEFAULT NULL COMMENT '创建时间',
-  `over_time` varchar(30) DEFAULT NULL COMMENT '过期时间',
+  `code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '邀请码',
+  `create_by` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '邀请人',
+  `invite_type` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '链接类型',
+  `source_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '资源编码',
+  `create_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '创建时间',
+  `over_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '过期时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `code` (`code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2  COMMENT='邀请链接表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='邀请链接表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -192,7 +200,7 @@ CREATE TABLE `hi_lock` (
   `pvalue` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '次数',
   `expiretime` int(11) NOT NULL DEFAULT '0' COMMENT '锁定截止时间',
   PRIMARY KEY (`pid`) USING BTREE
-) ENGINE=InnoDB  COMMENT='防灌水表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='防灌水表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -214,18 +222,18 @@ DROP TABLE IF EXISTS `hi_mailqueue`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_mailqueue` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `toList` varchar(255) NOT NULL,
-  `ccList` varchar(255) NOT NULL,
-  `subject` varchar(255) NOT NULL,
-  `body` text NOT NULL,
-  `addedBy` char(30) NOT NULL,
-  `addedDate` varchar(255) DEFAULT NULL,
-  `sendTime` varchar(255) DEFAULT NULL,
-  `status` varchar(10) NOT NULL DEFAULT 'wait',
-  `failReason` text NOT NULL,
+  `toList` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ccList` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `subject` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `body` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `addedBy` char(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `addedDate` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sendTime` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'wait',
+  `failReason` text COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  KEY `sendTime` (`sendTime`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=31858  COMMENT='邮件队列';
+  KEY `sendTime` (`sendTime`(250)) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=31858 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='邮件队列';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -246,31 +254,31 @@ DROP TABLE IF EXISTS `hi_member`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_member` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '系统前台用户表',
-  `account` varchar(20) NOT NULL DEFAULT '' COMMENT '用户登陆账号',
-  `password` char(32) DEFAULT '' COMMENT '登陆密码，32位加密串',
-  `name` varchar(255) DEFAULT '' COMMENT '用户昵称',
+  `account` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '用户登陆账号',
+  `password` char(32) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '登陆密码，32位加密串',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '用户昵称',
   `mobile` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '手机',
   `realname` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '真实姓名',
-  `create_time` varchar(30) DEFAULT NULL COMMENT '创建时间',
+  `create_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '创建时间',
   `status` tinyint(1) DEFAULT '0' COMMENT '状态',
-  `last_login_time` varchar(30) DEFAULT NULL COMMENT '上次登录时间',
-  `sex` char(2) DEFAULT '' COMMENT '性别',
-  `avatar` varchar(255) DEFAULT '' COMMENT '头像',
-  `idcard` varchar(255) DEFAULT NULL COMMENT '身份证',
+  `last_login_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '上次登录时间',
+  `sex` char(2) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '性别',
+  `avatar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '头像',
+  `idcard` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '身份证',
   `province` int(11) DEFAULT '0' COMMENT '省',
   `city` int(11) DEFAULT '0' COMMENT '市',
   `area` int(11) DEFAULT '0' COMMENT '区',
-  `address` varchar(255) DEFAULT NULL COMMENT '所在地址',
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '所在地址',
   `description` text CHARACTER SET utf8mb4 COMMENT '备注',
-  `email` varchar(255) DEFAULT NULL COMMENT '邮箱',
-  `code` varchar(45) DEFAULT NULL COMMENT '编号',
-  `dingtalk_openid` varchar(50) DEFAULT NULL COMMENT '钉钉openid',
-  `dingtalk_unionid` varchar(50) DEFAULT NULL COMMENT '钉钉unionid',
-  `dingtalk_userid` varchar(50) DEFAULT NULL COMMENT '钉钉用户id',
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '邮箱',
+  `code` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '编号',
+  `dingtalk_openid` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '钉钉openid',
+  `dingtalk_unionid` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '钉钉unionid',
+  `dingtalk_userid` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '钉钉用户id',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `code` (`code`) USING BTREE,
   KEY `username` (`account`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=589  COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=589 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -279,7 +287,7 @@ CREATE TABLE `hi_member` (
 
 LOCK TABLES `hi_member` WRITE;
 /*!40000 ALTER TABLE `hi_member` DISABLE KEYS */;
-INSERT INTO `hi_member` VALUES (582,'admin','b5be656a7060dd3525027d6763c33ca0','admin','18681140825','juli',NULL,1,'2019-08-22 08:51:41','','https://static.vilson.xyz/cover.png','',0,0,0,NULL,NULL,'545522390@qq.com','6v7be19pwman2fird04gqu53',NULL,NULL,NULL),(586,'Alians','e10adc3949ba59abbe56e057f20f883e','Alians','18377893857','vilson',NULL,1,'2019-01-26 07:29:41','','https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png',NULL,0,0,0,NULL,NULL,'vilson@qq.com','kqdcn2w40p58r31zyo6efjib',NULL,NULL,NULL),(587,'Chihiro','e10adc3949ba59abbe56e057f20f883e','Chihiro','18278881051','Chihiro',NULL,1,'2019-01-24 11:15:09','','https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',NULL,0,0,0,NULL,NULL,'741648282@qq.com','y680trgedcavbhnz24u7i5m3',NULL,NULL,NULL),(588,'Json','f9f02f39d6d2048d760d8add98265ba1','Json','18681140821','Json','2019-01-05 21:57:01',1,'2019-01-06 08:21:42','','https://static.vilson.xyz/cover.png',NULL,0,0,0,NULL,NULL,'123456@qq.com','vys8gd32cfui6brtwzj4pqho',NULL,NULL,NULL);
+INSERT INTO `hi_member` VALUES (582,'admin','b5be656a7060dd3525027d6763c33ca0','admin','18681140825','juli',NULL,1,'2019-08-28 12:41:03','','https://static.vilson.xyz/cover.png','',0,0,0,NULL,NULL,'545522390@qq.com','6v7be19pwman2fird04gqu53',NULL,NULL,NULL),(586,'Alians','e10adc3949ba59abbe56e057f20f883e','Alians','18377893857','vilson',NULL,1,'2019-01-26 07:29:41','','https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png',NULL,0,0,0,NULL,NULL,'vilson@qq.com','kqdcn2w40p58r31zyo6efjib',NULL,NULL,NULL),(587,'Chihiro','e10adc3949ba59abbe56e057f20f883e','Chihiro','18278881051','Chihiro',NULL,1,'2019-01-24 11:15:09','','https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',NULL,0,0,0,NULL,NULL,'741648282@qq.com','y680trgedcavbhnz24u7i5m3',NULL,NULL,NULL),(588,'Json','f9f02f39d6d2048d760d8add98265ba1','Json','18681140821','Json','2019-01-05 21:57:01',1,'2019-01-06 08:21:42','','https://static.vilson.xyz/cover.png',NULL,0,0,0,NULL,NULL,'123456@qq.com','vys8gd32cfui6brtwzj4pqho',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `hi_member` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -292,25 +300,25 @@ DROP TABLE IF EXISTS `hi_member_account`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_member_account` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(30) DEFAULT NULL,
-  `member_code` varchar(30) DEFAULT '' COMMENT '所属账号id',
-  `organization_code` varchar(30) DEFAULT '' COMMENT '所属组织',
-  `department_code` varchar(500) DEFAULT '' COMMENT '部门编号',
-  `authorize` varchar(255) DEFAULT NULL COMMENT '角色',
+  `code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `member_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '所属账号id',
+  `organization_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '所属组织',
+  `department_code` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '部门编号',
+  `authorize` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '角色',
   `is_owner` tinyint(1) DEFAULT '0' COMMENT '是否主账号',
-  `name` varchar(255) DEFAULT NULL COMMENT '姓名',
-  `mobile` varchar(12) DEFAULT NULL COMMENT '手机号码',
-  `email` varchar(255) DEFAULT NULL COMMENT '邮件',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '姓名',
+  `mobile` varchar(12) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '手机号码',
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '邮件',
   `create_time` varchar(30) CHARACTER SET utf8 DEFAULT NULL COMMENT '创建时间',
   `last_login_time` varchar(30) CHARACTER SET utf8 DEFAULT NULL COMMENT '上次登录时间',
   `status` tinyint(1) DEFAULT '0' COMMENT '状态',
-  `description` varchar(255) DEFAULT NULL COMMENT '描述',
-  `avatar` varchar(255) DEFAULT NULL COMMENT '头像',
-  `position` varchar(255) DEFAULT NULL COMMENT '职位',
-  `department` varchar(255) DEFAULT NULL COMMENT '部门',
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '描述',
+  `avatar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '头像',
+  `position` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '职位',
+  `department` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '部门',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `code` (`code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=31  COMMENT='组织账号表';
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='组织账号表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -332,24 +340,24 @@ DROP TABLE IF EXISTS `hi_notify`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_notify` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) DEFAULT NULL COMMENT '标题',
-  `content` varchar(255) DEFAULT NULL COMMENT '内容',
-  `type` enum('notice','message','task') DEFAULT NULL COMMENT '通知类型。通知：notice，消息：message，待办：task',
-  `from` varchar(30) DEFAULT '0' COMMENT '发送人id',
-  `to` varchar(30) DEFAULT '0' COMMENT '送达用户id',
-  `create_time` varchar(30) DEFAULT NULL COMMENT '生成时间',
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '标题',
+  `content` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '内容',
+  `type` enum('notice','message','task') COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '通知类型。通知：notice，消息：message，待办：task',
+  `from` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '0' COMMENT '发送人id',
+  `to` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '0' COMMENT '送达用户id',
+  `create_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '生成时间',
   `is_read` tinyint(1) DEFAULT '0' COMMENT '是否已读',
-  `read_time` varchar(30) DEFAULT NULL COMMENT '阅读时间',
-  `send_data` text COMMENT '关联数据',
-  `finally_send_time` varchar(30) DEFAULT NULL COMMENT '最终发送时间',
-  `send_time` varchar(30) DEFAULT NULL COMMENT '发送时间',
-  `action` varchar(255) DEFAULT 'none' COMMENT '场景：task，project',
-  `terminal` varchar(255) DEFAULT NULL COMMENT '推送终端。pc端：project，移动端：wap',
-  `from_type` varchar(255) DEFAULT NULL COMMENT '''project'',''system''',
-  `avatar` varchar(200) DEFAULT NULL COMMENT '头像/图片',
-  `source_code` varchar(30) DEFAULT '0' COMMENT '资源code',
+  `read_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '阅读时间',
+  `send_data` text COLLATE utf8mb4_unicode_ci COMMENT '关联数据',
+  `finally_send_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '最终发送时间',
+  `send_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '发送时间',
+  `action` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT 'none' COMMENT '场景：task，project',
+  `terminal` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '推送终端。pc端：project，移动端：wap',
+  `from_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '''project'',''system''',
+  `avatar` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '头像/图片',
+  `source_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '0' COMMENT '资源code',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=4325  COMMENT='动态通知表';
+) ENGINE=MyISAM AUTO_INCREMENT=4325 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='动态通知表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -371,20 +379,20 @@ DROP TABLE IF EXISTS `hi_organization`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_organization` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL COMMENT '名称',
-  `avatar` varchar(255) DEFAULT NULL COMMENT '头像',
-  `description` varchar(500) DEFAULT NULL COMMENT '描述',
-  `owner_code` varchar(30) DEFAULT NULL COMMENT '拥有者',
-  `create_time` varchar(30) DEFAULT NULL COMMENT '创建时间',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '名称',
+  `avatar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '头像',
+  `description` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '描述',
+  `owner_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '拥有者',
+  `create_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '创建时间',
   `personal` tinyint(1) DEFAULT '0' COMMENT '是否个人项目',
-  `code` varchar(30) DEFAULT '' COMMENT '编号',
-  `address` varchar(100) DEFAULT NULL COMMENT '地址',
+  `code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '编号',
+  `address` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '地址',
   `province` int(10) DEFAULT '0' COMMENT '省',
   `city` int(10) DEFAULT '0' COMMENT '市',
   `area` int(10) DEFAULT '0' COMMENT '区',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `code` (`code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=7  COMMENT='组织表';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='组织表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -406,33 +414,33 @@ DROP TABLE IF EXISTS `hi_project`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_project` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `cover` varchar(255) DEFAULT NULL COMMENT '封面',
-  `name` varchar(90) DEFAULT NULL COMMENT '名称',
-  `code` varchar(45) DEFAULT NULL COMMENT '编号',
-  `description` text COMMENT '描述',
-  `access_control_type` enum('open','private','custom') DEFAULT 'open' COMMENT '访问控制l类型',
-  `white_list` varchar(255) DEFAULT NULL COMMENT '可以访问项目的权限组（白名单）',
+  `cover` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '封面',
+  `name` varchar(90) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '名称',
+  `code` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '编号',
+  `description` text COLLATE utf8mb4_unicode_ci COMMENT '描述',
+  `access_control_type` enum('open','private','custom') COLLATE utf8mb4_unicode_ci DEFAULT 'open' COMMENT '访问控制l类型',
+  `white_list` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '可以访问项目的权限组（白名单）',
   `order` int(11) unsigned DEFAULT '0' COMMENT '排序',
   `deleted` tinyint(1) DEFAULT '0' COMMENT '删除标记',
-  `template_code` varchar(30) DEFAULT '' COMMENT '项目类型',
+  `template_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '项目类型',
   `schedule` double(5,2) DEFAULT '0.00' COMMENT '进度',
-  `create_time` varchar(255) DEFAULT NULL COMMENT '创建时间',
-  `organization_code` varchar(30) DEFAULT '' COMMENT '组织id',
-  `deleted_time` varchar(30) DEFAULT NULL COMMENT '删除时间',
+  `create_time` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '创建时间',
+  `organization_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '组织id',
+  `deleted_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '删除时间',
   `private` tinyint(1) DEFAULT '1' COMMENT '是否私有',
-  `prefix` varchar(10) DEFAULT NULL COMMENT '项目前缀',
+  `prefix` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '项目前缀',
   `open_prefix` tinyint(1) DEFAULT '0' COMMENT '是否开启项目前缀',
   `archive` tinyint(1) DEFAULT '0' COMMENT '是否归档',
-  `archive_time` varchar(30) DEFAULT NULL COMMENT '归档时间',
+  `archive_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '归档时间',
   `open_begin_time` tinyint(1) DEFAULT '0' COMMENT '是否开启任务开始时间',
   `open_task_private` tinyint(1) DEFAULT '0' COMMENT '是否开启新任务默认开启隐私模式',
-  `task_board_theme` varchar(255) DEFAULT 'default' COMMENT '看板风格',
-  `begin_time` varchar(30) DEFAULT NULL COMMENT '项目开始日期',
-  `end_time` varchar(30) DEFAULT NULL COMMENT '项目截止日期',
+  `task_board_theme` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT 'default' COMMENT '看板风格',
+  `begin_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '项目开始日期',
+  `end_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '项目截止日期',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `code` (`code`) USING BTREE,
   KEY `project` (`order`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=13046  COMMENT='项目表';
+) ENGINE=InnoDB AUTO_INCREMENT=13046 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='项目表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -454,17 +462,17 @@ DROP TABLE IF EXISTS `hi_project_auth`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_project_auth` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(20) NOT NULL COMMENT '权限名称',
+  `title` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '权限名称',
   `status` tinyint(1) unsigned DEFAULT '1' COMMENT '状态(1:禁用,2:启用)',
   `sort` smallint(6) unsigned DEFAULT '0' COMMENT '排序权重',
-  `desc` varchar(255) DEFAULT NULL COMMENT '备注说明',
+  `desc` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '备注说明',
   `create_by` bigint(11) unsigned DEFAULT '0' COMMENT '创建人',
-  `create_at` varchar(30) DEFAULT NULL COMMENT '创建时间',
-  `organization_code` varchar(30) DEFAULT '' COMMENT '所属组织',
+  `create_at` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '创建时间',
+  `organization_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '所属组织',
   `is_default` tinyint(1) DEFAULT '0' COMMENT '是否默认',
-  `type` varchar(255) DEFAULT NULL COMMENT '权限类型',
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '权限类型',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=10  COMMENT='项目权限表';
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='项目权限表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -487,11 +495,11 @@ DROP TABLE IF EXISTS `hi_project_auth_node`;
 CREATE TABLE `hi_project_auth_node` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `auth` bigint(20) unsigned DEFAULT NULL COMMENT '角色ID',
-  `node` varchar(200) DEFAULT NULL COMMENT '节点路径',
+  `node` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '节点路径',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `index_system_auth_auth` (`auth`) USING BTREE,
   KEY `index_system_auth_node` (`node`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4854  COMMENT='项目角色与节点绑定';
+) ENGINE=InnoDB AUTO_INCREMENT=5026 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='项目角色与节点绑定';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -500,7 +508,7 @@ CREATE TABLE `hi_project_auth_node` (
 
 LOCK TABLES `hi_project_auth_node` WRITE;
 /*!40000 ALTER TABLE `hi_project_auth_node` DISABLE KEYS */;
-INSERT INTO `hi_project_auth_node` VALUES (3097,1,'project'),(3098,1,'project/account'),(3099,1,'project/account/index'),(3100,1,'project/account/auth'),(3101,1,'project/account/add'),(3102,1,'project/account/edit'),(3103,1,'project/account/del'),(3104,1,'project/account/forbid'),(3105,1,'project/account/resume'),(3106,1,'project/auth'),(3107,1,'project/auth/index'),(3108,1,'project/auth/apply'),(3109,1,'project/auth/add'),(3110,1,'project/auth/edit'),(3111,1,'project/auth/forbid'),(3112,1,'project/auth/resume'),(3113,1,'project/auth/setdefault'),(3114,1,'project/auth/del'),(3115,1,'project/department'),(3116,1,'project/department/index'),(3117,1,'project/department/read'),(3118,1,'project/department/save'),(3119,1,'project/department/edit'),(3120,1,'project/department/delete'),(3121,1,'project/department_member'),(3122,1,'project/department_member/index'),(3123,1,'project/department_member/searchinvitemember'),(3124,1,'project/department_member/invitemember'),(3125,1,'project/department_member/removemember'),(3126,1,'project/index'),(3127,1,'project/index/index'),(3128,1,'project/index/changecurrentorganization'),(3129,1,'project/index/systemconfig'),(3130,1,'project/index/info'),(3131,1,'project/index/editpersonal'),(3132,1,'project/index/editpassword'),(3133,1,'project/index/uploadimg'),(3134,1,'project/index/uploadavatar'),(3135,1,'project/menu'),(3136,1,'project/menu/menu'),(3137,1,'project/menu/menuadd'),(3138,1,'project/menu/menuedit'),(3139,1,'project/menu/menuforbid'),(3140,1,'project/menu/menuresume'),(3141,1,'project/menu/menudel'),(3142,1,'project/node'),(3143,1,'project/node/index'),(3144,1,'project/node/alllist'),(3145,1,'project/node/clear'),(3146,1,'project/node/save'),(3147,1,'project/notify'),(3148,1,'project/notify/index'),(3149,1,'project/notify/noreads'),(3150,1,'project/notify/setreadied'),(3151,1,'project/notify/batchdel'),(3152,1,'project/notify/read'),(3153,1,'project/notify/delete'),(3154,1,'project/organization'),(3155,1,'project/organization/index'),(3156,1,'project/organization/save'),(3157,1,'project/organization/read'),(3158,1,'project/organization/edit'),(3159,1,'project/organization/delete'),(3160,1,'project/project'),(3161,1,'project/project/index'),(3162,1,'project/project/selflist'),(3163,1,'project/project/save'),(3164,1,'project/project/read'),(3165,1,'project/project/edit'),(3166,1,'project/project/uploadcover'),(3167,1,'project/project/recycle'),(3168,1,'project/project/recovery'),(3169,1,'project/project/archive'),(3170,1,'project/project/recoveryarchive'),(3171,1,'project/project/quit'),(3172,1,'project/project_collect'),(3173,1,'project/project_collect/collect'),(3174,1,'project/project_member'),(3175,1,'project/project_member/index'),(3176,1,'project/project_member/searchinvitemember'),(3177,1,'project/project_member/invitemember'),(3178,1,'project/project_template'),(3179,1,'project/project_template/index'),(3180,1,'project/project_template/save'),(3181,1,'project/project_template/uploadcover'),(3182,1,'project/project_template/edit'),(3183,1,'project/project_template/delete'),(3184,1,'project/task'),(3185,1,'project/task/index'),(3186,1,'project/task/selflist'),(3187,1,'project/task/read'),(3188,1,'project/task/save'),(3189,1,'project/task/taskdone'),(3190,1,'project/task/assigntask'),(3191,1,'project/task/sort'),(3192,1,'project/task/createcomment'),(3193,1,'project/task/edit'),(3194,1,'project/task/like'),(3195,1,'project/task/star'),(3196,1,'project/task/recycle'),(3197,1,'project/task/recovery'),(3198,1,'project/task/delete'),(3199,1,'project/task_log'),(3200,1,'project/task_log/index'),(3201,1,'project/task_log/getlistbyselfproject'),(3202,1,'project/task_member'),(3203,1,'project/task_member/index'),(3204,1,'project/task_member/searchinvitemember'),(3205,1,'project/task_member/invitemember'),(3206,1,'project/task_member/invitememberbatch'),(3207,1,'project/task_stages'),(3208,1,'project/task_stages/index'),(3209,1,'project/task_stages/tasks'),(3210,1,'project/task_stages/sort'),(3211,1,'project/task_stages/save'),(3212,1,'project/task_stages/edit'),(3213,1,'project/task_stages/delete'),(3214,1,'project/task_stages_template'),(3215,1,'project/task_stages_template/index'),(3216,1,'project/task_stages_template/save'),(3217,1,'project/task_stages_template/edit'),(3218,1,'project/task_stages_template/delete'),(3219,2,'project/account/index'),(3220,2,'project/auth/index'),(3221,2,'project/index/index'),(3222,2,'project/index'),(3223,2,'project/index/changecurrentorganization'),(3224,2,'project/index/systemconfig'),(3225,2,'project/index/info'),(3226,2,'project/index/editpersonal'),(3227,2,'project/index/editpassword'),(3228,2,'project/index/uploadimg'),(3229,2,'project/index/uploadavatar'),(3230,2,'project/menu/menu'),(3231,2,'project/node/index'),(3232,2,'project/node/alllist'),(3233,2,'project/notify/index'),(3234,2,'project/notify'),(3235,2,'project/notify/noreads'),(3236,2,'project/notify/setreadied'),(3237,2,'project/notify/batchdel'),(3238,2,'project/notify/read'),(3239,2,'project/notify/delete'),(3240,2,'project/organization/index'),(3241,2,'project/organization'),(3242,2,'project/organization/save'),(3243,2,'project/organization/read'),(3244,2,'project/organization/edit'),(3245,2,'project/organization/delete'),(3246,2,'project/project/index'),(3247,2,'project/project/read'),(3248,2,'project/project_collect/collect'),(3249,2,'project/project_collect'),(3250,2,'project/project_member/index'),(3251,2,'project/project_template/index'),(3252,2,'project/task/index'),(3253,2,'project/task/read'),(3254,2,'project/task/save'),(3255,2,'project/task/taskdone'),(3256,2,'project/task/assigntask'),(3257,2,'project/task/sort'),(3258,2,'project/task/createcomment'),(3259,2,'project/task/like'),(3260,2,'project/task/star'),(3261,2,'project/task_log/index'),(3262,2,'project/task_log'),(3263,2,'project/task_log/getlistbyselfproject'),(3264,2,'project/task_member/index'),(3265,2,'project/task_member/searchinvitemember'),(3266,2,'project/task_stages/index'),(3267,2,'project/task_stages/tasks'),(3268,2,'project/task_stages/sort'),(3269,2,'project/task_stages_template/index'),(3270,2,'project/department/index'),(3271,2,'project/department/read'),(3272,2,'project/department_member/index'),(3273,2,'project/department_member/searchinvitemember'),(3274,2,'project/project/selflist'),(3275,2,'project/project/save'),(3276,2,'project/task/selflist'),(3636,6,'project'),(3637,6,'project/account'),(3638,6,'project/account/index'),(3639,6,'project/account/auth'),(3640,6,'project/account/add'),(3641,6,'project/account/edit'),(3642,6,'project/account/del'),(3643,6,'project/account/forbid'),(3644,6,'project/account/resume'),(3645,6,'project/auth'),(3646,6,'project/auth/index'),(3647,6,'project/auth/apply'),(3648,6,'project/auth/add'),(3649,6,'project/auth/edit'),(3650,6,'project/auth/forbid'),(3651,6,'project/auth/resume'),(3652,6,'project/auth/setdefault'),(3653,6,'project/auth/del'),(3654,6,'project/department'),(3655,6,'project/department/index'),(3656,6,'project/department/read'),(3657,6,'project/department/save'),(3658,6,'project/department/edit'),(3659,6,'project/department/delete'),(3660,6,'project/department_member'),(3661,6,'project/department_member/index'),(3662,6,'project/department_member/searchinvitemember'),(3663,6,'project/department_member/invitemember'),(3664,6,'project/department_member/removemember'),(3665,6,'project/index'),(3666,6,'project/index/index'),(3667,6,'project/index/changecurrentorganization'),(3668,6,'project/index/systemconfig'),(3669,6,'project/index/info'),(3670,6,'project/index/editpersonal'),(3671,6,'project/index/editpassword'),(3672,6,'project/index/uploadimg'),(3673,6,'project/index/uploadavatar'),(3674,6,'project/menu'),(3675,6,'project/menu/menu'),(3676,6,'project/menu/menuadd'),(3677,6,'project/menu/menuedit'),(3678,6,'project/menu/menuforbid'),(3679,6,'project/menu/menuresume'),(3680,6,'project/menu/menudel'),(3681,6,'project/node'),(3682,6,'project/node/index'),(3683,6,'project/node/alllist'),(3684,6,'project/node/clear'),(3685,6,'project/node/save'),(3686,6,'project/notify'),(3687,6,'project/notify/index'),(3688,6,'project/notify/noreads'),(3689,6,'project/notify/setreadied'),(3690,6,'project/notify/batchdel'),(3691,6,'project/notify/read'),(3692,6,'project/notify/delete'),(3693,6,'project/organization'),(3694,6,'project/organization/index'),(3695,6,'project/organization/save'),(3696,6,'project/organization/read'),(3697,6,'project/organization/edit'),(3698,6,'project/organization/delete'),(3699,6,'project/project'),(3700,6,'project/project/index'),(3701,6,'project/project/selflist'),(3702,6,'project/project/save'),(3703,6,'project/project/read'),(3704,6,'project/project/edit'),(3705,6,'project/project/uploadcover'),(3706,6,'project/project/recycle'),(3707,6,'project/project/recovery'),(3708,6,'project/project/archive'),(3709,6,'project/project/recoveryarchive'),(3710,6,'project/project/quit'),(3711,6,'project/project_collect'),(3712,6,'project/project_collect/collect'),(3713,6,'project/project_member'),(3714,6,'project/project_member/index'),(3715,6,'project/project_member/searchinvitemember'),(3716,6,'project/project_member/invitemember'),(3717,6,'project/project_template'),(3718,6,'project/project_template/index'),(3719,6,'project/project_template/save'),(3720,6,'project/project_template/uploadcover'),(3721,6,'project/project_template/edit'),(3722,6,'project/project_template/delete'),(3723,6,'project/task'),(3724,6,'project/task/index'),(3725,6,'project/task/selflist'),(3726,6,'project/task/read'),(3727,6,'project/task/save'),(3728,6,'project/task/taskdone'),(3729,6,'project/task/assigntask'),(3730,6,'project/task/sort'),(3731,6,'project/task/createcomment'),(3732,6,'project/task/edit'),(3733,6,'project/task/like'),(3734,6,'project/task/star'),(3735,6,'project/task/recycle'),(3736,6,'project/task/recovery'),(3737,6,'project/task/delete'),(3738,6,'project/task_log'),(3739,6,'project/task_log/index'),(3740,6,'project/task_log/getlistbyselfproject'),(3741,6,'project/task_member'),(3742,6,'project/task_member/index'),(3743,6,'project/task_member/searchinvitemember'),(3744,6,'project/task_member/invitemember'),(3745,6,'project/task_member/invitememberbatch'),(3746,6,'project/task_stages'),(3747,6,'project/task_stages/index'),(3748,6,'project/task_stages/tasks'),(3749,6,'project/task_stages/sort'),(3750,6,'project/task_stages/save'),(3751,6,'project/task_stages/edit'),(3752,6,'project/task_stages/delete'),(3753,6,'project/task_stages_template'),(3754,6,'project/task_stages_template/index'),(3755,6,'project/task_stages_template/save'),(3756,6,'project/task_stages_template/edit'),(3757,6,'project/task_stages_template/delete'),(3758,7,'project/account/index'),(3759,7,'project/auth/index'),(3760,7,'project/index/index'),(3761,7,'project/index'),(3762,7,'project/index/changecurrentorganization'),(3763,7,'project/index/systemconfig'),(3764,7,'project/index/info'),(3765,7,'project/index/editpersonal'),(3766,7,'project/index/editpassword'),(3767,7,'project/index/uploadimg'),(3768,7,'project/index/uploadavatar'),(3769,7,'project/menu/menu'),(3770,7,'project/node/index'),(3771,7,'project/node/alllist'),(3772,7,'project/notify/index'),(3773,7,'project/notify'),(3774,7,'project/notify/noreads'),(3775,7,'project/notify/setreadied'),(3776,7,'project/notify/batchdel'),(3777,7,'project/notify/read'),(3778,7,'project/notify/delete'),(3779,7,'project/organization/index'),(3780,7,'project/organization'),(3781,7,'project/organization/save'),(3782,7,'project/organization/read'),(3783,7,'project/organization/edit'),(3784,7,'project/organization/delete'),(3785,7,'project/project/index'),(3786,7,'project/project/read'),(3787,7,'project/project_collect/collect'),(3788,7,'project/project_collect'),(3789,7,'project/project_member/index'),(3790,7,'project/project_template/index'),(3791,7,'project/task/index'),(3792,7,'project/task/read'),(3793,7,'project/task/save'),(3794,7,'project/task/taskdone'),(3795,7,'project/task/assigntask'),(3796,7,'project/task/sort'),(3797,7,'project/task/createcomment'),(3798,7,'project/task/like'),(3799,7,'project/task/star'),(3800,7,'project/task_log/index'),(3801,7,'project/task_log'),(3802,7,'project/task_log/getlistbyselfproject'),(3803,7,'project/task_member/index'),(3804,7,'project/task_member/searchinvitemember'),(3805,7,'project/task_stages/index'),(3806,7,'project/task_stages/tasks'),(3807,7,'project/task_stages/sort'),(3808,7,'project/task_stages_template/index'),(3809,7,'project/department/index'),(3810,7,'project/department/read'),(3811,7,'project/department_member/index'),(3812,7,'project/department_member/searchinvitemember'),(3813,7,'project/project/selflist'),(3814,7,'project/project/save'),(3815,7,'project/task/selflist'),(3816,8,'project'),(3817,8,'project/account'),(3818,8,'project/account/index'),(3819,8,'project/account/auth'),(3820,8,'project/account/add'),(3821,8,'project/account/edit'),(3822,8,'project/account/del'),(3823,8,'project/account/forbid'),(3824,8,'project/account/resume'),(3825,8,'project/auth'),(3826,8,'project/auth/index'),(3827,8,'project/auth/apply'),(3828,8,'project/auth/add'),(3829,8,'project/auth/edit'),(3830,8,'project/auth/forbid'),(3831,8,'project/auth/resume'),(3832,8,'project/auth/setdefault'),(3833,8,'project/auth/del'),(3834,8,'project/department'),(3835,8,'project/department/index'),(3836,8,'project/department/read'),(3837,8,'project/department/save'),(3838,8,'project/department/edit'),(3839,8,'project/department/delete'),(3840,8,'project/department_member'),(3841,8,'project/department_member/index'),(3842,8,'project/department_member/searchinvitemember'),(3843,8,'project/department_member/invitemember'),(3844,8,'project/department_member/removemember'),(3845,8,'project/index'),(3846,8,'project/index/index'),(3847,8,'project/index/changecurrentorganization'),(3848,8,'project/index/systemconfig'),(3849,8,'project/index/info'),(3850,8,'project/index/editpersonal'),(3851,8,'project/index/editpassword'),(3852,8,'project/index/uploadimg'),(3853,8,'project/index/uploadavatar'),(3854,8,'project/menu'),(3855,8,'project/menu/menu'),(3856,8,'project/menu/menuadd'),(3857,8,'project/menu/menuedit'),(3858,8,'project/menu/menuforbid'),(3859,8,'project/menu/menuresume'),(3860,8,'project/menu/menudel'),(3861,8,'project/node'),(3862,8,'project/node/index'),(3863,8,'project/node/alllist'),(3864,8,'project/node/clear'),(3865,8,'project/node/save'),(3866,8,'project/notify'),(3867,8,'project/notify/index'),(3868,8,'project/notify/noreads'),(3869,8,'project/notify/setreadied'),(3870,8,'project/notify/batchdel'),(3871,8,'project/notify/read'),(3872,8,'project/notify/delete'),(3873,8,'project/organization'),(3874,8,'project/organization/index'),(3875,8,'project/organization/save'),(3876,8,'project/organization/read'),(3877,8,'project/organization/edit'),(3878,8,'project/organization/delete'),(3879,8,'project/project'),(3880,8,'project/project/index'),(3881,8,'project/project/selflist'),(3882,8,'project/project/save'),(3883,8,'project/project/read'),(3884,8,'project/project/edit'),(3885,8,'project/project/uploadcover'),(3886,8,'project/project/recycle'),(3887,8,'project/project/recovery'),(3888,8,'project/project/archive'),(3889,8,'project/project/recoveryarchive'),(3890,8,'project/project/quit'),(3891,8,'project/project_collect'),(3892,8,'project/project_collect/collect'),(3893,8,'project/project_member'),(3894,8,'project/project_member/index'),(3895,8,'project/project_member/searchinvitemember'),(3896,8,'project/project_member/invitemember'),(3897,8,'project/project_template'),(3898,8,'project/project_template/index'),(3899,8,'project/project_template/save'),(3900,8,'project/project_template/uploadcover'),(3901,8,'project/project_template/edit'),(3902,8,'project/project_template/delete'),(3903,8,'project/task'),(3904,8,'project/task/index'),(3905,8,'project/task/selflist'),(3906,8,'project/task/read'),(3907,8,'project/task/save'),(3908,8,'project/task/taskdone'),(3909,8,'project/task/assigntask'),(3910,8,'project/task/sort'),(3911,8,'project/task/createcomment'),(3912,8,'project/task/edit'),(3913,8,'project/task/like'),(3914,8,'project/task/star'),(3915,8,'project/task/recycle'),(3916,8,'project/task/recovery'),(3917,8,'project/task/delete'),(3918,8,'project/task_log'),(3919,8,'project/task_log/index'),(3920,8,'project/task_log/getlistbyselfproject'),(3921,8,'project/task_member'),(3922,8,'project/task_member/index'),(3923,8,'project/task_member/searchinvitemember'),(3924,8,'project/task_member/invitemember'),(3925,8,'project/task_member/invitememberbatch'),(3926,8,'project/task_stages'),(3927,8,'project/task_stages/index'),(3928,8,'project/task_stages/tasks'),(3929,8,'project/task_stages/sort'),(3930,8,'project/task_stages/save'),(3931,8,'project/task_stages/edit'),(3932,8,'project/task_stages/delete'),(3933,8,'project/task_stages_template'),(3934,8,'project/task_stages_template/index'),(3935,8,'project/task_stages_template/save'),(3936,8,'project/task_stages_template/edit'),(3937,8,'project/task_stages_template/delete'),(3938,9,'project/account/index'),(3939,9,'project/auth/index'),(3940,9,'project/index/index'),(3941,9,'project/index'),(3942,9,'project/index/changecurrentorganization'),(3943,9,'project/index/systemconfig'),(3944,9,'project/index/info'),(3945,9,'project/index/editpersonal'),(3946,9,'project/index/editpassword'),(3947,9,'project/index/uploadimg'),(3948,9,'project/index/uploadavatar'),(3949,9,'project/menu/menu'),(3950,9,'project/node/index'),(3951,9,'project/node/alllist'),(3952,9,'project/notify/index'),(3953,9,'project/notify'),(3954,9,'project/notify/noreads'),(3955,9,'project/notify/setreadied'),(3956,9,'project/notify/batchdel'),(3957,9,'project/notify/read'),(3958,9,'project/notify/delete'),(3959,9,'project/organization/index'),(3960,9,'project/organization'),(3961,9,'project/organization/save'),(3962,9,'project/organization/read'),(3963,9,'project/organization/edit'),(3964,9,'project/organization/delete'),(3965,9,'project/project/index'),(3966,9,'project/project/read'),(3967,9,'project/project_collect/collect'),(3968,9,'project/project_collect'),(3969,9,'project/project_member/index'),(3970,9,'project/project_template/index'),(3971,9,'project/task/index'),(3972,9,'project/task/read'),(3973,9,'project/task/save'),(3974,9,'project/task/taskdone'),(3975,9,'project/task/assigntask'),(3976,9,'project/task/sort'),(3977,9,'project/task/createcomment'),(3978,9,'project/task/like'),(3979,9,'project/task/star'),(3980,9,'project/task_log/index'),(3981,9,'project/task_log'),(3982,9,'project/task_log/getlistbyselfproject'),(3983,9,'project/task_member/index'),(3984,9,'project/task_member/searchinvitemember'),(3985,9,'project/task_stages/index'),(3986,9,'project/task_stages/tasks'),(3987,9,'project/task_stages/sort'),(3988,9,'project/task_stages_template/index'),(3989,9,'project/department/index'),(3990,9,'project/department/read'),(3991,9,'project/department_member/index'),(3992,9,'project/department_member/searchinvitemember'),(3993,9,'project/project/selflist'),(3994,9,'project/project/save'),(3995,9,'project/task/selflist'),(4452,4,'project/account/index'),(4453,4,'project/account/read'),(4454,4,'project/auth/index'),(4455,4,'project/department/index'),(4456,4,'project/department/read'),(4457,4,'project/department_member/index'),(4458,4,'project/department_member/searchinvitemember'),(4459,4,'project/file/index'),(4460,4,'project/file/read'),(4461,4,'project/file/uploadfiles'),(4462,4,'project/index/index'),(4463,4,'project/index'),(4464,4,'project/index/changecurrentorganization'),(4465,4,'project/index/systemconfig'),(4466,4,'project/index/info'),(4467,4,'project/index/editpersonal'),(4468,4,'project/index/editpassword'),(4469,4,'project/index/uploadimg'),(4470,4,'project/index/uploadavatar'),(4471,4,'project/menu/menu'),(4472,4,'project/node/index'),(4473,4,'project/node/alllist'),(4474,4,'project/notify/index'),(4475,4,'project/notify'),(4476,4,'project/notify/noreads'),(4477,4,'project/notify/setreadied'),(4478,4,'project/notify/batchdel'),(4479,4,'project/notify/read'),(4480,4,'project/notify/delete'),(4481,4,'project/organization/index'),(4482,4,'project/organization'),(4483,4,'project/organization/save'),(4484,4,'project/organization/read'),(4485,4,'project/organization/edit'),(4486,4,'project/organization/delete'),(4487,4,'project/project/index'),(4488,4,'project/project/selflist'),(4489,4,'project/project/save'),(4490,4,'project/project/read'),(4491,4,'project/project/getlogbyselfproject'),(4492,4,'project/project/quit'),(4493,4,'project/project_collect/collect'),(4494,4,'project/project_collect'),(4495,4,'project/project_member/index'),(4496,4,'project/project_template/index'),(4497,4,'project/task/index'),(4498,4,'project/task/datetotalforproject'),(4499,4,'project/task/selflist'),(4500,4,'project/task/read'),(4501,4,'project/task/save'),(4502,4,'project/task/taskdone'),(4503,4,'project/task/assigntask'),(4504,4,'project/task/sort'),(4505,4,'project/task/createcomment'),(4506,4,'project/task/setprivate'),(4507,4,'project/task/like'),(4508,4,'project/task/tasktotags'),(4509,4,'project/task/settag'),(4510,4,'project/task/star'),(4511,4,'project/task/tasklog'),(4512,4,'project/task_member/index'),(4513,4,'project/task_member/searchinvitemember'),(4514,4,'project/task_stages/index'),(4515,4,'project/task_stages/tasks'),(4516,4,'project/task_stages/sort'),(4517,4,'project/task_stages_template/index'),(4518,4,'project/task_tag/index'),(4519,4,'project/task_tag'),(4520,4,'project/task_tag/save'),(4521,4,'project/task_tag/edit'),(4522,4,'project/task_tag/delete'),(4523,4,'project/project_features/index'),(4524,4,'project/project_version/index'),(4525,4,'project/project_version/read'),(4526,4,'project/task_workflow/index'),(4682,3,'project/account/index'),(4683,3,'project/account'),(4684,3,'project/account/read'),(4685,3,'project/account/auth'),(4686,3,'project/account/add'),(4687,3,'project/account/edit'),(4688,3,'project/account/del'),(4689,3,'project/account/forbid'),(4690,3,'project/account/resume'),(4691,3,'project/auth/index'),(4692,3,'project/auth'),(4693,3,'project/auth/apply'),(4694,3,'project/auth/add'),(4695,3,'project/auth/edit'),(4696,3,'project/auth/forbid'),(4697,3,'project/auth/resume'),(4698,3,'project/auth/setdefault'),(4699,3,'project/auth/del'),(4700,3,'project/department/index'),(4701,3,'project/department'),(4702,3,'project/department/read'),(4703,3,'project/department/save'),(4704,3,'project/department/edit'),(4705,3,'project/department/delete'),(4706,3,'project/department_member/index'),(4707,3,'project/department_member'),(4708,3,'project/department_member/searchinvitemember'),(4709,3,'project/department_member/invitemember'),(4710,3,'project/department_member/removemember'),(4711,3,'project/department_member/uploadfile'),(4712,3,'project/file/index'),(4713,3,'project/file'),(4714,3,'project/file/read'),(4715,3,'project/file/uploadfiles'),(4716,3,'project/file/edit'),(4717,3,'project/file/recycle'),(4718,3,'project/file/recovery'),(4719,3,'project/file/delete'),(4720,3,'project/index/index'),(4721,3,'project/index'),(4722,3,'project/index/changecurrentorganization'),(4723,3,'project/index/systemconfig'),(4724,3,'project/index/info'),(4725,3,'project/index/editpersonal'),(4726,3,'project/index/editpassword'),(4727,3,'project/index/uploadimg'),(4728,3,'project/index/uploadavatar'),(4729,3,'project/menu/menu'),(4730,3,'project/menu'),(4731,3,'project/menu/menuadd'),(4732,3,'project/menu/menuedit'),(4733,3,'project/menu/menuforbid'),(4734,3,'project/menu/menuresume'),(4735,3,'project/menu/menudel'),(4736,3,'project/node/index'),(4737,3,'project/node'),(4738,3,'project/node/alllist'),(4739,3,'project/node/clear'),(4740,3,'project/node/save'),(4741,3,'project/notify/index'),(4742,3,'project/notify'),(4743,3,'project/notify/noreads'),(4744,3,'project/notify/setreadied'),(4745,3,'project/notify/batchdel'),(4746,3,'project/notify/read'),(4747,3,'project/notify/delete'),(4748,3,'project/organization/index'),(4749,3,'project/organization'),(4750,3,'project/organization/save'),(4751,3,'project/organization/read'),(4752,3,'project/organization/edit'),(4753,3,'project/organization/delete'),(4754,3,'project/project/index'),(4755,3,'project/project'),(4756,3,'project/project/selflist'),(4757,3,'project/project/save'),(4758,3,'project/project/read'),(4759,3,'project/project/edit'),(4760,3,'project/project/getlogbyselfproject'),(4761,3,'project/project/uploadcover'),(4762,3,'project/project/recycle'),(4763,3,'project/project/recovery'),(4764,3,'project/project/archive'),(4765,3,'project/project/recoveryarchive'),(4766,3,'project/project/quit'),(4767,3,'project/project_collect/collect'),(4768,3,'project/project_collect'),(4769,3,'project/project_member/index'),(4770,3,'project/project_member'),(4771,3,'project/project_member/searchinvitemember'),(4772,3,'project/project_member/invitemember'),(4773,3,'project/project_member/removemember'),(4774,3,'project/project_template/index'),(4775,3,'project/project_template'),(4776,3,'project/project_template/save'),(4777,3,'project/project_template/uploadcover'),(4778,3,'project/project_template/edit'),(4779,3,'project/project_template/delete'),(4780,3,'project/source_link/delete'),(4781,3,'project/source_link'),(4782,3,'project/task/index'),(4783,3,'project/task'),(4784,3,'project/task/datetotalforproject'),(4785,3,'project/task/selflist'),(4786,3,'project/task/tasksources'),(4787,3,'project/task/getlistbytasktag'),(4788,3,'project/task/read'),(4789,3,'project/task/save'),(4790,3,'project/task/taskdone'),(4791,3,'project/task/assigntask'),(4792,3,'project/task/batchassigntask'),(4793,3,'project/task/sort'),(4794,3,'project/task/createcomment'),(4795,3,'project/task/edit'),(4796,3,'project/task/setprivate'),(4797,3,'project/task/like'),(4798,3,'project/task/tasktotags'),(4799,3,'project/task/settag'),(4800,3,'project/task/star'),(4801,3,'project/task/tasklog'),(4802,3,'project/task/savetaskworktime'),(4803,3,'project/task/edittaskworktime'),(4804,3,'project/task/deltaskworktime'),(4805,3,'project/task/uploadfile'),(4806,3,'project/task/recyclebatch'),(4807,3,'project/task/recycle'),(4808,3,'project/task/recovery'),(4809,3,'project/task/delete'),(4810,3,'project/task_member/index'),(4811,3,'project/task_member'),(4812,3,'project/task_member/searchinvitemember'),(4813,3,'project/task_member/invitemember'),(4814,3,'project/task_member/invitememberbatch'),(4815,3,'project/task_stages/index'),(4816,3,'project/task_stages'),(4817,3,'project/task_stages/tasks'),(4818,3,'project/task_stages/sort'),(4819,3,'project/task_stages/save'),(4820,3,'project/task_stages/edit'),(4821,3,'project/task_stages/delete'),(4822,3,'project/task_stages_template/index'),(4823,3,'project/task_stages_template'),(4824,3,'project/task_stages_template/save'),(4825,3,'project/task_stages_template/edit'),(4826,3,'project/task_stages_template/delete'),(4827,3,'project/task_tag'),(4828,3,'project/task_tag/index'),(4829,3,'project/task_tag/save'),(4830,3,'project/task_tag/edit'),(4831,3,'project/task_tag/delete'),(4832,3,'project/task_workflow'),(4833,3,'project/task_workflow/index'),(4834,3,'project/task_workflow/save'),(4835,3,'project/task_workflow/edit'),(4836,3,'project/task_workflow/delete'),(4837,3,'project'),(4838,3,'project/invite_link'),(4839,3,'project/invite_link/save'),(4840,3,'project/project_features'),(4841,3,'project/project_features/index'),(4842,3,'project/project_features/save'),(4843,3,'project/project_features/edit'),(4844,3,'project/project_features/delete'),(4845,3,'project/project_version'),(4846,3,'project/project_version/index'),(4847,3,'project/project_version/save'),(4848,3,'project/project_version/edit'),(4849,3,'project/project_version/changestatus'),(4850,3,'project/project_version/read'),(4851,3,'project/project_version/addversiontask'),(4852,3,'project/project_version/removeversiontask'),(4853,3,'project/project_version/delete');
+INSERT INTO `hi_project_auth_node` VALUES (3097,1,'project'),(3098,1,'project/account'),(3099,1,'project/account/index'),(3100,1,'project/account/auth'),(3101,1,'project/account/add'),(3102,1,'project/account/edit'),(3103,1,'project/account/del'),(3104,1,'project/account/forbid'),(3105,1,'project/account/resume'),(3106,1,'project/auth'),(3107,1,'project/auth/index'),(3108,1,'project/auth/apply'),(3109,1,'project/auth/add'),(3110,1,'project/auth/edit'),(3111,1,'project/auth/forbid'),(3112,1,'project/auth/resume'),(3113,1,'project/auth/setdefault'),(3114,1,'project/auth/del'),(3115,1,'project/department'),(3116,1,'project/department/index'),(3117,1,'project/department/read'),(3118,1,'project/department/save'),(3119,1,'project/department/edit'),(3120,1,'project/department/delete'),(3121,1,'project/department_member'),(3122,1,'project/department_member/index'),(3123,1,'project/department_member/searchinvitemember'),(3124,1,'project/department_member/invitemember'),(3125,1,'project/department_member/removemember'),(3126,1,'project/index'),(3127,1,'project/index/index'),(3128,1,'project/index/changecurrentorganization'),(3129,1,'project/index/systemconfig'),(3130,1,'project/index/info'),(3131,1,'project/index/editpersonal'),(3132,1,'project/index/editpassword'),(3133,1,'project/index/uploadimg'),(3134,1,'project/index/uploadavatar'),(3135,1,'project/menu'),(3136,1,'project/menu/menu'),(3137,1,'project/menu/menuadd'),(3138,1,'project/menu/menuedit'),(3139,1,'project/menu/menuforbid'),(3140,1,'project/menu/menuresume'),(3141,1,'project/menu/menudel'),(3142,1,'project/node'),(3143,1,'project/node/index'),(3144,1,'project/node/alllist'),(3145,1,'project/node/clear'),(3146,1,'project/node/save'),(3147,1,'project/notify'),(3148,1,'project/notify/index'),(3149,1,'project/notify/noreads'),(3150,1,'project/notify/setreadied'),(3151,1,'project/notify/batchdel'),(3152,1,'project/notify/read'),(3153,1,'project/notify/delete'),(3154,1,'project/organization'),(3155,1,'project/organization/index'),(3156,1,'project/organization/save'),(3157,1,'project/organization/read'),(3158,1,'project/organization/edit'),(3159,1,'project/organization/delete'),(3160,1,'project/project'),(3161,1,'project/project/index'),(3162,1,'project/project/selflist'),(3163,1,'project/project/save'),(3164,1,'project/project/read'),(3165,1,'project/project/edit'),(3166,1,'project/project/uploadcover'),(3167,1,'project/project/recycle'),(3168,1,'project/project/recovery'),(3169,1,'project/project/archive'),(3170,1,'project/project/recoveryarchive'),(3171,1,'project/project/quit'),(3172,1,'project/project_collect'),(3173,1,'project/project_collect/collect'),(3174,1,'project/project_member'),(3175,1,'project/project_member/index'),(3176,1,'project/project_member/searchinvitemember'),(3177,1,'project/project_member/invitemember'),(3178,1,'project/project_template'),(3179,1,'project/project_template/index'),(3180,1,'project/project_template/save'),(3181,1,'project/project_template/uploadcover'),(3182,1,'project/project_template/edit'),(3183,1,'project/project_template/delete'),(3184,1,'project/task'),(3185,1,'project/task/index'),(3186,1,'project/task/selflist'),(3187,1,'project/task/read'),(3188,1,'project/task/save'),(3189,1,'project/task/taskdone'),(3190,1,'project/task/assigntask'),(3191,1,'project/task/sort'),(3192,1,'project/task/createcomment'),(3193,1,'project/task/edit'),(3194,1,'project/task/like'),(3195,1,'project/task/star'),(3196,1,'project/task/recycle'),(3197,1,'project/task/recovery'),(3198,1,'project/task/delete'),(3199,1,'project/task_log'),(3200,1,'project/task_log/index'),(3201,1,'project/task_log/getlistbyselfproject'),(3202,1,'project/task_member'),(3203,1,'project/task_member/index'),(3204,1,'project/task_member/searchinvitemember'),(3205,1,'project/task_member/invitemember'),(3206,1,'project/task_member/invitememberbatch'),(3207,1,'project/task_stages'),(3208,1,'project/task_stages/index'),(3209,1,'project/task_stages/tasks'),(3210,1,'project/task_stages/sort'),(3211,1,'project/task_stages/save'),(3212,1,'project/task_stages/edit'),(3213,1,'project/task_stages/delete'),(3214,1,'project/task_stages_template'),(3215,1,'project/task_stages_template/index'),(3216,1,'project/task_stages_template/save'),(3217,1,'project/task_stages_template/edit'),(3218,1,'project/task_stages_template/delete'),(3219,2,'project/account/index'),(3220,2,'project/auth/index'),(3221,2,'project/index/index'),(3222,2,'project/index'),(3223,2,'project/index/changecurrentorganization'),(3224,2,'project/index/systemconfig'),(3225,2,'project/index/info'),(3226,2,'project/index/editpersonal'),(3227,2,'project/index/editpassword'),(3228,2,'project/index/uploadimg'),(3229,2,'project/index/uploadavatar'),(3230,2,'project/menu/menu'),(3231,2,'project/node/index'),(3232,2,'project/node/alllist'),(3233,2,'project/notify/index'),(3234,2,'project/notify'),(3235,2,'project/notify/noreads'),(3236,2,'project/notify/setreadied'),(3237,2,'project/notify/batchdel'),(3238,2,'project/notify/read'),(3239,2,'project/notify/delete'),(3240,2,'project/organization/index'),(3241,2,'project/organization'),(3242,2,'project/organization/save'),(3243,2,'project/organization/read'),(3244,2,'project/organization/edit'),(3245,2,'project/organization/delete'),(3246,2,'project/project/index'),(3247,2,'project/project/read'),(3248,2,'project/project_collect/collect'),(3249,2,'project/project_collect'),(3250,2,'project/project_member/index'),(3251,2,'project/project_template/index'),(3252,2,'project/task/index'),(3253,2,'project/task/read'),(3254,2,'project/task/save'),(3255,2,'project/task/taskdone'),(3256,2,'project/task/assigntask'),(3257,2,'project/task/sort'),(3258,2,'project/task/createcomment'),(3259,2,'project/task/like'),(3260,2,'project/task/star'),(3261,2,'project/task_log/index'),(3262,2,'project/task_log'),(3263,2,'project/task_log/getlistbyselfproject'),(3264,2,'project/task_member/index'),(3265,2,'project/task_member/searchinvitemember'),(3266,2,'project/task_stages/index'),(3267,2,'project/task_stages/tasks'),(3268,2,'project/task_stages/sort'),(3269,2,'project/task_stages_template/index'),(3270,2,'project/department/index'),(3271,2,'project/department/read'),(3272,2,'project/department_member/index'),(3273,2,'project/department_member/searchinvitemember'),(3274,2,'project/project/selflist'),(3275,2,'project/project/save'),(3276,2,'project/task/selflist'),(3636,6,'project'),(3637,6,'project/account'),(3638,6,'project/account/index'),(3639,6,'project/account/auth'),(3640,6,'project/account/add'),(3641,6,'project/account/edit'),(3642,6,'project/account/del'),(3643,6,'project/account/forbid'),(3644,6,'project/account/resume'),(3645,6,'project/auth'),(3646,6,'project/auth/index'),(3647,6,'project/auth/apply'),(3648,6,'project/auth/add'),(3649,6,'project/auth/edit'),(3650,6,'project/auth/forbid'),(3651,6,'project/auth/resume'),(3652,6,'project/auth/setdefault'),(3653,6,'project/auth/del'),(3654,6,'project/department'),(3655,6,'project/department/index'),(3656,6,'project/department/read'),(3657,6,'project/department/save'),(3658,6,'project/department/edit'),(3659,6,'project/department/delete'),(3660,6,'project/department_member'),(3661,6,'project/department_member/index'),(3662,6,'project/department_member/searchinvitemember'),(3663,6,'project/department_member/invitemember'),(3664,6,'project/department_member/removemember'),(3665,6,'project/index'),(3666,6,'project/index/index'),(3667,6,'project/index/changecurrentorganization'),(3668,6,'project/index/systemconfig'),(3669,6,'project/index/info'),(3670,6,'project/index/editpersonal'),(3671,6,'project/index/editpassword'),(3672,6,'project/index/uploadimg'),(3673,6,'project/index/uploadavatar'),(3674,6,'project/menu'),(3675,6,'project/menu/menu'),(3676,6,'project/menu/menuadd'),(3677,6,'project/menu/menuedit'),(3678,6,'project/menu/menuforbid'),(3679,6,'project/menu/menuresume'),(3680,6,'project/menu/menudel'),(3681,6,'project/node'),(3682,6,'project/node/index'),(3683,6,'project/node/alllist'),(3684,6,'project/node/clear'),(3685,6,'project/node/save'),(3686,6,'project/notify'),(3687,6,'project/notify/index'),(3688,6,'project/notify/noreads'),(3689,6,'project/notify/setreadied'),(3690,6,'project/notify/batchdel'),(3691,6,'project/notify/read'),(3692,6,'project/notify/delete'),(3693,6,'project/organization'),(3694,6,'project/organization/index'),(3695,6,'project/organization/save'),(3696,6,'project/organization/read'),(3697,6,'project/organization/edit'),(3698,6,'project/organization/delete'),(3699,6,'project/project'),(3700,6,'project/project/index'),(3701,6,'project/project/selflist'),(3702,6,'project/project/save'),(3703,6,'project/project/read'),(3704,6,'project/project/edit'),(3705,6,'project/project/uploadcover'),(3706,6,'project/project/recycle'),(3707,6,'project/project/recovery'),(3708,6,'project/project/archive'),(3709,6,'project/project/recoveryarchive'),(3710,6,'project/project/quit'),(3711,6,'project/project_collect'),(3712,6,'project/project_collect/collect'),(3713,6,'project/project_member'),(3714,6,'project/project_member/index'),(3715,6,'project/project_member/searchinvitemember'),(3716,6,'project/project_member/invitemember'),(3717,6,'project/project_template'),(3718,6,'project/project_template/index'),(3719,6,'project/project_template/save'),(3720,6,'project/project_template/uploadcover'),(3721,6,'project/project_template/edit'),(3722,6,'project/project_template/delete'),(3723,6,'project/task'),(3724,6,'project/task/index'),(3725,6,'project/task/selflist'),(3726,6,'project/task/read'),(3727,6,'project/task/save'),(3728,6,'project/task/taskdone'),(3729,6,'project/task/assigntask'),(3730,6,'project/task/sort'),(3731,6,'project/task/createcomment'),(3732,6,'project/task/edit'),(3733,6,'project/task/like'),(3734,6,'project/task/star'),(3735,6,'project/task/recycle'),(3736,6,'project/task/recovery'),(3737,6,'project/task/delete'),(3738,6,'project/task_log'),(3739,6,'project/task_log/index'),(3740,6,'project/task_log/getlistbyselfproject'),(3741,6,'project/task_member'),(3742,6,'project/task_member/index'),(3743,6,'project/task_member/searchinvitemember'),(3744,6,'project/task_member/invitemember'),(3745,6,'project/task_member/invitememberbatch'),(3746,6,'project/task_stages'),(3747,6,'project/task_stages/index'),(3748,6,'project/task_stages/tasks'),(3749,6,'project/task_stages/sort'),(3750,6,'project/task_stages/save'),(3751,6,'project/task_stages/edit'),(3752,6,'project/task_stages/delete'),(3753,6,'project/task_stages_template'),(3754,6,'project/task_stages_template/index'),(3755,6,'project/task_stages_template/save'),(3756,6,'project/task_stages_template/edit'),(3757,6,'project/task_stages_template/delete'),(3758,7,'project/account/index'),(3759,7,'project/auth/index'),(3760,7,'project/index/index'),(3761,7,'project/index'),(3762,7,'project/index/changecurrentorganization'),(3763,7,'project/index/systemconfig'),(3764,7,'project/index/info'),(3765,7,'project/index/editpersonal'),(3766,7,'project/index/editpassword'),(3767,7,'project/index/uploadimg'),(3768,7,'project/index/uploadavatar'),(3769,7,'project/menu/menu'),(3770,7,'project/node/index'),(3771,7,'project/node/alllist'),(3772,7,'project/notify/index'),(3773,7,'project/notify'),(3774,7,'project/notify/noreads'),(3775,7,'project/notify/setreadied'),(3776,7,'project/notify/batchdel'),(3777,7,'project/notify/read'),(3778,7,'project/notify/delete'),(3779,7,'project/organization/index'),(3780,7,'project/organization'),(3781,7,'project/organization/save'),(3782,7,'project/organization/read'),(3783,7,'project/organization/edit'),(3784,7,'project/organization/delete'),(3785,7,'project/project/index'),(3786,7,'project/project/read'),(3787,7,'project/project_collect/collect'),(3788,7,'project/project_collect'),(3789,7,'project/project_member/index'),(3790,7,'project/project_template/index'),(3791,7,'project/task/index'),(3792,7,'project/task/read'),(3793,7,'project/task/save'),(3794,7,'project/task/taskdone'),(3795,7,'project/task/assigntask'),(3796,7,'project/task/sort'),(3797,7,'project/task/createcomment'),(3798,7,'project/task/like'),(3799,7,'project/task/star'),(3800,7,'project/task_log/index'),(3801,7,'project/task_log'),(3802,7,'project/task_log/getlistbyselfproject'),(3803,7,'project/task_member/index'),(3804,7,'project/task_member/searchinvitemember'),(3805,7,'project/task_stages/index'),(3806,7,'project/task_stages/tasks'),(3807,7,'project/task_stages/sort'),(3808,7,'project/task_stages_template/index'),(3809,7,'project/department/index'),(3810,7,'project/department/read'),(3811,7,'project/department_member/index'),(3812,7,'project/department_member/searchinvitemember'),(3813,7,'project/project/selflist'),(3814,7,'project/project/save'),(3815,7,'project/task/selflist'),(3816,8,'project'),(3817,8,'project/account'),(3818,8,'project/account/index'),(3819,8,'project/account/auth'),(3820,8,'project/account/add'),(3821,8,'project/account/edit'),(3822,8,'project/account/del'),(3823,8,'project/account/forbid'),(3824,8,'project/account/resume'),(3825,8,'project/auth'),(3826,8,'project/auth/index'),(3827,8,'project/auth/apply'),(3828,8,'project/auth/add'),(3829,8,'project/auth/edit'),(3830,8,'project/auth/forbid'),(3831,8,'project/auth/resume'),(3832,8,'project/auth/setdefault'),(3833,8,'project/auth/del'),(3834,8,'project/department'),(3835,8,'project/department/index'),(3836,8,'project/department/read'),(3837,8,'project/department/save'),(3838,8,'project/department/edit'),(3839,8,'project/department/delete'),(3840,8,'project/department_member'),(3841,8,'project/department_member/index'),(3842,8,'project/department_member/searchinvitemember'),(3843,8,'project/department_member/invitemember'),(3844,8,'project/department_member/removemember'),(3845,8,'project/index'),(3846,8,'project/index/index'),(3847,8,'project/index/changecurrentorganization'),(3848,8,'project/index/systemconfig'),(3849,8,'project/index/info'),(3850,8,'project/index/editpersonal'),(3851,8,'project/index/editpassword'),(3852,8,'project/index/uploadimg'),(3853,8,'project/index/uploadavatar'),(3854,8,'project/menu'),(3855,8,'project/menu/menu'),(3856,8,'project/menu/menuadd'),(3857,8,'project/menu/menuedit'),(3858,8,'project/menu/menuforbid'),(3859,8,'project/menu/menuresume'),(3860,8,'project/menu/menudel'),(3861,8,'project/node'),(3862,8,'project/node/index'),(3863,8,'project/node/alllist'),(3864,8,'project/node/clear'),(3865,8,'project/node/save'),(3866,8,'project/notify'),(3867,8,'project/notify/index'),(3868,8,'project/notify/noreads'),(3869,8,'project/notify/setreadied'),(3870,8,'project/notify/batchdel'),(3871,8,'project/notify/read'),(3872,8,'project/notify/delete'),(3873,8,'project/organization'),(3874,8,'project/organization/index'),(3875,8,'project/organization/save'),(3876,8,'project/organization/read'),(3877,8,'project/organization/edit'),(3878,8,'project/organization/delete'),(3879,8,'project/project'),(3880,8,'project/project/index'),(3881,8,'project/project/selflist'),(3882,8,'project/project/save'),(3883,8,'project/project/read'),(3884,8,'project/project/edit'),(3885,8,'project/project/uploadcover'),(3886,8,'project/project/recycle'),(3887,8,'project/project/recovery'),(3888,8,'project/project/archive'),(3889,8,'project/project/recoveryarchive'),(3890,8,'project/project/quit'),(3891,8,'project/project_collect'),(3892,8,'project/project_collect/collect'),(3893,8,'project/project_member'),(3894,8,'project/project_member/index'),(3895,8,'project/project_member/searchinvitemember'),(3896,8,'project/project_member/invitemember'),(3897,8,'project/project_template'),(3898,8,'project/project_template/index'),(3899,8,'project/project_template/save'),(3900,8,'project/project_template/uploadcover'),(3901,8,'project/project_template/edit'),(3902,8,'project/project_template/delete'),(3903,8,'project/task'),(3904,8,'project/task/index'),(3905,8,'project/task/selflist'),(3906,8,'project/task/read'),(3907,8,'project/task/save'),(3908,8,'project/task/taskdone'),(3909,8,'project/task/assigntask'),(3910,8,'project/task/sort'),(3911,8,'project/task/createcomment'),(3912,8,'project/task/edit'),(3913,8,'project/task/like'),(3914,8,'project/task/star'),(3915,8,'project/task/recycle'),(3916,8,'project/task/recovery'),(3917,8,'project/task/delete'),(3918,8,'project/task_log'),(3919,8,'project/task_log/index'),(3920,8,'project/task_log/getlistbyselfproject'),(3921,8,'project/task_member'),(3922,8,'project/task_member/index'),(3923,8,'project/task_member/searchinvitemember'),(3924,8,'project/task_member/invitemember'),(3925,8,'project/task_member/invitememberbatch'),(3926,8,'project/task_stages'),(3927,8,'project/task_stages/index'),(3928,8,'project/task_stages/tasks'),(3929,8,'project/task_stages/sort'),(3930,8,'project/task_stages/save'),(3931,8,'project/task_stages/edit'),(3932,8,'project/task_stages/delete'),(3933,8,'project/task_stages_template'),(3934,8,'project/task_stages_template/index'),(3935,8,'project/task_stages_template/save'),(3936,8,'project/task_stages_template/edit'),(3937,8,'project/task_stages_template/delete'),(3938,9,'project/account/index'),(3939,9,'project/auth/index'),(3940,9,'project/index/index'),(3941,9,'project/index'),(3942,9,'project/index/changecurrentorganization'),(3943,9,'project/index/systemconfig'),(3944,9,'project/index/info'),(3945,9,'project/index/editpersonal'),(3946,9,'project/index/editpassword'),(3947,9,'project/index/uploadimg'),(3948,9,'project/index/uploadavatar'),(3949,9,'project/menu/menu'),(3950,9,'project/node/index'),(3951,9,'project/node/alllist'),(3952,9,'project/notify/index'),(3953,9,'project/notify'),(3954,9,'project/notify/noreads'),(3955,9,'project/notify/setreadied'),(3956,9,'project/notify/batchdel'),(3957,9,'project/notify/read'),(3958,9,'project/notify/delete'),(3959,9,'project/organization/index'),(3960,9,'project/organization'),(3961,9,'project/organization/save'),(3962,9,'project/organization/read'),(3963,9,'project/organization/edit'),(3964,9,'project/organization/delete'),(3965,9,'project/project/index'),(3966,9,'project/project/read'),(3967,9,'project/project_collect/collect'),(3968,9,'project/project_collect'),(3969,9,'project/project_member/index'),(3970,9,'project/project_template/index'),(3971,9,'project/task/index'),(3972,9,'project/task/read'),(3973,9,'project/task/save'),(3974,9,'project/task/taskdone'),(3975,9,'project/task/assigntask'),(3976,9,'project/task/sort'),(3977,9,'project/task/createcomment'),(3978,9,'project/task/like'),(3979,9,'project/task/star'),(3980,9,'project/task_log/index'),(3981,9,'project/task_log'),(3982,9,'project/task_log/getlistbyselfproject'),(3983,9,'project/task_member/index'),(3984,9,'project/task_member/searchinvitemember'),(3985,9,'project/task_stages/index'),(3986,9,'project/task_stages/tasks'),(3987,9,'project/task_stages/sort'),(3988,9,'project/task_stages_template/index'),(3989,9,'project/department/index'),(3990,9,'project/department/read'),(3991,9,'project/department_member/index'),(3992,9,'project/department_member/searchinvitemember'),(3993,9,'project/project/selflist'),(3994,9,'project/project/save'),(3995,9,'project/task/selflist'),(4452,4,'project/account/index'),(4453,4,'project/account/read'),(4454,4,'project/auth/index'),(4455,4,'project/department/index'),(4456,4,'project/department/read'),(4457,4,'project/department_member/index'),(4458,4,'project/department_member/searchinvitemember'),(4459,4,'project/file/index'),(4460,4,'project/file/read'),(4461,4,'project/file/uploadfiles'),(4462,4,'project/index/index'),(4463,4,'project/index'),(4464,4,'project/index/changecurrentorganization'),(4465,4,'project/index/systemconfig'),(4466,4,'project/index/info'),(4467,4,'project/index/editpersonal'),(4468,4,'project/index/editpassword'),(4469,4,'project/index/uploadimg'),(4470,4,'project/index/uploadavatar'),(4471,4,'project/menu/menu'),(4472,4,'project/node/index'),(4473,4,'project/node/alllist'),(4474,4,'project/notify/index'),(4475,4,'project/notify'),(4476,4,'project/notify/noreads'),(4477,4,'project/notify/setreadied'),(4478,4,'project/notify/batchdel'),(4479,4,'project/notify/read'),(4480,4,'project/notify/delete'),(4481,4,'project/organization/index'),(4482,4,'project/organization'),(4483,4,'project/organization/save'),(4484,4,'project/organization/read'),(4485,4,'project/organization/edit'),(4486,4,'project/organization/delete'),(4487,4,'project/project/index'),(4488,4,'project/project/selflist'),(4489,4,'project/project/save'),(4490,4,'project/project/read'),(4491,4,'project/project/getlogbyselfproject'),(4492,4,'project/project/quit'),(4493,4,'project/project_collect/collect'),(4494,4,'project/project_collect'),(4495,4,'project/project_member/index'),(4496,4,'project/project_template/index'),(4497,4,'project/task/index'),(4498,4,'project/task/datetotalforproject'),(4499,4,'project/task/selflist'),(4500,4,'project/task/read'),(4501,4,'project/task/save'),(4502,4,'project/task/taskdone'),(4503,4,'project/task/assigntask'),(4504,4,'project/task/sort'),(4505,4,'project/task/createcomment'),(4506,4,'project/task/setprivate'),(4507,4,'project/task/like'),(4508,4,'project/task/tasktotags'),(4509,4,'project/task/settag'),(4510,4,'project/task/star'),(4511,4,'project/task/tasklog'),(4512,4,'project/task_member/index'),(4513,4,'project/task_member/searchinvitemember'),(4514,4,'project/task_stages/index'),(4515,4,'project/task_stages/tasks'),(4516,4,'project/task_stages/sort'),(4517,4,'project/task_stages_template/index'),(4518,4,'project/task_tag/index'),(4519,4,'project/task_tag'),(4520,4,'project/task_tag/save'),(4521,4,'project/task_tag/edit'),(4522,4,'project/task_tag/delete'),(4523,4,'project/project_features/index'),(4524,4,'project/project_version/index'),(4525,4,'project/project_version/read'),(4526,4,'project/task_workflow/index'),(4854,3,'project/auth/index'),(4855,3,'project/auth'),(4856,3,'project/auth/apply'),(4857,3,'project/auth/add'),(4858,3,'project/auth/edit'),(4859,3,'project/auth/forbid'),(4860,3,'project/auth/resume'),(4861,3,'project/auth/setdefault'),(4862,3,'project/auth/del'),(4863,3,'project/department/index'),(4864,3,'project/department'),(4865,3,'project/department/read'),(4866,3,'project/department/save'),(4867,3,'project/department/edit'),(4868,3,'project/department/delete'),(4869,3,'project/department_member/index'),(4870,3,'project/department_member'),(4871,3,'project/department_member/searchinvitemember'),(4872,3,'project/department_member/invitemember'),(4873,3,'project/department_member/removemember'),(4874,3,'project/department_member/uploadfile'),(4875,3,'project/file/index'),(4876,3,'project/file'),(4877,3,'project/file/read'),(4878,3,'project/file/uploadfiles'),(4879,3,'project/file/edit'),(4880,3,'project/file/recycle'),(4881,3,'project/file/recovery'),(4882,3,'project/file/delete'),(4883,3,'project/index/index'),(4884,3,'project/index'),(4885,3,'project/index/changecurrentorganization'),(4886,3,'project/index/systemconfig'),(4887,3,'project/index/info'),(4888,3,'project/index/editpersonal'),(4889,3,'project/index/editpassword'),(4890,3,'project/index/uploadimg'),(4891,3,'project/index/uploadavatar'),(4892,3,'project/invite_link/save'),(4893,3,'project/invite_link'),(4894,3,'project/menu/menu'),(4895,3,'project/menu'),(4896,3,'project/menu/menuadd'),(4897,3,'project/menu/menuedit'),(4898,3,'project/menu/menuforbid'),(4899,3,'project/menu/menuresume'),(4900,3,'project/menu/menudel'),(4901,3,'project/node/index'),(4902,3,'project/node'),(4903,3,'project/node/alllist'),(4904,3,'project/node/clear'),(4905,3,'project/node/save'),(4906,3,'project/notify/index'),(4907,3,'project/notify'),(4908,3,'project/notify/noreads'),(4909,3,'project/notify/setreadied'),(4910,3,'project/notify/batchdel'),(4911,3,'project/notify/read'),(4912,3,'project/notify/delete'),(4913,3,'project/organization/index'),(4914,3,'project/organization'),(4915,3,'project/organization/save'),(4916,3,'project/organization/read'),(4917,3,'project/organization/edit'),(4918,3,'project/organization/delete'),(4919,3,'project/project/index'),(4920,3,'project/project'),(4921,3,'project/project/selflist'),(4922,3,'project/project/save'),(4923,3,'project/project/read'),(4924,3,'project/project/edit'),(4925,3,'project/project/getlogbyselfproject'),(4926,3,'project/project/uploadcover'),(4927,3,'project/project/recycle'),(4928,3,'project/project/recovery'),(4929,3,'project/project/archive'),(4930,3,'project/project/recoveryarchive'),(4931,3,'project/project/quit'),(4932,3,'project/project_collect/collect'),(4933,3,'project/project_collect'),(4934,3,'project/project_features/index'),(4935,3,'project/project_features'),(4936,3,'project/project_features/save'),(4937,3,'project/project_features/edit'),(4938,3,'project/project_features/delete'),(4939,3,'project/project_member/index'),(4940,3,'project/project_member'),(4941,3,'project/project_member/searchinvitemember'),(4942,3,'project/project_member/invitemember'),(4943,3,'project/project_member/removemember'),(4944,3,'project/project_template/index'),(4945,3,'project/project_template'),(4946,3,'project/project_template/save'),(4947,3,'project/project_template/uploadcover'),(4948,3,'project/project_template/edit'),(4949,3,'project/project_template/delete'),(4950,3,'project/project_version/index'),(4951,3,'project/project_version'),(4952,3,'project/project_version/save'),(4953,3,'project/project_version/edit'),(4954,3,'project/project_version/changestatus'),(4955,3,'project/project_version/read'),(4956,3,'project/project_version/addversiontask'),(4957,3,'project/project_version/removeversiontask'),(4958,3,'project/project_version/delete'),(4959,3,'project/source_link/delete'),(4960,3,'project/source_link'),(4961,3,'project/task/index'),(4962,3,'project/task'),(4963,3,'project/task/datetotalforproject'),(4964,3,'project/task/selflist'),(4965,3,'project/task/tasksources'),(4966,3,'project/task/getlistbytasktag'),(4967,3,'project/task/read'),(4968,3,'project/task/save'),(4969,3,'project/task/taskdone'),(4970,3,'project/task/assigntask'),(4971,3,'project/task/batchassigntask'),(4972,3,'project/task/sort'),(4973,3,'project/task/createcomment'),(4974,3,'project/task/edit'),(4975,3,'project/task/setprivate'),(4976,3,'project/task/like'),(4977,3,'project/task/tasktotags'),(4978,3,'project/task/settag'),(4979,3,'project/task/star'),(4980,3,'project/task/tasklog'),(4981,3,'project/task/savetaskworktime'),(4982,3,'project/task/edittaskworktime'),(4983,3,'project/task/deltaskworktime'),(4984,3,'project/task/uploadfile'),(4985,3,'project/task/recyclebatch'),(4986,3,'project/task/recycle'),(4987,3,'project/task/recovery'),(4988,3,'project/task/delete'),(4989,3,'project/task_member/index'),(4990,3,'project/task_member'),(4991,3,'project/task_member/searchinvitemember'),(4992,3,'project/task_member/invitemember'),(4993,3,'project/task_member/invitememberbatch'),(4994,3,'project/task_stages/index'),(4995,3,'project/task_stages'),(4996,3,'project/task_stages/tasks'),(4997,3,'project/task_stages/sort'),(4998,3,'project/task_stages/save'),(4999,3,'project/task_stages/edit'),(5000,3,'project/task_stages/delete'),(5001,3,'project/task_stages_template/index'),(5002,3,'project/task_stages_template'),(5003,3,'project/task_stages_template/save'),(5004,3,'project/task_stages_template/edit'),(5005,3,'project/task_stages_template/delete'),(5006,3,'project/task_tag/index'),(5007,3,'project/task_tag'),(5008,3,'project/task_tag/save'),(5009,3,'project/task_tag/edit'),(5010,3,'project/task_tag/delete'),(5011,3,'project/task_workflow/index'),(5012,3,'project/task_workflow'),(5013,3,'project/task_workflow/save'),(5014,3,'project/task_workflow/edit'),(5015,3,'project/task_workflow/delete'),(5016,3,'project'),(5017,3,'project/member'),(5018,3,'project/member/index'),(5019,3,'project/member/read'),(5020,3,'project/member/auth'),(5021,3,'project/member/add'),(5022,3,'project/member/edit'),(5023,3,'project/member/del'),(5024,3,'project/member/forbid'),(5025,3,'project/member/resume');
 /*!40000 ALTER TABLE `hi_project_auth_node` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -513,11 +521,11 @@ DROP TABLE IF EXISTS `hi_project_collection`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_project_collection` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `project_code` varchar(30) DEFAULT '' COMMENT '项目id',
-  `member_code` varchar(30) DEFAULT '' COMMENT '成员id',
-  `create_time` varchar(30) DEFAULT NULL COMMENT '加入时间',
+  `project_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '项目id',
+  `member_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '成员id',
+  `create_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '加入时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=48  COMMENT='项目-收藏表';
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='项目-收藏表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -539,10 +547,10 @@ DROP TABLE IF EXISTS `hi_project_config`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_project_config` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(30) DEFAULT NULL,
-  `project_code` varchar(30) DEFAULT NULL,
+  `code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `project_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB  COMMENT='项目配置表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='项目配置表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -563,16 +571,16 @@ DROP TABLE IF EXISTS `hi_project_features`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_project_features` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(30) DEFAULT NULL COMMENT '编号',
-  `name` varchar(255) DEFAULT NULL COMMENT '版本库名称',
-  `description` varchar(500) DEFAULT NULL COMMENT '描述',
-  `create_time` varchar(30) DEFAULT NULL,
-  `update_time` varchar(30) DEFAULT NULL,
-  `organization_code` varchar(30) DEFAULT '' COMMENT '组织id',
-  `project_code` varchar(30) DEFAULT '' COMMENT '项目id',
+  `code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '编号',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '版本库名称',
+  `description` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '描述',
+  `create_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `update_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `organization_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '组织id',
+  `project_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '项目id',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `code` (`code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2  COMMENT='版本库表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='版本库表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -594,22 +602,22 @@ DROP TABLE IF EXISTS `hi_project_log`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_project_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(30) DEFAULT '',
-  `member_code` varchar(30) DEFAULT '0' COMMENT '操作人id',
-  `content` text COMMENT '操作内容',
-  `remark` text,
-  `type` varchar(255) DEFAULT 'create' COMMENT '操作类型',
-  `create_time` varchar(30) DEFAULT NULL COMMENT '添加时间',
-  `source_code` varchar(30) DEFAULT '0' COMMENT '任务id',
-  `action_type` varchar(30) DEFAULT NULL COMMENT '场景类型',
-  `to_member_code` varchar(500) DEFAULT '0',
+  `code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  `member_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '0' COMMENT '操作人id',
+  `content` text COLLATE utf8mb4_unicode_ci COMMENT '操作内容',
+  `remark` text COLLATE utf8mb4_unicode_ci,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT 'create' COMMENT '操作类型',
+  `create_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '添加时间',
+  `source_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '0' COMMENT '任务id',
+  `action_type` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '场景类型',
+  `to_member_code` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT '0',
   `is_comment` tinyint(1) DEFAULT '0' COMMENT '是否评论，0：否',
-  `project_code` varchar(255) DEFAULT NULL,
-  `icon` varchar(20) DEFAULT NULL,
+  `project_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `icon` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `is_robot` tinyint(1) DEFAULT '0' COMMENT '是否机器人',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `code` (`code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4498  COMMENT='项目日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=4498 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='项目日志表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -631,14 +639,14 @@ DROP TABLE IF EXISTS `hi_project_member`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_project_member` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `project_code` varchar(30) DEFAULT '' COMMENT '项目id',
-  `member_code` varchar(30) DEFAULT '' COMMENT '成员id',
-  `join_time` varchar(255) DEFAULT NULL COMMENT '加入时间',
+  `project_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '项目id',
+  `member_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '成员id',
+  `join_time` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '加入时间',
   `is_owner` int(11) DEFAULT '0' COMMENT '拥有者',
-  `authorize` varchar(255) DEFAULT NULL COMMENT '角色',
+  `authorize` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '角色',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `unique` (`project_code`,`member_code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=40  COMMENT='项目-成员表';
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='项目-成员表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -661,21 +669,21 @@ DROP TABLE IF EXISTS `hi_project_menu`;
 CREATE TABLE `hi_project_menu` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `pid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '父id',
-  `title` varchar(100) NOT NULL DEFAULT '' COMMENT '名称',
-  `icon` varchar(100) NOT NULL DEFAULT '' COMMENT '菜单图标',
-  `url` varchar(400) NOT NULL DEFAULT '' COMMENT '链接',
-  `file_path` varchar(200) DEFAULT NULL COMMENT '文件路径',
-  `params` varchar(500) DEFAULT '' COMMENT '链接参数',
-  `node` varchar(255) DEFAULT '#' COMMENT '权限节点',
+  `title` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '名称',
+  `icon` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '菜单图标',
+  `url` varchar(400) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '链接',
+  `file_path` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '文件路径',
+  `params` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '链接参数',
+  `node` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '#' COMMENT '权限节点',
   `sort` int(11) unsigned DEFAULT '0' COMMENT '菜单排序',
   `status` tinyint(1) unsigned DEFAULT '1' COMMENT '状态(0:禁用,1:启用)',
   `create_by` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '创建人',
-  `create_at` varchar(30) DEFAULT NULL COMMENT '创建时间',
+  `create_at` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '创建时间',
   `is_inner` tinyint(1) DEFAULT '0' COMMENT '是否内页',
-  `values` varchar(255) DEFAULT NULL COMMENT '参数默认值',
+  `values` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '参数默认值',
   `show_slider` tinyint(1) DEFAULT '1' COMMENT '是否显示侧栏',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=169  COMMENT='项目菜单表';
+) ENGINE=InnoDB AUTO_INCREMENT=169 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='项目菜单表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -684,7 +692,7 @@ CREATE TABLE `hi_project_menu` (
 
 LOCK TABLES `hi_project_menu` WRITE;
 /*!40000 ALTER TABLE `hi_project_menu` DISABLE KEYS */;
-INSERT INTO `hi_project_menu` VALUES (120,0,'工作台','appstore-o','home','home','','#',0,1,0,'2018-09-30 16:30:01',0,'',0),(121,0,'项目管理','project','#','#','','#',0,1,0,'0000-00-00 00:00:00',0,'',1),(122,121,'项目列表','branches','#','#','','#',0,1,0,'0000-00-00 00:00:00',0,'',1),(124,0,'系统设置','setting','#','#','','#',100,1,0,'0000-00-00 00:00:00',0,'',1),(125,124,'成员管理','unlock','#','#','','#',10,1,0,'0000-00-00 00:00:00',0,'',1),(126,125,'账号列表','','system/account','system/account','','project/account/index',10,1,0,'0000-00-00 00:00:00',0,'',1),(127,122,'我的组织','','organization','organization','','project/organization/index',30,1,0,'0000-00-00 00:00:00',0,'',1),(130,125,'访问授权','','system/account/auth','system/account/auth','','project/auth/index',20,1,0,'0000-00-00 00:00:00',0,'',1),(131,125,'授权页面','','system/account/apply','system/account/apply',':id','project/auth/apply',30,1,0,'0000-00-00 00:00:00',1,'',1),(138,121,'消息提醒','info-circle-o','#','#','','#',30,1,0,'0000-00-00 00:00:00',0,'',1),(139,138,'站内消息','','notify/notice','notify/notice','','project/notify/index',0,1,0,'0000-00-00 00:00:00',0,'',1),(140,138,'系统公告','','notify/system','notify/system','','project/notify/index',10,1,0,'0000-00-00 00:00:00',0,'',1),(143,124,'系统管理','appstore','#','#','','#',0,1,0,'0000-00-00 00:00:00',0,'',1),(144,143,'菜单路由','','system/config/menu','system/config/menu','','project/menu/menuadd',0,1,0,'0000-00-00 00:00:00',0,'',1),(145,143,'访问节点','','system/config/node','system/config/node','','project/node/save',0,1,0,'0000-00-00 00:00:00',0,'',1),(148,124,'个人管理','user','#','#','','#',0,1,0,'0000-00-00 00:00:00',0,'',1),(149,148,'个人设置','','account/setting/base','account/setting/base','','project/index/editpersonal',0,1,0,'0000-00-00 00:00:00',0,'',1),(150,148,'安全设置','','account/setting/security','account/setting/security','','project/index/editpersonal',0,1,0,'0000-00-00 00:00:00',1,'',1),(151,122,'我的项目','','project/list','project/list',':type','project/project/index',0,1,0,'0000-00-00 00:00:00',0,'my',1),(152,122,'回收站','','project/recycle','project/recycle','','project/project/index',20,1,0,'0000-00-00 00:00:00',0,'',1),(153,121,'项目空间','heat-map','project/space/task','project/space/task',':code','#',20,1,0,'0000-00-00 00:00:00',1,'',1),(154,153,'任务详情','','project/space/task/:code/detail','project/space/taskdetail',':code','project/task/read',0,1,0,'0000-00-00 00:00:00',1,'',0),(155,122,'我的收藏','','project/list','project/list',':type','project/project/index',10,1,0,'0000-00-00 00:00:00',0,'collect',1),(156,121,'基础设置','experiment','#','#','','#',0,1,0,'0000-00-00 00:00:00',0,'',1),(157,156,'项目模板','','project/template','project/template','','project/project_template/index',0,1,0,'0000-00-00 00:00:00',0,'',1),(158,156,'项目列表模板','','project/template/taskStages','project/template/taskStages',':code','project/task_stages_template/index',0,1,0,'0000-00-00 00:00:00',1,'',0),(159,122,'已归档项目','','project/archive','project/archive','','project/project/index',10,1,0,NULL,0,'',1),(160,0,'团队成员','team','#','#','','#',0,1,0,NULL,1,'',0),(161,153,'项目概况','','project/space/overview','project/space/overview',':code','project/index/info',20,1,0,NULL,1,'',0),(162,153,'项目文件','','project/space/files','project/space/files',':code','project/index/info',10,1,0,NULL,1,'',0),(163,122,'项目分析','','project/analysis','project/analysis','','project/index/info',5,1,0,NULL,0,'',1),(164,160,'团队成员','','#','#','','#',0,1,0,NULL,1,'',0),(166,164,'团队成员','','members','members','','project/department/index',0,1,0,NULL,1,'',0),(167,164,'成员信息','','members/profile','members/profile',':code','project/department/read',0,1,0,NULL,1,'',0),(168,153,'版本管理','','project/space/features','project/space/features',':code','project/index/info',20,1,0,NULL,1,'',0);
+INSERT INTO `hi_project_menu` VALUES (120,0,'工作台','appstore-o','home','home','','#',0,1,0,'2018-09-30 16:30:01',0,'',0),(121,0,'项目管理','project','#','#','','#',0,1,0,'0000-00-00 00:00:00',0,'',1),(122,121,'项目列表','branches','#','#','','#',0,1,0,'0000-00-00 00:00:00',0,'',1),(124,0,'系统设置','setting','#','#','','#',100,1,0,'0000-00-00 00:00:00',0,'',1),(125,124,'成员管理','unlock','#','#','','#',10,1,0,'0000-00-00 00:00:00',0,'',1),(126,125,'账号列表','','system/member','system/member','','project/member/index',10,1,0,'0000-00-00 00:00:00',0,'',1),(127,122,'我的组织','','organization','organization','','project/organization/index',30,1,0,'0000-00-00 00:00:00',0,'',1),(130,125,'访问授权','','system/member/auth','system/member/auth','','project/auth/index',20,1,0,'0000-00-00 00:00:00',0,'',1),(131,125,'授权页面','','system/member/apply','system/member/apply',':id','project/auth/apply',30,1,0,'0000-00-00 00:00:00',1,'',1),(138,121,'消息提醒','info-circle-o','#','#','','#',30,1,0,'0000-00-00 00:00:00',0,'',1),(139,138,'站内消息','','notify/notice','notify/notice','','project/notify/index',0,1,0,'0000-00-00 00:00:00',0,'',1),(140,138,'系统公告','','notify/system','notify/system','','project/notify/index',10,1,0,'0000-00-00 00:00:00',0,'',1),(143,124,'系统管理','appstore','#','#','','#',0,1,0,'0000-00-00 00:00:00',0,'',1),(144,143,'菜单路由','','system/config/menu','system/config/menu','','project/menu/menuadd',0,1,0,'0000-00-00 00:00:00',0,'',1),(145,143,'访问节点','','system/config/node','system/config/node','','project/node/save',0,1,0,'0000-00-00 00:00:00',0,'',1),(148,124,'个人管理','user','#','#','','#',0,1,0,'0000-00-00 00:00:00',0,'',1),(149,148,'个人设置','','member/base','member/base','','project/index/editpersonal',0,1,0,'0000-00-00 00:00:00',0,'',1),(150,148,'安全设置','','member/security','member/security','','project/index/editpersonal',0,1,0,'0000-00-00 00:00:00',0,'',1),(151,122,'我的项目','','project/index','project/index',':type','project/project/index',0,1,0,'0000-00-00 00:00:00',0,'my',1),(152,122,'回收站','','project/recycle','project/recycle','','project/project/index',20,1,0,'0000-00-00 00:00:00',0,'',1),(153,121,'项目空间','heat-map','project/space/task','project/space/task',':code','#',20,1,0,'0000-00-00 00:00:00',1,'',1),(154,153,'任务详情','','project/space/task/:code/detail','project/space/taskdetail',':code','project/task/read',0,1,0,'0000-00-00 00:00:00',1,'',0),(155,122,'我的收藏','','project/index','project/index',':type','project/project/index',10,1,0,'0000-00-00 00:00:00',0,'collect',1),(156,121,'基础设置','experiment','#','#','','#',0,1,0,'0000-00-00 00:00:00',0,'',1),(157,156,'项目模板','','project/template','project/template','','project/project_template/index',0,1,0,'0000-00-00 00:00:00',0,'',1),(158,156,'项目列表模板','','project/template/taskStages','project/template/taskStages',':code','project/task_stages_template/index',0,1,0,'0000-00-00 00:00:00',1,'',0),(159,122,'已归档项目','','project/archive','project/archive','','project/project/index',10,1,0,NULL,0,'',1),(160,0,'团队成员','team','#','#','','#',0,1,0,NULL,1,'',0),(161,153,'项目概况','','project/space/overview','project/space/overview',':code','project/index/info',20,1,0,NULL,1,'',0),(162,153,'项目文件','','project/space/files','project/space/files',':code','project/index/info',10,1,0,NULL,1,'',0),(163,122,'项目分析','','project/analysis','project/analysis','','project/index/info',5,1,0,NULL,0,'',1),(164,160,'团队成员','','#','#','','#',0,1,0,NULL,1,'',0),(166,164,'团队成员','','member/index','member/index','','project/department/index',0,1,0,NULL,1,'',0),(167,164,'成员信息','','member/profile','member/profile',':code','project/department/read',0,1,0,NULL,1,'',0),(168,153,'版本管理','','project/space/features','project/space/features',':code','project/index/info',20,1,0,NULL,1,'',0);
 /*!40000 ALTER TABLE `hi_project_menu` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -697,15 +705,15 @@ DROP TABLE IF EXISTS `hi_project_node`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_project_node` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `node` varchar(100) DEFAULT NULL COMMENT '节点代码',
-  `title` varchar(500) DEFAULT NULL COMMENT '节点标题',
+  `node` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '节点代码',
+  `title` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '节点标题',
   `is_menu` tinyint(1) unsigned DEFAULT '0' COMMENT '是否可设置为菜单',
   `is_auth` tinyint(1) unsigned DEFAULT '1' COMMENT '是否启动RBAC权限控制',
   `is_login` tinyint(1) unsigned DEFAULT '1' COMMENT '是否启动登录控制',
-  `create_at` varchar(30) DEFAULT NULL COMMENT '创建时间',
+  `create_at` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `index_system_node_node` (`node`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=635  COMMENT='项目端节点表';
+) ENGINE=InnoDB AUTO_INCREMENT=644 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='项目端节点表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -714,7 +722,7 @@ CREATE TABLE `hi_project_node` (
 
 LOCK TABLES `hi_project_node` WRITE;
 /*!40000 ALTER TABLE `hi_project_node` DISABLE KEYS */;
-INSERT INTO `hi_project_node` VALUES (360,'project','项目管理模块',0,1,1,'2018-09-19 17:48:16'),(361,'project/index/info','详情',0,0,1,'2018-09-19 17:48:34'),(362,'project/index','基础版块',0,1,1,'2018-09-19 17:48:34'),(363,'project/index/index','框架布局',0,0,1,'2018-09-30 16:48:35'),(364,'project/index/systemconfig','系统信息',0,0,0,'2018-09-30 16:55:11'),(365,'project/index/editpersonal','修改个人资料',0,0,1,'2018-09-30 17:42:42'),(366,'project/index/uploadavatar','上传头像',0,0,1,'2018-09-30 17:42:46'),(370,'project/account','账号管理',0,1,1,'0000-00-00 00:00:00'),(371,'project/account/index','账号列表',0,0,1,'0000-00-00 00:00:00'),(372,'project/organization/index','组织列表',0,0,1,'0000-00-00 00:00:00'),(373,'project/organization/save','创建组织',0,0,1,'0000-00-00 00:00:00'),(374,'project/organization/read','组织信息',0,0,1,'0000-00-00 00:00:00'),(375,'project/organization/edit','编辑组织',0,1,1,'0000-00-00 00:00:00'),(376,'project/organization/delete','删除组织',0,1,1,'0000-00-00 00:00:00'),(377,'project/organization','组织管理',0,1,1,'0000-00-00 00:00:00'),(388,'project/auth/index','权限列表',0,0,1,'0000-00-00 00:00:00'),(389,'project/auth/add','添加权限角色',0,1,1,'0000-00-00 00:00:00'),(390,'project/auth/edit','编辑权限',0,1,1,'0000-00-00 00:00:00'),(391,'project/auth/forbid','禁用权限',0,1,1,'0000-00-00 00:00:00'),(392,'project/auth/resume','启用权限',0,1,1,'0000-00-00 00:00:00'),(393,'project/auth/del','删除权限',0,1,1,'0000-00-00 00:00:00'),(394,'project/auth','访问授权',0,1,1,'0000-00-00 00:00:00'),(395,'project/auth/apply','应用权限',0,1,1,'0000-00-00 00:00:00'),(396,'project/notify/index','通知列表',0,0,1,'0000-00-00 00:00:00'),(397,'project/notify/noreads','未读通知',0,0,1,'0000-00-00 00:00:00'),(399,'project/notify/read','通知信息',0,1,1,'0000-00-00 00:00:00'),(401,'project/notify/delete','删除通知',0,1,1,'0000-00-00 00:00:00'),(402,'project/notify','通知管理',0,1,1,'0000-00-00 00:00:00'),(434,'project/account/auth','授权管理',0,1,1,'0000-00-00 00:00:00'),(435,'project/account/add','添加账号',0,1,1,'0000-00-00 00:00:00'),(436,'project/account/edit','编辑账号',0,1,1,'0000-00-00 00:00:00'),(437,'project/account/del','删除账号',0,1,1,'0000-00-00 00:00:00'),(438,'project/account/forbid','禁用账号',0,1,1,'0000-00-00 00:00:00'),(439,'project/account/resume','启用账号',0,1,1,'0000-00-00 00:00:00'),(498,'project/notify/setreadied','设置已读',0,1,1,'0000-00-00 00:00:00'),(499,'project/notify/batchdel','批量删除',0,1,1,'0000-00-00 00:00:00'),(500,'project/auth/setdefault','设置默认权限',0,1,1,NULL),(501,'project/department','部门管理',0,1,1,NULL),(502,'project/department/index','部门列表',0,0,1,NULL),(503,'project/department/read','部门信息',0,0,1,NULL),(504,'project/department/save','创建部门',0,1,1,NULL),(505,'project/department/edit','编辑部门',0,1,1,NULL),(506,'project/department/delete','删除部门',0,1,1,NULL),(507,'project/department_member','部门成员管理',0,1,1,NULL),(508,'project/department_member/index','部门成员列表',0,0,1,NULL),(509,'project/department_member/searchinvitemember','搜索部门成员',0,0,1,NULL),(510,'project/department_member/invitemember','添加部门成员',0,1,1,NULL),(511,'project/department_member/removemember','移除部门成员',0,1,1,NULL),(512,'project/index/changecurrentorganization','切换当前组织',0,1,1,NULL),(513,'project/index/editpassword','修改密码',0,1,1,NULL),(514,'project/index/uploadimg','上传图片',0,0,1,NULL),(515,'project/menu','菜单管理',0,1,1,NULL),(516,'project/menu/menu','菜单列表',0,0,0,NULL),(517,'project/menu/menuadd','添加菜单',0,1,1,NULL),(518,'project/menu/menuedit','编辑菜单',0,1,1,NULL),(519,'project/menu/menuforbid','禁用菜单',0,1,1,NULL),(520,'project/menu/menuresume','启用菜单',0,1,1,NULL),(521,'project/menu/menudel','删除菜单',0,1,1,NULL),(522,'project/node','节点管理',0,1,1,NULL),(523,'project/node/index','节点列表',0,1,1,NULL),(524,'project/node/alllist','全部节点列表',0,1,1,NULL),(525,'project/node/clear','清理节点',0,1,1,NULL),(526,'project/node/save','编辑节点',0,1,1,NULL),(527,'project/project','项目管理',0,1,1,NULL),(528,'project/project/index','项目列表',0,0,1,NULL),(529,'project/project/selflist','个人项目列表',0,0,1,NULL),(530,'project/project/save','创建项目',0,1,1,NULL),(531,'project/project/read','项目信息',0,0,1,NULL),(532,'project/project/edit','编辑项目',0,1,1,NULL),(533,'project/project/uploadcover','上传项目封面',0,0,1,NULL),(534,'project/project/recycle','项目放入回收站',0,1,1,NULL),(535,'project/project/recovery','恢复项目',0,1,1,NULL),(536,'project/project/archive','归档项目',0,1,1,NULL),(537,'project/project/recoveryarchive','取消归档项目',0,1,1,NULL),(538,'project/project/quit','退出项目',0,1,1,NULL),(539,'project/project_collect','项目收藏管理',0,0,1,NULL),(540,'project/project_collect/collect','收藏项目',0,1,1,NULL),(541,'project/project_member','项目成员管理',0,1,1,NULL),(542,'project/project_member/index','项目成员列表',0,0,1,NULL),(543,'project/project_member/searchinvitemember','搜索项目成员',0,0,1,NULL),(544,'project/project_member/invitemember','邀请项目成员',0,1,1,NULL),(545,'project/project_template','项目模板管理',0,1,1,NULL),(546,'project/project_template/index','项目模板列表',0,0,1,NULL),(547,'project/project_template/save','创建项目模板',0,1,1,NULL),(548,'project/project_template/uploadcover','上传项目模板封面',0,1,1,NULL),(549,'project/project_template/edit','编辑项目模板',0,1,1,NULL),(550,'project/project_template/delete','删除项目模板',0,1,1,NULL),(551,'project/task/index','任务列表',0,0,1,NULL),(552,'project/task/selflist','个人任务列表',0,0,1,NULL),(553,'project/task/read','任务信息',0,0,1,NULL),(554,'project/task/save','创建任务',0,1,1,NULL),(555,'project/task/taskdone','更改任务状态',0,0,1,NULL),(556,'project/task/assigntask','指派任务执行者',0,1,1,NULL),(557,'project/task/sort','任务排序',0,1,1,NULL),(558,'project/task/createcomment','发表任务评论',0,1,1,NULL),(559,'project/task/edit','编辑任务',0,1,1,NULL),(560,'project/task/like','点赞任务',0,0,1,NULL),(561,'project/task/star','收藏任务',0,0,1,NULL),(562,'project/task/recycle','移动任务到回收站',0,1,1,NULL),(563,'project/task/recovery','恢复任务',0,1,1,NULL),(564,'project/task/delete','删除任务',0,1,1,NULL),(565,'project/task','任务管理',0,1,1,NULL),(569,'project/task_member/index','任务成员列表',0,0,1,NULL),(570,'project/task_member/searchinvitemember','搜索任务成员',0,0,1,NULL),(571,'project/task_member/invitemember','添加任务成员',0,1,1,NULL),(572,'project/task_member/invitememberbatch','批量添加任务成员',0,1,1,NULL),(573,'project/task_member','任务成员管理',0,1,1,NULL),(574,'project/task_stages','任务分组管理',0,1,1,NULL),(575,'project/task_stages/index','任务分组列表',0,0,1,NULL),(576,'project/task_stages/tasks','任务分组任务列表',0,0,1,NULL),(577,'project/task_stages/sort','任务分组排序',0,1,1,NULL),(578,'project/task_stages/save','添加任务分组',0,1,1,NULL),(579,'project/task_stages/edit','编辑任务分组',0,1,1,NULL),(580,'project/task_stages/delete','删除任务分组',0,1,1,NULL),(581,'project/task_stages_template/index','任务分组模板列表',0,0,1,NULL),(582,'project/task_stages_template/save','创建任务分组模板',0,1,1,NULL),(583,'project/task_stages_template/edit','编辑任务分组模板',0,1,1,NULL),(584,'project/task_stages_template/delete','删除任务分组模板',0,1,1,NULL),(585,'project/task_stages_template','任务分组模板管理',0,1,1,NULL),(587,'project/project_member/removemember','移除项目成员',0,1,1,NULL),(588,'project/task/datetotalforproject','任务统计',0,0,1,NULL),(589,'project/task/tasksources','任务资源列表',0,0,1,NULL),(590,'project/file','文件管理',0,1,1,NULL),(591,'project/file/index','文件列表',0,0,1,NULL),(592,'project/file/read','文件详情',0,0,1,NULL),(593,'project/file/uploadfiles','上传文件',0,1,1,NULL),(594,'project/file/edit','编辑文件',0,1,1,NULL),(595,'project/file/recycle','文件移至回收站',0,1,1,NULL),(596,'project/file/recovery','恢复文件',0,1,1,NULL),(597,'project/file/delete','删除文件',0,1,1,NULL),(598,'project/project/getlogbyselfproject','项目概况',0,1,1,NULL),(599,'project/source_link','资源关联管理',0,1,1,NULL),(600,'project/source_link/delete','取消关联',0,1,1,NULL),(601,'project/task/tasklog','任务动态',0,1,1,NULL),(602,'project/task/recyclebatch','批量移动任务到回收站',0,1,1,NULL),(603,'project/invite_link','邀请链接管理',0,1,1,NULL),(604,'project/invite_link/save','创建邀请链接',0,1,1,NULL),(605,'project/task/setprivate','设置任务隐私模式',0,1,1,NULL),(606,'project/account/read','账号信息',0,1,1,NULL),(607,'project/task/batchassigntask','批量指派任务',0,1,1,NULL),(608,'project/task/tasktotags','任务标签',0,1,1,NULL),(609,'project/task/settag','设置任务标签',0,1,1,NULL),(610,'project/task_tag','任务标签管理',0,1,1,NULL),(611,'project/task_tag/index','任务标签列表',0,1,1,NULL),(612,'project/task_tag/save','创建任务标签',0,1,1,NULL),(613,'project/task_tag/edit','编辑任务标签',0,1,1,NULL),(614,'project/task_tag/delete','删除任务标签',0,1,1,NULL),(615,'project/project_features','项目版本库管理',0,1,1,NULL),(616,'project/project_features/index','版本库列表',0,1,1,NULL),(617,'project/project_features/save','添加版本库',0,1,1,NULL),(618,'project/project_features/edit','编辑版本库',0,1,1,NULL),(619,'project/project_features/delete','删除版本库',0,1,1,NULL),(620,'project/project_version','项目版本管理',0,1,1,NULL),(621,'project/project_version/index','项目版本列表',0,1,1,NULL),(622,'project/project_version/save','添加项目版本',0,1,1,NULL),(623,'project/project_version/edit','编辑项目版本',0,1,1,NULL),(624,'project/project_version/changestatus','更改项目版本状态',0,1,1,NULL),(625,'project/project_version/read','项目版本详情',0,1,1,NULL),(626,'project/project_version/addversiontask','关联项目版本任务',0,1,1,NULL),(627,'project/project_version/removeversiontask','移除项目版本任务',0,1,1,NULL),(628,'project/project_version/delete','删除项目版本',0,1,1,NULL),(629,'project/task/getlistbytasktag','标签任务列表',0,1,1,NULL),(630,'project/task_workflow','任务流转管理',0,1,1,NULL),(631,'project/task_workflow/index','任务流转列表',0,1,1,NULL),(632,'project/task_workflow/save','添加任务流转',0,1,1,NULL),(633,'project/task_workflow/edit','编辑任务流转',0,1,1,NULL),(634,'project/task_workflow/delete','删除任务流转',0,1,1,NULL);
+INSERT INTO `hi_project_node` VALUES (360,'project','项目管理模块',0,1,1,'2018-09-19 17:48:16'),(361,'project/index/info','详情',0,0,1,'2018-09-19 17:48:34'),(362,'project/index','基础版块',0,1,1,'2018-09-19 17:48:34'),(363,'project/index/index','框架布局',0,0,1,'2018-09-30 16:48:35'),(364,'project/index/systemconfig','系统信息',0,0,0,'2018-09-30 16:55:11'),(365,'project/index/editpersonal','修改个人资料',0,0,1,'2018-09-30 17:42:42'),(366,'project/index/uploadavatar','上传头像',0,0,1,'2018-09-30 17:42:46'),(372,'project/organization/index','组织列表',0,0,1,'0000-00-00 00:00:00'),(373,'project/organization/save','创建组织',0,0,1,'0000-00-00 00:00:00'),(374,'project/organization/read','组织信息',0,0,1,'0000-00-00 00:00:00'),(375,'project/organization/edit','编辑组织',0,1,1,'0000-00-00 00:00:00'),(376,'project/organization/delete','删除组织',0,1,1,'0000-00-00 00:00:00'),(377,'project/organization','组织管理',0,1,1,'0000-00-00 00:00:00'),(388,'project/auth/index','权限列表',0,0,1,'0000-00-00 00:00:00'),(389,'project/auth/add','添加权限角色',0,1,1,'0000-00-00 00:00:00'),(390,'project/auth/edit','编辑权限',0,1,1,'0000-00-00 00:00:00'),(391,'project/auth/forbid','禁用权限',0,1,1,'0000-00-00 00:00:00'),(392,'project/auth/resume','启用权限',0,1,1,'0000-00-00 00:00:00'),(393,'project/auth/del','删除权限',0,1,1,'0000-00-00 00:00:00'),(394,'project/auth','访问授权',0,1,1,'0000-00-00 00:00:00'),(395,'project/auth/apply','应用权限',0,1,1,'0000-00-00 00:00:00'),(396,'project/notify/index','通知列表',0,0,1,'0000-00-00 00:00:00'),(397,'project/notify/noreads','未读通知',0,0,1,'0000-00-00 00:00:00'),(399,'project/notify/read','通知信息',0,1,1,'0000-00-00 00:00:00'),(401,'project/notify/delete','删除通知',0,1,1,'0000-00-00 00:00:00'),(402,'project/notify','通知管理',0,1,1,'0000-00-00 00:00:00'),(498,'project/notify/setreadied','设置已读',0,1,1,'0000-00-00 00:00:00'),(499,'project/notify/batchdel','批量删除',0,1,1,'0000-00-00 00:00:00'),(500,'project/auth/setdefault','设置默认权限',0,1,1,NULL),(501,'project/department','部门管理',0,1,1,NULL),(502,'project/department/index','部门列表',0,0,1,NULL),(503,'project/department/read','部门信息',0,0,1,NULL),(504,'project/department/save','创建部门',0,1,1,NULL),(505,'project/department/edit','编辑部门',0,1,1,NULL),(506,'project/department/delete','删除部门',0,1,1,NULL),(507,'project/department_member','部门成员管理',0,1,1,NULL),(508,'project/department_member/index','部门成员列表',0,0,1,NULL),(509,'project/department_member/searchinvitemember','搜索部门成员',0,0,1,NULL),(510,'project/department_member/invitemember','添加部门成员',0,1,1,NULL),(511,'project/department_member/removemember','移除部门成员',0,1,1,NULL),(512,'project/index/changecurrentorganization','切换当前组织',0,1,1,NULL),(513,'project/index/editpassword','修改密码',0,1,1,NULL),(514,'project/index/uploadimg','上传图片',0,0,1,NULL),(515,'project/menu','菜单管理',0,1,1,NULL),(516,'project/menu/menu','菜单列表',0,0,0,NULL),(517,'project/menu/menuadd','添加菜单',0,1,1,NULL),(518,'project/menu/menuedit','编辑菜单',0,1,1,NULL),(519,'project/menu/menuforbid','禁用菜单',0,1,1,NULL),(520,'project/menu/menuresume','启用菜单',0,1,1,NULL),(521,'project/menu/menudel','删除菜单',0,1,1,NULL),(522,'project/node','节点管理',0,1,1,NULL),(523,'project/node/index','节点列表',0,1,1,NULL),(524,'project/node/alllist','全部节点列表',0,1,1,NULL),(525,'project/node/clear','清理节点',0,1,1,NULL),(526,'project/node/save','编辑节点',0,1,1,NULL),(527,'project/project','项目管理',0,1,1,NULL),(528,'project/project/index','项目列表',0,0,1,NULL),(529,'project/project/selflist','个人项目列表',0,0,1,NULL),(530,'project/project/save','创建项目',0,1,1,NULL),(531,'project/project/read','项目信息',0,0,1,NULL),(532,'project/project/edit','编辑项目',0,1,1,NULL),(533,'project/project/uploadcover','上传项目封面',0,0,1,NULL),(534,'project/project/recycle','项目放入回收站',0,1,1,NULL),(535,'project/project/recovery','恢复项目',0,1,1,NULL),(536,'project/project/archive','归档项目',0,1,1,NULL),(537,'project/project/recoveryarchive','取消归档项目',0,1,1,NULL),(538,'project/project/quit','退出项目',0,1,1,NULL),(539,'project/project_collect','项目收藏管理',0,0,1,NULL),(540,'project/project_collect/collect','收藏项目',0,1,1,NULL),(541,'project/project_member','项目成员管理',0,1,1,NULL),(542,'project/project_member/index','项目成员列表',0,0,1,NULL),(543,'project/project_member/searchinvitemember','搜索项目成员',0,0,1,NULL),(544,'project/project_member/invitemember','邀请项目成员',0,1,1,NULL),(545,'project/project_template','项目模板管理',0,1,1,NULL),(546,'project/project_template/index','项目模板列表',0,0,1,NULL),(547,'project/project_template/save','创建项目模板',0,1,1,NULL),(548,'project/project_template/uploadcover','上传项目模板封面',0,1,1,NULL),(549,'project/project_template/edit','编辑项目模板',0,1,1,NULL),(550,'project/project_template/delete','删除项目模板',0,1,1,NULL),(551,'project/task/index','任务列表',0,0,1,NULL),(552,'project/task/selflist','个人任务列表',0,0,1,NULL),(553,'project/task/read','任务信息',0,0,1,NULL),(554,'project/task/save','创建任务',0,1,1,NULL),(555,'project/task/taskdone','更改任务状态',0,0,1,NULL),(556,'project/task/assigntask','指派任务执行者',0,1,1,NULL),(557,'project/task/sort','任务排序',0,1,1,NULL),(558,'project/task/createcomment','发表任务评论',0,1,1,NULL),(559,'project/task/edit','编辑任务',0,1,1,NULL),(560,'project/task/like','点赞任务',0,0,1,NULL),(561,'project/task/star','收藏任务',0,0,1,NULL),(562,'project/task/recycle','移动任务到回收站',0,1,1,NULL),(563,'project/task/recovery','恢复任务',0,1,1,NULL),(564,'project/task/delete','删除任务',0,1,1,NULL),(565,'project/task','任务管理',0,1,1,NULL),(569,'project/task_member/index','任务成员列表',0,0,1,NULL),(570,'project/task_member/searchinvitemember','搜索任务成员',0,0,1,NULL),(571,'project/task_member/invitemember','添加任务成员',0,1,1,NULL),(572,'project/task_member/invitememberbatch','批量添加任务成员',0,1,1,NULL),(573,'project/task_member','任务成员管理',0,1,1,NULL),(574,'project/task_stages','任务分组管理',0,1,1,NULL),(575,'project/task_stages/index','任务分组列表',0,0,1,NULL),(576,'project/task_stages/tasks','任务分组任务列表',0,0,1,NULL),(577,'project/task_stages/sort','任务分组排序',0,1,1,NULL),(578,'project/task_stages/save','添加任务分组',0,1,1,NULL),(579,'project/task_stages/edit','编辑任务分组',0,1,1,NULL),(580,'project/task_stages/delete','删除任务分组',0,1,1,NULL),(581,'project/task_stages_template/index','任务分组模板列表',0,0,1,NULL),(582,'project/task_stages_template/save','创建任务分组模板',0,1,1,NULL),(583,'project/task_stages_template/edit','编辑任务分组模板',0,1,1,NULL),(584,'project/task_stages_template/delete','删除任务分组模板',0,1,1,NULL),(585,'project/task_stages_template','任务分组模板管理',0,1,1,NULL),(587,'project/project_member/removemember','移除项目成员',0,1,1,NULL),(588,'project/task/datetotalforproject','任务统计',0,0,1,NULL),(589,'project/task/tasksources','任务资源列表',0,0,1,NULL),(590,'project/file','文件管理',0,1,1,NULL),(591,'project/file/index','文件列表',0,0,1,NULL),(592,'project/file/read','文件详情',0,0,1,NULL),(593,'project/file/uploadfiles','上传文件',0,1,1,NULL),(594,'project/file/edit','编辑文件',0,1,1,NULL),(595,'project/file/recycle','文件移至回收站',0,1,1,NULL),(596,'project/file/recovery','恢复文件',0,1,1,NULL),(597,'project/file/delete','删除文件',0,1,1,NULL),(598,'project/project/getlogbyselfproject','项目概况',0,1,1,NULL),(599,'project/source_link','资源关联管理',0,1,1,NULL),(600,'project/source_link/delete','取消关联',0,1,1,NULL),(601,'project/task/tasklog','任务动态',0,1,1,NULL),(602,'project/task/recyclebatch','批量移动任务到回收站',0,1,1,NULL),(603,'project/invite_link','邀请链接管理',0,1,1,NULL),(604,'project/invite_link/save','创建邀请链接',0,1,1,NULL),(605,'project/task/setprivate','设置任务隐私模式',0,1,1,NULL),(607,'project/task/batchassigntask','批量指派任务',0,1,1,NULL),(608,'project/task/tasktotags','任务标签',0,1,1,NULL),(609,'project/task/settag','设置任务标签',0,1,1,NULL),(610,'project/task_tag','任务标签管理',0,1,1,NULL),(611,'project/task_tag/index','任务标签列表',0,1,1,NULL),(612,'project/task_tag/save','创建任务标签',0,1,1,NULL),(613,'project/task_tag/edit','编辑任务标签',0,1,1,NULL),(614,'project/task_tag/delete','删除任务标签',0,1,1,NULL),(615,'project/project_features','项目版本库管理',0,1,1,NULL),(616,'project/project_features/index','版本库列表',0,1,1,NULL),(617,'project/project_features/save','添加版本库',0,1,1,NULL),(618,'project/project_features/edit','编辑版本库',0,1,1,NULL),(619,'project/project_features/delete','删除版本库',0,1,1,NULL),(620,'project/project_version','项目版本管理',0,1,1,NULL),(621,'project/project_version/index','项目版本列表',0,1,1,NULL),(622,'project/project_version/save','添加项目版本',0,1,1,NULL),(623,'project/project_version/edit','编辑项目版本',0,1,1,NULL),(624,'project/project_version/changestatus','更改项目版本状态',0,1,1,NULL),(625,'project/project_version/read','项目版本详情',0,1,1,NULL),(626,'project/project_version/addversiontask','关联项目版本任务',0,1,1,NULL),(627,'project/project_version/removeversiontask','移除项目版本任务',0,1,1,NULL),(628,'project/project_version/delete','删除项目版本',0,1,1,NULL),(629,'project/task/getlistbytasktag','标签任务列表',0,1,1,NULL),(630,'project/task_workflow','任务流转管理',0,1,1,NULL),(631,'project/task_workflow/index','任务流转列表',0,1,1,NULL),(632,'project/task_workflow/save','添加任务流转',0,1,1,NULL),(633,'project/task_workflow/edit','编辑任务流转',0,1,1,NULL),(634,'project/task_workflow/delete','删除任务流转',0,1,1,NULL),(635,'project/member','账号管理',0,1,1,NULL),(636,'project/member/index','账号列表',0,1,1,NULL),(637,'project/member/read','账号信息',0,1,1,NULL),(638,'project/member/auth','授权管理',0,1,1,NULL),(639,'project/member/add','添加账号',0,1,1,NULL),(640,'project/member/edit','编辑账号',0,1,1,NULL),(641,'project/member/del','删除账号',0,1,1,NULL),(642,'project/member/forbid','禁用账号',0,1,1,NULL),(643,'project/member/resume','启用账号',0,1,1,NULL);
 /*!40000 ALTER TABLE `hi_project_node` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -727,15 +735,15 @@ DROP TABLE IF EXISTS `hi_project_report`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_project_report` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `project_code` varchar(30) DEFAULT NULL COMMENT '项目编号',
-  `date` varchar(30) DEFAULT NULL COMMENT '日期',
-  `content` text,
-  `create_time` varchar(30) DEFAULT NULL,
-  `update_time` varchar(30) DEFAULT NULL,
+  `project_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '项目编号',
+  `date` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '日期',
+  `content` text COLLATE utf8mb4_unicode_ci,
+  `create_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `update_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `union` (`project_code`,`date`) USING BTREE,
   KEY `code` (`project_code`) USING BTREE
-) ENGINE=InnoDB  COMMENT='项目报表统计表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='项目报表统计表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -756,18 +764,18 @@ DROP TABLE IF EXISTS `hi_project_template`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_project_template` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL COMMENT '类型名称',
-  `description` text COMMENT '备注',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '类型名称',
+  `description` text COLLATE utf8mb4_unicode_ci COMMENT '备注',
   `sort` tinyint(2) DEFAULT '0',
   `create_time` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-  `code` varchar(30) DEFAULT NULL COMMENT '编号',
-  `organization_code` varchar(30) DEFAULT '' COMMENT '组织id',
-  `cover` varchar(255) DEFAULT NULL COMMENT '封面',
-  `member_code` varchar(30) DEFAULT '' COMMENT '创建人',
+  `code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '编号',
+  `organization_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '组织id',
+  `cover` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '封面',
+  `member_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '创建人',
   `is_system` tinyint(1) DEFAULT '0' COMMENT '系统默认',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `code` (`code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=21  COMMENT='项目类型表';
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='项目类型表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -789,21 +797,21 @@ DROP TABLE IF EXISTS `hi_project_version`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_project_version` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(30) DEFAULT NULL COMMENT '编号',
-  `name` varchar(255) DEFAULT NULL COMMENT '版本库名称',
-  `description` varchar(500) DEFAULT NULL COMMENT '描述',
-  `create_time` varchar(30) DEFAULT NULL,
-  `update_time` varchar(30) DEFAULT NULL,
-  `organization_code` varchar(30) DEFAULT '' COMMENT '组织id',
-  `publish_time` varchar(30) DEFAULT NULL COMMENT '发布时间',
-  `start_time` varchar(30) DEFAULT NULL COMMENT '开始时间',
+  `code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '编号',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '版本库名称',
+  `description` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '描述',
+  `create_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `update_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `organization_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '组织id',
+  `publish_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '发布时间',
+  `start_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '开始时间',
   `status` tinyint(1) DEFAULT '0' COMMENT '状态。0：未开始，1：进行中，2：延期发布，3：已发布',
   `schedule` int(3) DEFAULT '0' COMMENT '进度百分比',
-  `plan_publish_time` varchar(30) DEFAULT NULL COMMENT '预计发布时间',
-  `features_code` varchar(30) DEFAULT NULL COMMENT '版本库编号',
+  `plan_publish_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '预计发布时间',
+  `features_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '版本库编号',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `code` (`code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4  COMMENT='项目版本表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='项目版本表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -825,19 +833,19 @@ DROP TABLE IF EXISTS `hi_project_version_log`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_project_version_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(30) DEFAULT '',
-  `member_code` varchar(30) DEFAULT NULL COMMENT '操作人id',
-  `content` text COMMENT '操作内容',
-  `remark` text COMMENT '日志描述',
-  `type` varchar(255) DEFAULT 'create' COMMENT '操作类型',
-  `create_time` varchar(30) DEFAULT NULL COMMENT '添加时间',
-  `source_code` varchar(30) DEFAULT '0' COMMENT '任务id',
-  `project_code` varchar(255) DEFAULT NULL COMMENT '项目编号',
-  `icon` varchar(20) DEFAULT NULL,
-  `features_code` varchar(255) DEFAULT NULL COMMENT '版本库编号',
+  `code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  `member_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '操作人id',
+  `content` text COLLATE utf8mb4_unicode_ci COMMENT '操作内容',
+  `remark` text COLLATE utf8mb4_unicode_ci COMMENT '日志描述',
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT 'create' COMMENT '操作类型',
+  `create_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '添加时间',
+  `source_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '0' COMMENT '任务id',
+  `project_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '项目编号',
+  `icon` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `features_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '版本库编号',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `code` (`code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=23  COMMENT='项目日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='项目日志表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -859,18 +867,18 @@ DROP TABLE IF EXISTS `hi_source_link`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_source_link` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(30) DEFAULT NULL COMMENT '编号',
-  `source_type` char(20) DEFAULT NULL COMMENT '资源类型',
-  `source_code` varchar(30) DEFAULT NULL COMMENT '资源编号',
-  `link_type` char(20) DEFAULT NULL COMMENT '关联类型',
-  `link_code` varchar(30) DEFAULT NULL COMMENT '关联编号',
+  `code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '编号',
+  `source_type` char(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '资源类型',
+  `source_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '资源编号',
+  `link_type` char(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '关联类型',
+  `link_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '关联编号',
   `organization_code` varchar(30) CHARACTER SET utf8 DEFAULT '' COMMENT '组织编码',
-  `create_by` varchar(30) DEFAULT NULL COMMENT '创建人',
-  `create_time` varchar(30) DEFAULT NULL COMMENT '创建时间',
+  `create_by` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '创建人',
+  `create_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '创建时间',
   `sort` int(11) DEFAULT '0' COMMENT '排序',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `code` (`code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6  COMMENT='资源关联表';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='资源关联表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -892,11 +900,11 @@ DROP TABLE IF EXISTS `hi_system_config`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_system_config` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) DEFAULT NULL COMMENT '配置编码',
-  `value` varchar(500) DEFAULT NULL COMMENT '配置值',
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '配置编码',
+  `value` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '配置值',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `index_system_config_name` (`name`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=44  COMMENT='系统参数配置';
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统参数配置';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -918,14 +926,14 @@ DROP TABLE IF EXISTS `hi_system_log`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_system_log` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `ip` char(15) NOT NULL DEFAULT '' COMMENT '操作者IP地址',
-  `node` char(200) NOT NULL DEFAULT '' COMMENT '当前操作节点',
-  `username` varchar(32) NOT NULL DEFAULT '' COMMENT '操作人用户名',
-  `action` varchar(200) NOT NULL DEFAULT '' COMMENT '操作行为',
-  `content` text NOT NULL COMMENT '操作内容描述',
-  `create_at` varchar(30) DEFAULT NULL COMMENT '创建时间',
+  `ip` char(15) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '操作者IP地址',
+  `node` char(200) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '当前操作节点',
+  `username` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '操作人用户名',
+  `action` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '操作行为',
+  `content` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '操作内容描述',
+  `create_at` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB  COMMENT='系统操作日志表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统操作日志表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -946,37 +954,37 @@ DROP TABLE IF EXISTS `hi_task`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_task` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(30) DEFAULT NULL COMMENT '编号',
-  `project_code` varchar(30) NOT NULL DEFAULT '' COMMENT '项目编号',
-  `name` varchar(255) DEFAULT NULL,
+  `code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '编号',
+  `project_code` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '项目编号',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `pri` tinyint(3) unsigned DEFAULT '0' COMMENT '紧急程度',
-  `execute_status` enum('wait','doing','done','pause','cancel','closed') DEFAULT 'wait' COMMENT '执行状态',
-  `description` text COMMENT '详情',
-  `create_by` varchar(30) DEFAULT NULL COMMENT '创建人',
-  `create_time` varchar(30) DEFAULT NULL COMMENT '创建日期',
-  `assign_to` varchar(30) DEFAULT '' COMMENT '指派给谁',
+  `execute_status` enum('wait','doing','done','pause','cancel','closed') COLLATE utf8mb4_unicode_ci DEFAULT 'wait' COMMENT '执行状态',
+  `description` text COLLATE utf8mb4_unicode_ci COMMENT '详情',
+  `create_by` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '创建人',
+  `create_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '创建日期',
+  `assign_to` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '指派给谁',
   `deleted` tinyint(1) DEFAULT '0' COMMENT '回收站',
-  `stage_code` varchar(30) DEFAULT '' COMMENT '任务列表',
-  `task_tag` varchar(255) DEFAULT NULL COMMENT '任务标签',
+  `stage_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '任务列表',
+  `task_tag` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '任务标签',
   `done` tinyint(2) DEFAULT '0' COMMENT '是否完成',
-  `begin_time` varchar(30) DEFAULT NULL COMMENT '开始时间',
-  `end_time` varchar(30) DEFAULT NULL COMMENT '截止时间',
-  `remind_time` varchar(30) DEFAULT NULL COMMENT '提醒时间',
-  `pcode` varchar(30) DEFAULT '' COMMENT '父任务id',
+  `begin_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '开始时间',
+  `end_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '截止时间',
+  `remind_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '提醒时间',
+  `pcode` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '父任务id',
   `sort` int(11) DEFAULT '0' COMMENT '排序',
   `like` int(7) DEFAULT '0' COMMENT '点赞数',
   `star` int(7) DEFAULT '0' COMMENT '收藏数',
-  `deleted_time` varchar(30) DEFAULT NULL COMMENT '删除时间',
+  `deleted_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '删除时间',
   `private` tinyint(1) DEFAULT '0' COMMENT '是否隐私模式',
   `id_num` int(7) DEFAULT '1' COMMENT '任务id编号',
-  `path` text COMMENT '上级任务路径',
+  `path` text COLLATE utf8mb4_unicode_ci COMMENT '上级任务路径',
   `schedule` int(3) DEFAULT '0' COMMENT '进度百分比',
-  `version_code` varchar(30) DEFAULT '0' COMMENT '版本id',
-  `features_code` varchar(30) DEFAULT '0' COMMENT '版本库id',
+  `version_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '0' COMMENT '版本id',
+  `features_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '0' COMMENT '版本库id',
   `work_time` int(5) DEFAULT '0' COMMENT '预估工时',
   PRIMARY KEY (`id`,`project_code`) USING BTREE,
   UNIQUE KEY `task` (`code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=12365  COMMENT='任务表';
+) ENGINE=InnoDB AUTO_INCREMENT=12365 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='任务表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -998,12 +1006,12 @@ DROP TABLE IF EXISTS `hi_task_like`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_task_like` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `task_code` varchar(30) DEFAULT '0' COMMENT '任务ID',
-  `member_code` varchar(30) DEFAULT '' COMMENT '成员id',
-  `create_time` varchar(30) DEFAULT NULL,
+  `task_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '0' COMMENT '任务ID',
+  `member_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '成员id',
+  `create_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `id` (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=117  COMMENT='任务点赞表';
+) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='任务点赞表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1025,14 +1033,14 @@ DROP TABLE IF EXISTS `hi_task_member`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_task_member` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `task_code` varchar(30) DEFAULT '0' COMMENT '任务ID',
+  `task_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '0' COMMENT '任务ID',
   `is_executor` tinyint(1) DEFAULT '0' COMMENT '执行者',
-  `member_code` varchar(30) DEFAULT '' COMMENT '成员id',
-  `join_time` varchar(30) DEFAULT NULL,
+  `member_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '成员id',
+  `join_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `is_owner` tinyint(1) DEFAULT '0' COMMENT '是否创建人',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `id` (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=275  COMMENT='任务-成员表';
+) ENGINE=InnoDB AUTO_INCREMENT=275 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='任务-成员表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1054,16 +1062,16 @@ DROP TABLE IF EXISTS `hi_task_stages`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_task_stages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL COMMENT '类型名称',
-  `project_code` varchar(30) DEFAULT '' COMMENT '项目id',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '类型名称',
+  `project_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '项目id',
   `sort` int(11) DEFAULT '0' COMMENT '排序',
-  `description` text COMMENT '备注',
+  `description` text COLLATE utf8mb4_unicode_ci COMMENT '备注',
   `create_time` varchar(30) CHARACTER SET utf8 DEFAULT NULL COMMENT '创建时间',
-  `code` varchar(30) DEFAULT NULL COMMENT '编号',
+  `code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '编号',
   `deleted` tinyint(1) DEFAULT '0' COMMENT '删除标记',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `code` (`code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=90  COMMENT='任务列表表';
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='任务列表表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1072,7 +1080,7 @@ CREATE TABLE `hi_task_stages` (
 
 LOCK TABLES `hi_task_stages` WRITE;
 /*!40000 ALTER TABLE `hi_task_stages` DISABLE KEYS */;
-INSERT INTO `hi_task_stages` VALUES (33,'修复','mo4uqwfb06dxv8ez2spkl3rg',33,NULL,'2018-12-25 07:20:36','7z8tgb6xevy2aj9nui5fk0w1',0),(34,'重构','mo4uqwfb06dxv8ez2spkl3rg',34,NULL,'2018-12-25 07:20:36','g0yw3r54qahbk7lets6fv2on',0),(35,'升级','mo4uqwfb06dxv8ez2spkl3rg',35,NULL,'2018-12-25 07:20:36','psemnf3ugo89vc5r2hkxid1t',0),(36,'优化','mo4uqwfb06dxv8ez2spkl3rg',37,NULL,'2018-12-25 07:20:36','p56enm7zck4id2rb0tx9lguh',0),(37,'新增','mo4uqwfb06dxv8ez2spkl3rg',36,NULL,'2018-12-25 07:20:36','jvyswuxz34qk2cpt9o7ldb60',0),(38,'协议签订','ibag9hw3o1tusd5qlpxrk782',0,NULL,'2018-12-26 08:35:47','oijw2ds86lf7zp1chvq03r5e',0),(39,'图纸设计','ibag9hw3o1tusd5qlpxrk782',0,NULL,'2018-12-26 08:35:53','ipzyscgfo5l1qvah2xm4638t',0),(40,'评审及打样','ibag9hw3o1tusd5qlpxrk782',0,NULL,'2018-12-26 08:36:21','3uz8afjkxnogwivd9s0lqp7y',0),(41,'构件采购','ibag9hw3o1tusd5qlpxrk782',0,NULL,'2018-12-26 08:36:34','f6dp4ur1zc2omswtyhnbixe3',0),(42,'制造安装','ibag9hw3o1tusd5qlpxrk782',0,NULL,'2018-12-26 08:36:40','imltk4y2se1rbzafohw8x5p6',0),(43,'内部检验','ibag9hw3o1tusd5qlpxrk782',0,NULL,'2018-12-26 08:36:45','miwt9bd6saxge2pvn31h0zky',0),(44,'测试','ibag9hw3o1tusd5qlpxrk782',0,NULL,'2018-12-26 08:36:52','ao18rjcszwh2bm6inypxgkv0',0),(48,'产品计划','p94ckbwv5lyxt2rhzeam3s86',0,NULL,'2019-01-02 11:17:27','xt4ne81fu9jgayw2szokr5q3',0),(49,'即将发布','p94ckbwv5lyxt2rhzeam3s86',1,NULL,'2019-01-02 11:17:27','c9ro6jxpl25wbmuvfy840kqe',0),(50,'测试','p94ckbwv5lyxt2rhzeam3s86',2,NULL,'2019-01-02 11:17:27','inxmfhz8kvqes1w39a2oc5j6',0),(51,'准备发布','p94ckbwv5lyxt2rhzeam3s86',3,NULL,'2019-01-02 11:17:27','2zm1n3g8ikaseow5cfp9h7dx',0),(52,'发布成功','p94ckbwv5lyxt2rhzeam3s86',4,NULL,'2019-01-02 11:17:27','3jdozmqf4tcakyixgn750ule',0),(53,'产品计划','8ulzfth64cd0k1x5peivowm2',0,NULL,'2019-01-03 09:15:11','pfi2ltmjhxuda90ncsgb5vwo',0),(54,'即将发布','8ulzfth64cd0k1x5peivowm2',2,NULL,'2019-01-03 09:15:11','ht0gfnevaq7kp3ldx16i82yj',0),(55,'测试','8ulzfth64cd0k1x5peivowm2',1,NULL,'2019-01-03 09:15:11','dot8li21nx437ypksjav59wf',0),(56,'准备发布','8ulzfth64cd0k1x5peivowm2',3,NULL,'2019-01-03 09:15:11','p0re71zhm48yxq63lfnjwkso',0),(57,'发布成功','8ulzfth64cd0k1x5peivowm2',4,NULL,'2019-01-03 09:15:11','k436eltf5zygbpnhrdqc8mo2',0),(61,'ADD','elqa703jyvfhpt1dsxkzi8on',61,NULL,'2019-01-04 21:15:46','2sf7h3p01l5qgdeumrzny4bi',0),(62,'Fix','elqa703jyvfhpt1dsxkzi8on',62,NULL,'2019-01-04 21:15:51','njd4er1ohakl6bz258qcfgsv',0),(63,'Change','elqa703jyvfhpt1dsxkzi8on',63,NULL,'2019-01-04 21:16:07','oxcj9krmqeu08wbga2ftz7ls',0),(64,'Update','elqa703jyvfhpt1dsxkzi8on',64,NULL,'2019-01-04 21:16:29','sft603lxe5phk89ou1cgmiby',0),(65,'Removed','elqa703jyvfhpt1dsxkzi8on',65,NULL,'2019-01-04 21:16:49','0jmqucy41h3rt9ag27wils6b',0),(66,'产品计划','gbim9jpevkh7qr6ufa1t3wl4',0,NULL,'2019-01-05 21:57:31','j3f52swoct7earzhd6gxk41m',0),(67,'即将发布','gbim9jpevkh7qr6ufa1t3wl4',1,NULL,'2019-01-05 21:57:31','5fkwydvzopqrmxj0174nl93u',0),(68,'测试','gbim9jpevkh7qr6ufa1t3wl4',2,NULL,'2019-01-05 21:57:31','97gxmwyidlae4r2u1hqbcpnz',0),(69,'准备发布','gbim9jpevkh7qr6ufa1t3wl4',3,NULL,'2019-01-05 21:57:31','9f4vdsw7gzpo2hm1qbt0xyn6',0),(70,'发布成功','gbim9jpevkh7qr6ufa1t3wl4',4,NULL,'2019-01-05 21:57:31','pm8129iltue7jnyvgb4d30xw',0),(72,'简历初筛','sbklfvyouc0qpmwhitn47j5z',72,NULL,'2019-06-26 14:14:01','7fea2dnwqvhxpt3mcrl4j1uz',0),(73,'用人部门筛选','sbklfvyouc0qpmwhitn47j5z',73,NULL,'2019-06-26 14:14:17','xqo8u02h315ytjmlegnsbvip',0),(74,'面试','sbklfvyouc0qpmwhitn47j5z',74,NULL,'2019-06-26 14:14:24','csb8djyktl0f9nop71h64m5r',0),(75,'Offer发放','sbklfvyouc0qpmwhitn47j5z',75,NULL,'2019-06-26 14:14:32','9mo2nrbqygfv6j3tlzd1csex',0),(76,'入职','sbklfvyouc0qpmwhitn47j5z',76,NULL,'2019-06-26 14:14:39','5dinzhvtl29rxqey8puoa1b6',0),(77,'协议签订','2n5mi3wzsqtkuj9y8gvb6l0x',0,NULL,'2019-08-21 12:36:23','nhwd140ruebmgcaqkjs2vzti',0),(78,'图纸设计','2n5mi3wzsqtkuj9y8gvb6l0x',1,NULL,'2019-08-21 12:36:23','4gmwr07hsiutxflqzpjn19vc',0),(79,'评审及打样','2n5mi3wzsqtkuj9y8gvb6l0x',2,NULL,'2019-08-21 12:36:23','qvgdp45wkos90mzr6fh2clyu',0),(80,'构件采购','2n5mi3wzsqtkuj9y8gvb6l0x',3,NULL,'2019-08-21 12:36:23','adqmh9l56z7bsf8uykcrt32x',0),(81,'制造安装','2n5mi3wzsqtkuj9y8gvb6l0x',4,NULL,'2019-08-21 12:36:23','euvohmxiyawd9l6t5rfn8bzg',0),(82,'内部检验','2n5mi3wzsqtkuj9y8gvb6l0x',5,NULL,'2019-08-21 12:36:23','809j7ne2xcyom5g1kdv4srh6',0),(83,'验收','2n5mi3wzsqtkuj9y8gvb6l0x',6,NULL,'2019-08-21 12:36:23','o5qcy14vtnl8xjkuhrfbwdza',0),(84,'待处理','lfs9c3gyzr8w7vj5unmie1bq',0,NULL,'2019-08-21 16:04:08','qpu3oxgtl6s759c2d0evfi8r',0),(85,'进行中','lfs9c3gyzr8w7vj5unmie1bq',1,NULL,'2019-08-21 16:04:08','fytrda5ixse0b7plvho6gznu',0),(86,'已完成','lfs9c3gyzr8w7vj5unmie1bq',2,NULL,'2019-08-21 16:04:08','bjdet3xqynu4p6aif1gs09k8',0),(87,'待处理','fdlj07zvxkpg3hq2ro9itac6',0,NULL,'2019-08-22 14:56:02','gio3pwdeqjt52m4n7cf1kahz',0),(88,'进行中','fdlj07zvxkpg3hq2ro9itac6',1,NULL,'2019-08-22 14:56:02','1zwh0e5n3s6mkjibl8cr2xdu',0),(89,'已完成','fdlj07zvxkpg3hq2ro9itac6',2,NULL,'2019-08-22 14:56:02','zovlrtd5ig90he628qcp1x7k',0);
+INSERT INTO `hi_task_stages` VALUES (33,'修复','mo4uqwfb06dxv8ez2spkl3rg',33,NULL,'2018-12-25 07:20:36','7z8tgb6xevy2aj9nui5fk0w1',0),(34,'重构','mo4uqwfb06dxv8ez2spkl3rg',34,NULL,'2018-12-25 07:20:36','g0yw3r54qahbk7lets6fv2on',0),(35,'升级','mo4uqwfb06dxv8ez2spkl3rg',35,NULL,'2018-12-25 07:20:36','psemnf3ugo89vc5r2hkxid1t',0),(36,'优化','mo4uqwfb06dxv8ez2spkl3rg',37,NULL,'2018-12-25 07:20:36','p56enm7zck4id2rb0tx9lguh',0),(37,'新增','mo4uqwfb06dxv8ez2spkl3rg',36,NULL,'2018-12-25 07:20:36','jvyswuxz34qk2cpt9o7ldb60',0),(38,'协议签订','ibag9hw3o1tusd5qlpxrk782',0,NULL,'2018-12-26 08:35:47','oijw2ds86lf7zp1chvq03r5e',0),(39,'图纸设计','ibag9hw3o1tusd5qlpxrk782',0,NULL,'2018-12-26 08:35:53','ipzyscgfo5l1qvah2xm4638t',0),(40,'评审及打样','ibag9hw3o1tusd5qlpxrk782',0,NULL,'2018-12-26 08:36:21','3uz8afjkxnogwivd9s0lqp7y',0),(41,'构件采购','ibag9hw3o1tusd5qlpxrk782',0,NULL,'2018-12-26 08:36:34','f6dp4ur1zc2omswtyhnbixe3',0),(42,'制造安装','ibag9hw3o1tusd5qlpxrk782',0,NULL,'2018-12-26 08:36:40','imltk4y2se1rbzafohw8x5p6',0),(43,'内部检验','ibag9hw3o1tusd5qlpxrk782',0,NULL,'2018-12-26 08:36:45','miwt9bd6saxge2pvn31h0zky',0),(44,'测试','ibag9hw3o1tusd5qlpxrk782',0,NULL,'2018-12-26 08:36:52','ao18rjcszwh2bm6inypxgkv0',0),(48,'产品计划','p94ckbwv5lyxt2rhzeam3s86',0,NULL,'2019-01-02 11:17:27','xt4ne81fu9jgayw2szokr5q3',0),(49,'即将发布','p94ckbwv5lyxt2rhzeam3s86',1,NULL,'2019-01-02 11:17:27','c9ro6jxpl25wbmuvfy840kqe',0),(50,'测试','p94ckbwv5lyxt2rhzeam3s86',2,NULL,'2019-01-02 11:17:27','inxmfhz8kvqes1w39a2oc5j6',0),(51,'准备发布','p94ckbwv5lyxt2rhzeam3s86',3,NULL,'2019-01-02 11:17:27','2zm1n3g8ikaseow5cfp9h7dx',0),(52,'发布成功','p94ckbwv5lyxt2rhzeam3s86',4,NULL,'2019-01-02 11:17:27','3jdozmqf4tcakyixgn750ule',0),(53,'产品计划','8ulzfth64cd0k1x5peivowm2',0,NULL,'2019-01-03 09:15:11','pfi2ltmjhxuda90ncsgb5vwo',0),(54,'即将发布','8ulzfth64cd0k1x5peivowm2',2,NULL,'2019-01-03 09:15:11','ht0gfnevaq7kp3ldx16i82yj',0),(55,'测试','8ulzfth64cd0k1x5peivowm2',1,NULL,'2019-01-03 09:15:11','dot8li21nx437ypksjav59wf',0),(56,'准备发布','8ulzfth64cd0k1x5peivowm2',3,NULL,'2019-01-03 09:15:11','p0re71zhm48yxq63lfnjwkso',0),(57,'发布成功','8ulzfth64cd0k1x5peivowm2',4,NULL,'2019-01-03 09:15:11','k436eltf5zygbpnhrdqc8mo2',0),(61,'ADD','elqa703jyvfhpt1dsxkzi8on',61,NULL,'2019-01-04 21:15:46','2sf7h3p01l5qgdeumrzny4bi',0),(62,'Fix','elqa703jyvfhpt1dsxkzi8on',62,NULL,'2019-01-04 21:15:51','njd4er1ohakl6bz258qcfgsv',0),(63,'Change','elqa703jyvfhpt1dsxkzi8on',63,NULL,'2019-01-04 21:16:07','oxcj9krmqeu08wbga2ftz7ls',0),(64,'Update','elqa703jyvfhpt1dsxkzi8on',64,NULL,'2019-01-04 21:16:29','sft603lxe5phk89ou1cgmiby',0),(65,'Removed','elqa703jyvfhpt1dsxkzi8on',65,NULL,'2019-01-04 21:16:49','0jmqucy41h3rt9ag27wils6b',0),(66,'产品计划','gbim9jpevkh7qr6ufa1t3wl4',0,NULL,'2019-01-05 21:57:31','j3f52swoct7earzhd6gxk41m',0),(67,'即将发布','gbim9jpevkh7qr6ufa1t3wl4',1,NULL,'2019-01-05 21:57:31','5fkwydvzopqrmxj0174nl93u',0),(68,'测试','gbim9jpevkh7qr6ufa1t3wl4',2,NULL,'2019-01-05 21:57:31','97gxmwyidlae4r2u1hqbcpnz',0),(69,'准备发布','gbim9jpevkh7qr6ufa1t3wl4',3,NULL,'2019-01-05 21:57:31','9f4vdsw7gzpo2hm1qbt0xyn6',0),(70,'发布成功','gbim9jpevkh7qr6ufa1t3wl4',4,NULL,'2019-01-05 21:57:31','pm8129iltue7jnyvgb4d30xw',0),(72,'简历初筛','sbklfvyouc0qpmwhitn47j5z',72,NULL,'2019-06-26 14:14:01','7fea2dnwqvhxpt3mcrl4j1uz',0),(73,'用人部门筛选','sbklfvyouc0qpmwhitn47j5z',73,NULL,'2019-06-26 14:14:17','xqo8u02h315ytjmlegnsbvip',0),(74,'面试','sbklfvyouc0qpmwhitn47j5z',74,NULL,'2019-06-26 14:14:24','csb8djyktl0f9nop71h64m5r',0),(75,'Offer发放','sbklfvyouc0qpmwhitn47j5z',75,NULL,'2019-06-26 14:14:32','9mo2nrbqygfv6j3tlzd1csex',0),(76,'入职','sbklfvyouc0qpmwhitn47j5z',76,NULL,'2019-06-26 14:14:39','5dinzhvtl29rxqey8puoa1b6',0),(77,'协议签订','2n5mi3wzsqtkuj9y8gvb6l0x',0,NULL,'2019-08-21 12:36:23','nhwd140ruebmgcaqkjs2vzti',0),(78,'图纸设计','2n5mi3wzsqtkuj9y8gvb6l0x',1,NULL,'2019-08-21 12:36:23','4gmwr07hsiutxflqzpjn19vc',0),(79,'评审及打样','2n5mi3wzsqtkuj9y8gvb6l0x',2,NULL,'2019-08-21 12:36:23','qvgdp45wkos90mzr6fh2clyu',0),(80,'构件采购','2n5mi3wzsqtkuj9y8gvb6l0x',3,NULL,'2019-08-21 12:36:23','adqmh9l56z7bsf8uykcrt32x',0),(81,'制造安装','2n5mi3wzsqtkuj9y8gvb6l0x',4,NULL,'2019-08-21 12:36:23','euvohmxiyawd9l6t5rfn8bzg',0),(82,'内部检验','2n5mi3wzsqtkuj9y8gvb6l0x',5,NULL,'2019-08-21 12:36:23','809j7ne2xcyom5g1kdv4srh6',0),(83,'验收','2n5mi3wzsqtkuj9y8gvb6l0x',6,NULL,'2019-08-21 12:36:23','o5qcy14vtnl8xjkuhrfbwdza',0),(84,'待处理','lfs9c3gyzr8w7vj5unmie1bq',0,NULL,'2019-08-21 16:04:08','qpu3oxgtl6s759c2d0evfi8r',0),(85,'进行中','lfs9c3gyzr8w7vj5unmie1bq',1,NULL,'2019-08-21 16:04:08','fytrda5ixse0b7plvho6gznu',0),(86,'已完成','lfs9c3gyzr8w7vj5unmie1bq',2,NULL,'2019-08-21 16:04:08','bjdet3xqynu4p6aif1gs09k8',0),(87,'待处理','fdlj07zvxkpg3hq2ro9itac6',0,NULL,'2019-08-22 14:56:02','gio3pwdeqjt52m4n7cf1kahz',0),(88,'进行中','fdlj07zvxkpg3hq2ro9itac6',1,NULL,'2019-08-22 14:56:02','1zwh0e5n3s6mkjibl8cr2xdu',0),(89,'已完成','fdlj07zvxkpg3hq2ro9itac6',2,NULL,'2019-08-22 14:56:02','zovlrtd5ig90he628qcp1x7k',0),(97,'ll','fdlj07zvxkpg3hq2ro9itac6',97,NULL,'2019-08-28 20:25:54','zd79rksoe1m0alcj3426uhtg',0);
 /*!40000 ALTER TABLE `hi_task_stages` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1085,14 +1093,14 @@ DROP TABLE IF EXISTS `hi_task_stages_template`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_task_stages_template` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL COMMENT '类型名称',
-  `project_template_code` varchar(30) DEFAULT '0' COMMENT '项目id',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '类型名称',
+  `project_template_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '0' COMMENT '项目id',
   `create_time` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `sort` int(11) DEFAULT '0',
-  `code` varchar(30) DEFAULT NULL COMMENT '编号',
+  `code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '编号',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `code` (`code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=87  COMMENT='任务列表模板表';
+) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='任务列表模板表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1114,14 +1122,14 @@ DROP TABLE IF EXISTS `hi_task_tag`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_task_tag` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(30) DEFAULT NULL,
-  `project_code` varchar(30) DEFAULT NULL COMMENT '项目id',
-  `name` varchar(255) DEFAULT NULL COMMENT '标签名',
-  `color` enum('blue','red','orange','green','brown','purple') DEFAULT 'blue' COMMENT '颜色',
+  `code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `project_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '项目id',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '标签名',
+  `color` enum('blue','red','orange','green','brown','purple') COLLATE utf8mb4_unicode_ci DEFAULT 'blue' COMMENT '颜色',
   `create_time` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `code` (`code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4  COMMENT='任务标签表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='任务标签表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1143,13 +1151,13 @@ DROP TABLE IF EXISTS `hi_task_to_tag`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_task_to_tag` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(30) DEFAULT NULL,
-  `task_code` varchar(30) DEFAULT '0',
-  `tag_code` varchar(30) DEFAULT '0',
+  `code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `task_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '0',
+  `tag_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '0',
   `create_time` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `code` (`code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=138  COMMENT='任务标签映射表';
+) ENGINE=InnoDB AUTO_INCREMENT=138 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='任务标签映射表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1171,17 +1179,17 @@ DROP TABLE IF EXISTS `hi_task_work_time`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_task_work_time` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `task_code` varchar(30) DEFAULT '0' COMMENT '任务ID',
-  `member_code` varchar(30) DEFAULT '' COMMENT '成员id',
-  `create_time` varchar(30) DEFAULT NULL,
-  `content` varchar(500) DEFAULT NULL COMMENT '描述',
-  `begin_time` varchar(30) DEFAULT NULL COMMENT '开始时间',
+  `task_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '0' COMMENT '任务ID',
+  `member_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '成员id',
+  `create_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `content` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '描述',
+  `begin_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '开始时间',
   `num` int(5) DEFAULT '0' COMMENT '工时',
-  `code` varchar(30) DEFAULT NULL COMMENT 'id',
+  `code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'id',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `id` (`id`) USING BTREE,
   UNIQUE KEY `code` (`code`) USING BTREE
-) ENGINE=InnoDB  COMMENT='任务工时表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='任务工时表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1202,15 +1210,15 @@ DROP TABLE IF EXISTS `hi_task_workflow`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_task_workflow` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(30) DEFAULT NULL COMMENT '编号',
-  `name` varchar(100) DEFAULT NULL COMMENT '规则名称',
-  `create_time` varchar(30) DEFAULT NULL,
-  `update_time` varchar(30) DEFAULT NULL,
-  `organization_code` varchar(30) DEFAULT '' COMMENT '组织id',
-  `project_code` varchar(30) DEFAULT '' COMMENT '项目id',
+  `code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '编号',
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '规则名称',
+  `create_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `update_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `organization_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '组织id',
+  `project_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '项目id',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `code` (`code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=7  COMMENT='任务工作流表';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='任务工作流表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1232,17 +1240,17 @@ DROP TABLE IF EXISTS `hi_task_workflow_rule`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hi_task_workflow_rule` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(30) DEFAULT NULL COMMENT '编号',
+  `code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '编号',
   `type` tinyint(1) DEFAULT '0' COMMENT '规则类型，0：任务分组，1：人员，2：条件',
-  `object_code` varchar(30) DEFAULT NULL COMMENT '对象id',
+  `object_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '对象id',
   `action` tinyint(1) DEFAULT '0' COMMENT '场景。0：任何条件，1：被完成，2：被重做，3：设置执行人，4：截止时间，5：优先级',
-  `create_time` varchar(30) DEFAULT NULL,
-  `update_time` varchar(30) DEFAULT NULL,
-  `workflow_code` varchar(30) DEFAULT '' COMMENT '工作流id',
+  `create_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `update_time` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `workflow_code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '工作流id',
   `sort` int(10) DEFAULT '0' COMMENT '排序',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `code` (`code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=16  COMMENT='任务工作流规则表';
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='任务工作流规则表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1265,13 +1273,13 @@ DROP TABLE IF EXISTS `hi_user_token`;
 CREATE TABLE `hi_user_token` (
   `token_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '令牌编号',
   `user_id` int(10) unsigned NOT NULL COMMENT '用户编号',
-  `user_name` varchar(50) NOT NULL COMMENT '用户名',
-  `token` varchar(50) NOT NULL COMMENT '登录令牌',
+  `user_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '用户名',
+  `token` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '登录令牌',
   `login_time` int(10) unsigned NOT NULL COMMENT '登录时间',
-  `client_type` varchar(10) DEFAULT NULL COMMENT '客户端类型 android wap',
-  `login_ip` varchar(255) DEFAULT NULL COMMENT '登录ip',
+  `client_type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '客户端类型 android wap',
+  `login_ip` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '登录ip',
   PRIMARY KEY (`token_id`) USING BTREE
-) ENGINE=InnoDB  COMMENT='PC端登录令牌表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='PC端登录令牌表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1292,4 +1300,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-08-23  8:14:33
+-- Dump completed on 2019-08-29  3:08:26
