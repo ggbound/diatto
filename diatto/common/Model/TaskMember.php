@@ -39,7 +39,9 @@ class TaskMember extends CommonModel
             //已经是本人
             return true;
         }
-        self::update(['is_executor' => 0], ['task_code' => $taskCode]);
+        if ($isExecutor) {
+            self::update(['is_executor' => 0], ['task_code' => $taskCode]);
+        }
         if ($memberCode) {
             $hasJoined = self::where(['member_code' => $memberCode, 'task_code' => $taskCode])->find();
             if ($hasJoined) {
