@@ -181,12 +181,21 @@ function isOpenNoticePush()
 }
 
 /**
- * 是否开启钉钉消息推送
+ * 是否开启钉钉推送
  * @return mixed
  */
 function isOpenDingTalkNoticePush()
 {
     return config('config.dingtalk_push');
+}
+
+/**
+ * 是否开启邮件推送
+ * @return mixed
+ */
+function isOpenMailNoticePush()
+{
+    return config('config.mail_push');
 }
 
 /**
