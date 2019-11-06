@@ -74,14 +74,17 @@ class Auth
 
         //第三资源初始化
         $storageConfig = config('storage.');
-        if ($storageConfig) {
-            foreach ($storageConfig as $key => $config) {
-                if ($key == 'qiniu' || $key == 'oss') {
-                    foreach ($config as $itemKey => $item) {
-                        sysconf($itemKey, $item);
+        if ($storageConfig['init']) {
+            unset($storageConfig['init']);
+            if ($storageConfig) {
+                foreach ($storageConfig as $key => $config) {
+                    if ($key == 'qiniu' || $key == 'oss') {
+                        foreach ($config as $itemKey => $item) {
+                            sysconf($itemKey, $item);
+                        }
+                    } else {
+                        sysconf($key, $config);
                     }
-                } else {
-                    sysconf($key, $config);
                 }
             }
         }
